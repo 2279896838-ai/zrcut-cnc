@@ -1,0 +1,3223 @@
+<!DOCTYPE html>
+<!-- 由 web/build-pages.mjs 生成：单文件静态应用，含内联计算引擎与知识数据。 -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="智刃工艺 ZR-CUT：面向机加车间与实训中心的 CNC 切削工艺参数智能推荐系统。确定性计算引擎 + 十条硬约束 + 浏览器内真算。">
+<meta name="keywords" content="CNC,切削参数,工艺参数,智能制造,切削速度,进给,颤振,刀具寿命">
+<title>智刃工艺 ZR-CUT · CNC 切削工艺参数智能推荐系统</title>
+<style id="zrcut-style">
+
+/* ===== build-pages 注入：单文件 Pages 构建 ===== */
+/* ==========================================================================
+   智刃工艺 ZR-CUT · 界面样式
+   深色工业风，无外部字体依赖，打印友好降级
+   ========================================================================== */
+
+:root {
+  --bg: #0b0f16;
+  --bg2: #131924;
+  --bg3: #1a2231;
+  --bg4: #212b3d;
+  --line: #2a3547;
+  --line2: #384760;
+  --fg: #e7edf6;
+  --fg2: #93a2b8;
+  --fg3: #6b7b93;
+  --accent: #4d9dff;
+  --accent2: #2d7ee0;
+  --ok: #35c46a;
+  --ok-bg: rgba(53, 196, 106, .12);
+  --warn: #e0a83a;
+  --warn-bg: rgba(224, 168, 58, .12);
+  --bad: #f2564d;
+  --bad-bg: rgba(242, 86, 77, .12);
+  --mono: "Cascadia Code", "Consolas", "Courier New", monospace;
+  --radius: 10px;
+  --shadow: 0 4px 20px rgba(0, 0, 0, .35);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font: 15px/1.65 -apple-system, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ---------- 顶部进度条 ---------- */
+.top-progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 2px;
+  z-index: 100; pointer-events: none;
+}
+.top-progress span {
+  display: block; height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--accent), var(--ok));
+  transition: width .3s ease;
+}
+.top-progress.is-done span { opacity: 0; transition: opacity .4s ease .2s; }
+
+/* ---------- 页头 ---------- */
+.site-header {
+  background: linear-gradient(180deg, var(--bg2), var(--bg));
+  border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; z-index: 50;
+  backdrop-filter: blur(8px);
+}
+.header-inner {
+  max-width: 1240px; margin: 0 auto; padding: 14px 24px;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  flex-wrap: wrap;
+}
+.brand { display: flex; align-items: center; gap: 13px; }
+.brand-mark {
+  width: 40px; height: 40px; border-radius: 9px; flex: 0 0 auto;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: grid; place-items: center;
+  font-weight: 700; font-size: 19px; color: #fff;
+  box-shadow: 0 3px 12px rgba(77, 157, 255, .3);
+}
+.brand-copy h1 {
+  font-size: 17px; font-weight: 650; letter-spacing: -.2px;
+  display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+}
+.brand-copy .en {
+  font-size: 12px; font-weight: 500; color: var(--fg3);
+  font-family: var(--mono); letter-spacing: .5px;
+}
+.brand-copy p { font-size: 12px; color: var(--fg2); margin-top: 1px; }
+
+.header-tools { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+.mode-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+  background: var(--ok-bg); border: 1px solid rgba(53, 196, 106, .35); color: var(--ok);
+}
+.mode-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+  box-shadow: 0 0 6px currentColor;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+
+/* ---------- 导航页签 ---------- */
+.tabbar {
+  background: var(--bg2); border-bottom: 1px solid var(--line);
+  position: sticky; top: 69px; z-index: 49;
+  overflow-x: auto; scrollbar-width: none;
+}
+.tabbar::-webkit-scrollbar { display: none; }
+.tabbar-inner {
+  max-width: 1240px; margin: 0 auto; padding: 0 24px;
+  display: flex; gap: 2px;
+}
+.tab {
+  appearance: none; background: none; border: none; cursor: pointer;
+  padding: 12px 15px; font-size: 13.5px; font-weight: 550; color: var(--fg2);
+  border-bottom: 2px solid transparent; white-space: nowrap;
+  font-family: inherit; transition: color .15s, border-color .15s;
+  display: flex; align-items: center; gap: 7px;
+}
+.tab:hover { color: var(--fg); }
+.tab.is-active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-num {
+  font-family: var(--mono); font-size: 10.5px; color: var(--fg3);
+  font-weight: 600;
+}
+.tab.is-active .tab-num { color: var(--accent); }
+
+/* ---------- 主内容 ---------- */
+main { max-width: 1240px; margin: 0 auto; padding: 26px 24px 70px; }
+
+.panel { display: none; animation: fade .22s ease; }
+.panel.is-active { display: block; }
+@keyframes fade { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+
+.panel-head { margin-bottom: 20px; }
+.panel-head h2 {
+  font-size: 21px; font-weight: 650; letter-spacing: -.3px;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.panel-head h2 .idx {
+  font-family: var(--mono); font-size: 12px; font-weight: 700;
+  color: var(--accent); background: rgba(77, 157, 255, .1);
+  padding: 2px 8px; border-radius: 5px;
+}
+.panel-head p { color: var(--fg2); font-size: 13.5px; margin-top: 6px; max-width: 860px; }
+
+/* ---------- 卡片 ---------- */
+.card {
+  background: var(--bg2); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px;
+}
+.card-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 14px; flex-wrap: wrap;
+}
+.card-head h3 { font-size: 14.5px; font-weight: 620; }
+.card-head .sub { font-size: 12px; color: var(--fg3); }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.split-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+@media (max-width: 900px) {
+  .split, .split-3 { grid-template-columns: 1fr; }
+}
+
+/* ---------- 表单 ---------- */
+.form-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 13px 16px; align-items: end;
+}
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label {
+  font-size: 11.5px; font-weight: 600; color: var(--fg2);
+  letter-spacing: .3px; text-transform: uppercase;
+}
+.field .hint { font-size: 11px; color: var(--fg3); font-weight: 400; text-transform: none; letter-spacing: 0; }
+
+select, input[type="number"], input[type="text"] {
+  background: var(--bg3); border: 1px solid var(--line2); color: var(--fg);
+  border-radius: 7px; padding: 9px 11px; font-size: 13.5px;
+  font-family: inherit; width: 100%;
+  transition: border-color .15s, box-shadow .15s;
+}
+select:focus, input:focus {
+  outline: none; border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(77, 157, 255, .15);
+}
+input[type="number"] { font-family: var(--mono); }
+input.invalid { border-color: var(--bad); }
+
+.btn {
+  appearance: none; cursor: pointer; font-family: inherit;
+  background: var(--accent); color: #fff; border: 1px solid var(--accent);
+  border-radius: 7px; padding: 10px 20px; font-size: 13.5px; font-weight: 600;
+  transition: background .15s, transform .1s;
+}
+.btn:hover { background: var(--accent2); }
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn-ghost {
+  background: transparent; color: var(--fg2); border-color: var(--line2);
+}
+.btn-ghost:hover { background: var(--bg3); color: var(--fg); }
+.btn-sm { padding: 6px 13px; font-size: 12.5px; }
+
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+
+/* ---------- 表格 ---------- */
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { padding: 8px 11px; text-align: left; border-bottom: 1px solid var(--line); }
+th {
+  color: var(--fg2); font-weight: 600; font-size: 11px;
+  text-transform: uppercase; letter-spacing: .4px;
+  background: var(--bg3); position: sticky; top: 0;
+}
+tbody tr:hover td { background: rgba(77, 157, 255, .04); }
+td.num, th.num { text-align: right; font-family: var(--mono); }
+td.mono { font-family: var(--mono); }
+.table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--line); }
+.table-wrap table { margin: 0; }
+
+/* ---------- 标签 ---------- */
+.tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px; border-radius: 5px;
+  font-size: 11.5px; font-weight: 650; font-family: var(--mono);
+  white-space: nowrap;
+}
+.tag.ok { background: var(--ok-bg); color: var(--ok); border: 1px solid rgba(53, 196, 106, .3); }
+.tag.warn { background: var(--warn-bg); color: var(--warn); border: 1px solid rgba(224, 168, 58, .3); }
+.tag.bad { background: var(--bad-bg); color: var(--bad); border: 1px solid rgba(242, 86, 77, .3); }
+.tag.info { background: rgba(77, 157, 255, .12); color: var(--accent); border: 1px solid rgba(77, 157, 255, .3); }
+.tag.mute { background: var(--bg3); color: var(--fg3); border: 1px solid var(--line); }
+
+/* ---------- 指标卡 ---------- */
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 11px; }
+.metric {
+  background: var(--bg3); border: 1px solid var(--line);
+  border-radius: 8px; padding: 12px 14px;
+}
+.metric .k { font-size: 11px; color: var(--fg3); text-transform: uppercase; letter-spacing: .3px; }
+.metric .v {
+  font-size: 18px; font-weight: 700; font-family: var(--mono);
+  margin-top: 3px; color: var(--fg);
+}
+.metric .u { font-size: 11px; color: var(--fg3); font-weight: 400; margin-left: 3px; }
+.metric.is-ok .v { color: var(--ok); }
+.metric.is-warn .v { color: var(--warn); }
+.metric.is-bad .v { color: var(--bad); }
+
+/* ---------- 收敛链 ---------- */
+.chain { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; }
+.chain-step {
+  background: var(--bg3); border: 1px solid var(--line);
+  border-radius: 8px; padding: 10px 13px; min-width: 116px;
+  font-size: 12px; line-height: 1.5;
+}
+.chain-step.fail { border-color: rgba(242, 86, 77, .45); background: var(--bad-bg); }
+.chain-step.pass { border-color: rgba(53, 196, 106, .45); background: var(--ok-bg); }
+.chain-step .it {
+  font-family: var(--mono); font-size: 10.5px; color: var(--fg3);
+  text-transform: uppercase; letter-spacing: .4px;
+}
+.chain-step .p { font-family: var(--mono); font-size: 11.5px; color: var(--fg2); margin: 3px 0; }
+.chain-step .st { font-weight: 650; font-size: 11.5px; }
+.chain-arrow { display: grid; place-items: center; color: var(--fg3); font-size: 15px; padding: 0 1px; }
+
+/* ---------- 提示条 ---------- */
+.notice {
+  border-radius: 0 8px 8px 0; padding: 12px 16px;
+  font-size: 13px; line-height: 1.6; margin: 14px 0;
+  border-left: 3px solid var(--accent); background: rgba(77, 157, 255, .07);
+  color: var(--fg2);
+}
+.notice.warn { border-left-color: var(--warn); background: rgba(224, 168, 58, .07); }
+.notice.bad { border-left-color: var(--bad); background: var(--bad-bg); }
+.notice.ok { border-left-color: var(--ok); background: var(--ok-bg); }
+.notice strong { color: var(--fg); }
+.notice ul { margin: 7px 0 0 18px; }
+.notice li { margin: 3px 0; }
+
+/* ---------- 代码/依据块 ---------- */
+.rationale {
+  background: var(--bg3); border: 1px solid var(--line);
+  border-radius: 8px; padding: 14px 16px;
+  font-family: var(--mono); font-size: 12px; line-height: 1.75;
+  color: #b9c6da; overflow-x: auto; white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ---------- 工艺卡 ---------- */
+.process-card {
+  background: linear-gradient(160deg, var(--bg3), var(--bg2));
+  border: 1px solid var(--line2); border-radius: var(--radius);
+  overflow: hidden;
+}
+.process-card .pc-head {
+  padding: 14px 18px; border-bottom: 1px solid var(--line);
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 12px; flex-wrap: wrap;
+  background: rgba(77, 157, 255, .05);
+}
+.process-card .pc-head h3 { font-size: 14.5px; font-family: var(--mono); }
+.process-card .pc-body { padding: 6px 18px 16px; }
+.pc-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px;
+  padding: 6px 0; border-bottom: 1px dashed var(--line);
+  font-size: 13px;
+}
+.pc-row:last-child { border-bottom: none; }
+.pc-row .k { color: var(--fg2); }
+.pc-row .v { font-family: var(--mono); text-align: right; }
+@media (max-width: 640px) { .pc-row { grid-template-columns: 1fr; } .pc-row .v { text-align: left; } }
+
+.qr-payload {
+  font-family: var(--mono); font-size: 11.5px; color: var(--fg2);
+  background: var(--bg); border: 1px dashed var(--line2);
+  border-radius: 7px; padding: 11px 13px; word-break: break-all;
+  margin-top: 12px; line-height: 1.7;
+}
+
+/* ---------- 空状态 ---------- */
+.empty {
+  text-align: center; padding: 44px 20px; color: var(--fg3); font-size: 13.5px;
+}
+.empty .icon { font-size: 30px; opacity: .35; margin-bottom: 10px; }
+
+/* ---------- 页脚 ---------- */
+.site-footer {
+  border-top: 1px solid var(--line); background: var(--bg2);
+  padding: 26px 24px 40px; margin-top: 20px;
+}
+.footer-inner {
+  max-width: 1240px; margin: 0 auto;
+  font-size: 12.5px; color: var(--fg3); line-height: 1.8;
+}
+.footer-inner a { color: var(--accent); text-decoration: none; }
+.footer-inner a:hover { text-decoration: underline; }
+.footer-links { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 12px; font-size: 13px; }
+.disclaimer { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 11.5px; }
+
+/* ---------- 工具类 ---------- */
+.mt0 { margin-top: 0; }
+.mt8 { margin-top: 8px; }
+.mt16 { margin-top: 16px; }
+.mt24 { margin-top: 24px; }
+.text-mute { color: var(--fg3); }
+.text-mono { font-family: var(--mono); }
+.nowrap { white-space: nowrap; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+/* ---------- 打印 ---------- */
+@media print {
+  :root {
+    --bg: #fff; --bg2: #fff; --bg3: #f6f8fa; --bg4: #eef1f5;
+    --fg: #111; --fg2: #444; --fg3: #666;
+    --line: #ccc; --line2: #bbb;
+  }
+  .site-header, .tabbar, .actions, .site-footer { display: none !important; }
+  .panel { display: block !important; }
+  body { background: #fff; color: #111; }
+  .card { break-inside: avoid; border: 1px solid #ccc; }
+}
+
+</style>
+  <meta name="zrcut-build" content="pages-single-file" />
+  <meta name="zrcut-build-time" content="2026-11-10T04:46:09.916Z" />
+</head>
+<body>
+
+<div class="top-progress" id="topProgress" aria-hidden="true"><span></span></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">刃</div>
+      <div class="brand-copy">
+        <h1>智刃工艺 <span class="en">ZR-CUT</span></h1>
+        <p>CNC 切削工艺参数智能推荐系统 · 智能制造</p>
+      </div>
+    </div>
+    <div class="header-tools">
+      <div class="mode-badge" id="modeBadge" title="全部计算在本页面内完成，无需服务端">
+        <span class="mode-dot" aria-hidden="true"></span>
+        <span id="modeText">浏览器内真算</span>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="printBtn" type="button" title="打印或导出 PDF">打印</button>
+    </div>
+  </div>
+</header>
+
+<nav class="tabbar" aria-label="主导航">
+  <div class="tabbar-inner" role="tablist">
+    <button class="tab is-active" type="button" role="tab" data-tab="recommend" aria-selected="true">
+      <span class="tab-num">01</span><span>参数推荐</span>
+    </button>
+    <button class="tab" type="button" role="tab" data-tab="validate" aria-selected="false">
+      <span class="tab-num">02</span><span>约束校验</span>
+    </button>
+    <button class="tab" type="button" role="tab" data-tab="predict" aria-selected="false">
+      <span class="tab-num">03</span><span>结果预测</span>
+    </button>
+    <button class="tab" type="button" role="tab" data-tab="card" aria-selected="false">
+      <span class="tab-num">04</span><span>工艺卡</span>
+    </button>
+    <button class="tab" type="button" role="tab" data-tab="closure" aria-selected="false">
+      <span class="tab-num">05</span><span>回填闭环</span>
+    </button>
+    <button class="tab" type="button" role="tab" data-tab="knowledge" aria-selected="false">
+      <span class="tab-num">06</span><span>知识检索</span>
+    </button>
+    <button class="tab" type="button" role="tab" data-tab="about" aria-selected="false">
+      <span class="tab-num">07</span><span>系统能力</span>
+    </button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ==================== 01 参数推荐 ==================== -->
+  <section class="panel is-active" id="panel-recommend" role="tabpanel" aria-labelledby="tab-recommend">
+    <div class="panel-head">
+      <h2><span class="idx">01</span>参数推荐</h2>
+      <p>输入材料、刀具、工序与质量要求，输出可执行的切削参数主方案与两套备选。
+        所有数值由确定性计算引擎给出，可逐项复算。</p>
+    </div>
+
+    <div class="card">
+      <div class="form-grid">
+        <div class="field">
+          <label for="recMaterial">材料</label>
+          <select id="recMaterial"></select>
+          <span class="hint" id="recMaterialHint"></span>
+        </div>
+        <div class="field">
+          <label for="recTool">刀具</label>
+          <select id="recTool"></select>
+          <span class="hint" id="recToolHint"></span>
+        </div>
+        <div class="field">
+          <label for="recOperation">工序</label>
+          <select id="recOperation"></select>
+        </div>
+        <div class="field">
+          <label for="recRa">Ra 要求 <span class="hint">μm</span></label>
+          <input type="number" id="recRa" value="1.6" min="0.05" max="12.5" step="0.1">
+        </div>
+        <div class="field">
+          <label for="recVolume">去除体积 <span class="hint">mm³，可空</span></label>
+          <input type="number" id="recVolume" value="288000" min="0" step="1000">
+        </div>
+        <div class="field">
+          <label for="recStrategy">策略</label>
+          <select id="recStrategy">
+            <option value="">自动选择</option>
+            <option value="EFFICIENCY">效率优先</option>
+            <option value="QUALITY">质量优先</option>
+            <option value="LIFE">寿命优先</option>
+            <option value="BALANCED">均衡</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="recWall">壁厚 <span class="hint">mm，薄壁填 &lt;3</span></label>
+          <input type="number" id="recWall" value="" min="0" step="0.5" placeholder="非薄壁件">
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="recRun" type="button">生成方案</button>
+        <button class="btn btn-ghost" id="recReset" type="button">恢复默认</button>
+      </div>
+    </div>
+
+    <div id="recResult">
+      <div class="empty">
+        <div class="icon">⚙</div>
+        <div>点击「生成方案」开始计算</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 02 约束校验 ==================== -->
+  <section class="panel" id="panel-validate" role="tabpanel">
+    <div class="panel-head">
+      <h2><span class="idx">02</span>十条硬约束校验与自动收敛</h2>
+      <p>对给定参数逐条判定 C-01 至 C-10。越限时按
+        <b>先降 ap → 再降 ae → 再降 vc → 最后降 fz</b> 的顺序迭代收敛。</p>
+    </div>
+
+    <div class="card">
+      <div class="form-grid">
+        <div class="field">
+          <label for="valMaterial">材料</label>
+          <select id="valMaterial"></select>
+        </div>
+        <div class="field">
+          <label for="valTool">刀具</label>
+          <select id="valTool"></select>
+        </div>
+        <div class="field">
+          <label for="valVc">vc <span class="hint">m/min</span></label>
+          <input type="number" id="valVc" value="180" min="0.1" step="1">
+        </div>
+        <div class="field">
+          <label for="valFz">fz <span class="hint">mm/z</span></label>
+          <input type="number" id="valFz" value="0.12" min="0.001" step="0.005">
+        </div>
+        <div class="field">
+          <label for="valAp">ap <span class="hint">mm</span></label>
+          <input type="number" id="valAp" value="20" min="0.01" step="0.5">
+        </div>
+        <div class="field">
+          <label for="valAe">ae <span class="hint">mm</span></label>
+          <input type="number" id="valAe" value="14" min="0.01" step="0.5">
+        </div>
+        <div class="field">
+          <label for="valRa">Ra 要求 <span class="hint">μm</span></label>
+          <input type="number" id="valRa" value="1.6" min="0.05" step="0.1">
+        </div>
+        <div class="field">
+          <label for="valWall">壁厚 <span class="hint">mm，可空</span></label>
+          <input type="number" id="valWall" value="" min="0" step="0.5" placeholder="非薄壁件">
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="valRun" type="button">校验并收敛</button>
+        <button class="btn btn-ghost" id="valNoConverge" type="button">仅校验（不收敛）</button>
+        <button class="btn btn-ghost" id="valOverrun" type="button">填入越限算例</button>
+      </div>
+    </div>
+
+    <div id="valResult">
+      <div class="empty">
+        <div class="icon">⚖</div>
+        <div>填入参数后点击「校验并收敛」</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 03 结果预测 ==================== -->
+  <section class="panel" id="panel-predict" role="tabpanel">
+    <div class="panel-head">
+      <h2><span class="idx">03</span>结果预测</h2>
+      <p>给出表面粗糙度、刀具寿命、加工时间三项预测及 90% 置信区间。
+        无历史试切样本时退化为公式值并标注 LOW 置信度——这是刻意的保守设计。</p>
+    </div>
+
+    <div class="card">
+      <div class="form-grid">
+        <div class="field">
+          <label for="prdMaterial">材料</label>
+          <select id="prdMaterial"></select>
+        </div>
+        <div class="field">
+          <label for="prdTool">刀具</label>
+          <select id="prdTool"></select>
+        </div>
+        <div class="field">
+          <label for="prdVc">vc <span class="hint">m/min</span></label>
+          <input type="number" id="prdVc" value="168" min="0.1" step="1">
+        </div>
+        <div class="field">
+          <label for="prdFz">fz <span class="hint">mm/z</span></label>
+          <input type="number" id="prdFz" value="0.12" min="0.001" step="0.005">
+        </div>
+        <div class="field">
+          <label for="prdAp">ap <span class="hint">mm</span></label>
+          <input type="number" id="prdAp" value="8" min="0.01" step="0.5">
+        </div>
+        <div class="field">
+          <label for="prdVolume">去除体积 <span class="hint">mm³</span></label>
+          <input type="number" id="prdVolume" value="288000" min="1" step="1000">
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="prdRun" type="button">计算预测</button>
+      </div>
+    </div>
+
+    <div id="prdResult">
+      <div class="empty">
+        <div class="icon">📈</div>
+        <div>填入参数后点击「计算预测」</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 04 工艺卡 ==================== -->
+  <section class="panel" id="panel-card" role="tabpanel">
+    <div class="panel-head">
+      <h2><span class="idx">04</span>工艺卡生成与签发</h2>
+      <p>把推荐结果落成车间可执行的工艺卡。签发后锁定，内容哈希用于防篡改校验，
+        修改必须走变更单流程。</p>
+    </div>
+
+    <div class="card">
+      <div class="form-grid">
+        <div class="field">
+          <label for="cardPart">零件名</label>
+          <input type="text" id="cardPart" value="底板">
+        </div>
+        <div class="field">
+          <label for="cardBlank">毛坯尺寸</label>
+          <input type="text" id="cardBlank" value="100x60x20">
+        </div>
+        <div class="field">
+          <label for="cardOpNo">工序号</label>
+          <input type="number" id="cardOpNo" value="20" min="1" step="5">
+        </div>
+        <div class="field">
+          <label for="cardMaterial">材料</label>
+          <select id="cardMaterial"></select>
+        </div>
+        <div class="field">
+          <label for="cardTool">刀具</label>
+          <select id="cardTool"></select>
+        </div>
+        <div class="field">
+          <label for="cardOperation">工序</label>
+          <select id="cardOperation"></select>
+        </div>
+        <div class="field">
+          <label for="cardRa">Ra 要求 <span class="hint">μm</span></label>
+          <input type="number" id="cardRa" value="1.6" min="0.05" step="0.1">
+        </div>
+        <div class="field">
+          <label for="cardVolume">去除体积 <span class="hint">mm³</span></label>
+          <input type="number" id="cardVolume" value="61200" min="1" step="1000">
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="cardRun" type="button">生成工艺卡</button>
+        <button class="btn btn-ghost" id="cardIssue" type="button" disabled>签发并锁定</button>
+      </div>
+    </div>
+
+    <div id="cardResult">
+      <div class="empty">
+        <div class="icon">📋</div>
+        <div>填入信息后点击「生成工艺卡」</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 05 回填闭环 ==================== -->
+  <section class="panel" id="panel-closure" role="tabpanel">
+    <div class="panel-head">
+      <h2><span class="idx">05</span>回填闭环</h2>
+      <p>试切后回填实测数据，按三档阈值判定偏差：
+        Ra &gt; 25%、工时 &gt; 30%、寿命 &gt; 40%。
+        偏差严重时冻结该材料+刀具组合并转工艺工程师。</p>
+    </div>
+
+    <div class="card">
+      <div class="form-grid">
+        <div class="field">
+          <label for="clsMaterial">材料</label>
+          <select id="clsMaterial"></select>
+        </div>
+        <div class="field">
+          <label for="clsTool">刀具</label>
+          <select id="clsTool"></select>
+        </div>
+        <div class="field">
+          <label for="clsPredRa">预测 Ra <span class="hint">μm</span></label>
+          <input type="number" id="clsPredRa" value="0.900" min="0.001" step="0.01">
+        </div>
+        <div class="field">
+          <label for="clsActRa">实测 Ra <span class="hint">μm</span></label>
+          <input type="number" id="clsActRa" value="1.05" min="0.001" step="0.01">
+        </div>
+        <div class="field">
+          <label for="clsPredTime">预测工时 <span class="hint">min</span></label>
+          <input type="number" id="clsPredTime" value="1.438" min="0.001" step="0.01">
+        </div>
+        <div class="field">
+          <label for="clsActTime">实测工时 <span class="hint">min</span></label>
+          <input type="number" id="clsActTime" value="1.6" min="0.001" step="0.01">
+        </div>
+        <div class="field">
+          <label for="clsPredLife">预测寿命 <span class="hint">min</span></label>
+          <input type="number" id="clsPredLife" value="16.37" min="0.001" step="0.1">
+        </div>
+        <div class="field">
+          <label for="clsActLife">实测寿命 <span class="hint">min</span></label>
+          <input type="number" id="clsActLife" value="20" min="0.001" step="0.1">
+        </div>
+        <div class="field">
+          <label for="clsChatter">现场颤振</label>
+          <select id="clsChatter">
+            <option value="false">未观察到</option>
+            <option value="true">观察到</option>
+          </select>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="clsRun" type="button">判定偏差</button>
+        <button class="btn btn-ghost" id="clsPresetNormal" type="button">正常档算例</button>
+        <button class="btn btn-ghost" id="clsPresetSevere" type="button">严重档算例</button>
+      </div>
+    </div>
+
+    <div id="clsResult">
+      <div class="empty">
+        <div class="icon">🔄</div>
+        <div>填入实测数据后点击「判定偏差」</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 06 知识检索 ==================== -->
+  <section class="panel" id="panel-knowledge" role="tabpanel">
+    <div class="panel-head">
+      <h2><span class="idx">06</span>知识检索</h2>
+      <p>BM25 + IDF 加权查询覆盖率 + 三因子打分（相关度 0.50 / 权威度 0.35 / 时效性 0.15）。
+        无可靠依据时返回空结果而非硬凑——这是防止编造的关键设计。</p>
+    </div>
+
+    <div class="card">
+      <div class="form-grid">
+        <div class="field" style="grid-column: span 2;">
+          <label for="kbQuery">检索查询</label>
+          <input type="text" id="kbQuery" value="304 不锈钢 内冷">
+        </div>
+        <div class="field">
+          <label>&nbsp;</label>
+          <button class="btn" id="kbRun" type="button">检索</button>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-ghost btn-sm" type="button" data-kbq="45钢 侧铣 切削速度">45 钢侧铣</button>
+        <button class="btn btn-ghost btn-sm" type="button" data-kbq="钛合金 TC4 精加工">钛合金</button>
+        <button class="btn btn-ghost btn-sm" type="button" data-kbq="铝合金 6061 高速铣削">铝合金</button>
+        <button class="btn btn-ghost btn-sm" type="button" data-kbq="主轴功率 限制">主轴功率</button>
+        <button class="btn btn-ghost btn-sm" type="button" data-kbq="火星探测器轨道参数">无关查询（应返回空）</button>
+      </div>
+    </div>
+
+    <div id="kbResult">
+      <div class="empty">
+        <div class="icon">📚</div>
+        <div>输入查询后点击「检索」</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 07 系统能力 ==================== -->
+  <section class="panel" id="panel-about" role="tabpanel">
+    <div class="panel-head">
+      <h2><span class="idx">07</span>系统能力与质量</h2>
+      <p>本页是同一个系统的浏览器内实现。Python 端服务提供 HTTP API，
+        本页面把计算引擎移植到 JavaScript，在纯静态环境也能真实计算。</p>
+    </div>
+
+    <div id="aboutContent"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="#recommend">参数推荐</a>
+      <a href="#validate">约束校验</a>
+      <a href="#knowledge">知识检索</a>
+      <a href="#about">系统能力</a>
+    </div>
+    <div>智刃工艺 ZR-CUT · MIT License · 零外部依赖（Python 标准库 + numpy）</div>
+    <div class="disclaimer">
+      免责声明：本系统用于工艺参数推荐辅助，不替代法定检验、持证作业与工艺工程师签发。
+      颤振判定采用单自由度简化叶瓣模型，仅用于风险分级，不用于精确预测稳定域；
+      真实稳定域须以切削试验或锤击模态测试标定。材料与刀具参数来自公开手册，
+      量产前须用本厂实测数据校核。
+    </div>
+  </div>
+</footer>
+
+<script id="zrcut-engine">
+/**
+ * 智刃工艺 ZR-CUT · 浏览器端计算引擎
+ *
+ * 本文件是 Python 端 zrcut 包中 calc / constraints / recommender / knowledge
+ * 四个模块的移植版，用于在纯静态环境（GitHub Pages）中真实执行计算，
+ * 而不是播放预录结果。
+ *
+ * 一致性保证：web/test-engine.mjs 会用 web/golden-vectors.json 逐项比对
+ * 本引擎输出与 Python 端基准值，相对误差要求 ≤ 1e-4。
+ *
+ * 同构设计：浏览器挂到 window.ZR，Node 下走 module.exports。
+ */
+(function (root, factory) {
+  'use strict';
+  var api = factory();
+  if (typeof module === 'object' && module.exports) {
+    module.exports = api;
+  } else {
+    root.ZR = api;
+  }
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+
+  /* ==================== 领域常量（与 zrcut/domain.py 一致） ==================== */
+
+  var MACHINE = {
+    code: 'EQ-A01-0037',
+    name: 'VMC-850 立式加工中心',
+    controlSystem: 'FANUC 0i-MF',
+    spindleMaxRpm: 8000,
+    powerContinuousKw: 11,
+    powerPeakKw: 15,
+    torqueNominalNm: 70,
+    taper: 'BT40',
+    travelXyz: [850, 500, 550],
+    tableMm: [1000, 500],
+    rapidXy: 24000,
+    rapidZ: 18000,
+    feedMin: 1,
+    feedMax: 10000,
+    positioning: 0.008,
+    repeatability: 0.005,
+    coolant: '乳化液外冷',
+    coolantPressure: [0.3, 0.5],
+    naturalFrequencyHz: 320
+  };
+
+  var MATERIALS = {
+    M1: {
+      code: 'M1', name: '中碳钢', grade: '45，正火', hardness: 'HB 180-220',
+      kc: 2000, taylorC: 350, taylorN: 0.25, kRa: 1.6,
+      vcMin: 120, vcMax: 180, fzMin: 0.05, fzMax: 0.12,
+      aeDMax: 0.5, apDMax: 1.0, requiresCoolant: false
+    },
+    M2: {
+      code: 'M2', name: '铝合金', grade: '6061-T6', hardness: 'HB 95',
+      kc: 700, taylorC: 1800, taylorN: 0.40, kRa: 1.2,
+      vcMin: 300, vcMax: 500, fzMin: 0.08, fzMax: 0.20,
+      aeDMax: 0.7, apDMax: 2.0, requiresCoolant: false
+    },
+    M3: {
+      code: 'M3', name: '不锈钢', grade: '304', hardness: 'HB 185',
+      kc: 2600, taylorC: 160, taylorN: 0.20, kRa: 2.2,
+      vcMin: 60, vcMax: 100, fzMin: 0.04, fzMax: 0.08,
+      aeDMax: 0.4, apDMax: 0.5, requiresCoolant: true
+    },
+    M4: {
+      code: 'M4', name: '球墨铸铁', grade: 'QT600-3', hardness: 'HB 220-270',
+      kc: 1500, taylorC: 280, taylorN: 0.25, kRa: 2.0,
+      vcMin: 100, vcMax: 150, fzMin: 0.06, fzMax: 0.12,
+      aeDMax: 0.5, apDMax: 0.8, requiresCoolant: false
+    },
+    M5: {
+      code: 'M5', name: '钛合金', grade: 'TC4', hardness: 'HB 320',
+      kc: 2100, taylorC: 80, taylorN: 0.18, kRa: 2.5,
+      vcMin: 30, vcMax: 60, fzMin: 0.03, fzMax: 0.06,
+      aeDMax: 0.3, apDMax: 0.3, requiresCoolant: true
+    }
+  };
+
+  function mkTool(code, kind, d, z, coat, overhang, flute, r, isBall) {
+    return {
+      code: code, kind: kind, diameter: d, teeth: z, coating: coat,
+      overhang: overhang, fluteLength: flute, cornerRadius: r,
+      isBall: !!isBall, overhangRatio: overhang / d
+    };
+  }
+
+  var TOOLS = {
+    T1: mkTool('T1', '立铣刀', 10, 4, '硬质合金 TiAlN', 40, 22, 0.8, false),
+    T2: mkTool('T2', '立铣刀', 12, 4, '硬质合金 TiAlN', 45, 26, 0.8, false),
+    T3: mkTool('T3', '立铣刀', 16, 4, '硬质合金 TiAlN', 55, 32, 0.8, false),
+    T4: mkTool('T4', '立铣刀', 20, 4, '硬质合金 AlCrN', 65, 40, 0.8, false),
+    T5: mkTool('T5', '球头刀', 10, 2, '硬质合金 TiAlN', 50, 25, 5.0, true),
+    T6: mkTool('T6', '面铣刀', 80, 5, '硬质合金 可转位', 80, 0, 1.2, false)
+  };
+
+  var OPERATIONS = {
+    OP1: { code: 'OP1', name: '端面铣', typicalTools: ['T6'] },
+    OP2: { code: 'OP2', name: '侧铣（轮廓）', typicalTools: ['T1', 'T2', 'T3', 'T4'] },
+    OP3: { code: 'OP3', name: '型腔粗加工', typicalTools: ['T1', 'T2', 'T3', 'T4'] },
+    OP4: { code: 'OP4', name: '曲面精加工', typicalTools: ['T5'] }
+  };
+
+  var CHATTER_LOBES = [1, 2, 3];
+  var CHATTER_BAND_TOL = 0.03;
+  var LD_SAFE_MAX = 4.0;
+  var LD_WARN_MAX = 6.0;
+  var THIN_WALL_MM = 3.0;
+  var LONG_OVERHANG_AP_FACTOR = 0.7;
+  var THIN_WALL_AP_FACTOR = 0.5;
+  var DEFAULT_RA_REQ = 3.2;
+
+  /* ==================== 计算引擎（与 zrcut/calc.py 一致） ==================== */
+
+  var EPS = 1e-9;
+
+  function spindleSpeed(vc, D) {
+    if (vc <= 0) { throw new Error('切削速度必须为正，当前 ' + vc); }
+    if (D <= 0) { throw new Error('刀具直径必须为正，当前 ' + D); }
+    return 1000 * vc / (Math.PI * D);
+  }
+
+  function cuttingSpeedFromRpm(rpm, D) {
+    if (rpm <= 0) { throw new Error('主轴转速必须为正，当前 ' + rpm); }
+    if (D <= 0) { throw new Error('刀具直径必须为正，当前 ' + D); }
+    return Math.PI * D * rpm / 1000;
+  }
+
+  function feedRate(fz, z, n) {
+    if (fz <= 0) { throw new Error('每齿进给必须为正，当前 ' + fz); }
+    if (z <= 0) { throw new Error('齿数必须为正整数，当前 ' + z); }
+    if (n <= 0) { throw new Error('主轴转速必须为正，当前 ' + n); }
+    return fz * z * n;
+  }
+
+  function materialRemovalRate(ap, ae, vf) {
+    if (ap <= 0) { throw new Error('轴向切深必须为正，当前 ' + ap); }
+    if (ae <= 0) { throw new Error('径向切宽必须为正，当前 ' + ae); }
+    if (vf <= 0) { throw new Error('进给速度必须为正，当前 ' + vf); }
+    return ap * ae * vf;
+  }
+
+  function cuttingPower(mrr, kc) {
+    if (mrr <= 0) { throw new Error('材料去除率必须为正，当前 ' + mrr); }
+    if (kc <= 0) { throw new Error('比切削力必须为正，当前 ' + kc); }
+    return mrr * kc / (60 * 1e6);
+  }
+
+  function theoreticalRoughness(fz, cornerRadius, isBall) {
+    if (fz <= 0) { throw new Error('每齿进给必须为正，当前 ' + fz); }
+    if (cornerRadius <= 0) { throw new Error('刀尖圆弧半径必须为正，当前 ' + cornerRadius); }
+    var divisor = isBall ? 8 : 32;
+    return fz * fz / (divisor * cornerRadius) * 1000;
+  }
+
+  function predictedRoughness(raTh, kRa) {
+    if (raTh <= 0) { throw new Error('理论粗糙度必须为正，当前 ' + raTh); }
+    if (kRa <= 0) { throw new Error('粗糙度修正系数必须为正，当前 ' + kRa); }
+    return raTh * kRa;
+  }
+
+  function toolLife(vc, C, n) {
+    if (vc <= 0) { throw new Error('切削速度必须为正，当前 ' + vc); }
+    if (C <= 0) { throw new Error('Taylor 常数 C 必须为正，当前 ' + C); }
+    if (n <= 0) { throw new Error('Taylor 指数 n 必须为正，当前 ' + n); }
+    return Math.pow(C / vc, 1 / n);
+  }
+
+  function machiningTime(volume, ap, ae, vf) {
+    if (volume <= 0) { throw new Error('待去除体积必须为正，当前 ' + volume); }
+    return volume / materialRemovalRate(ap, ae, vf);
+  }
+
+  function maxFzForRoughness(raReq, cornerRadius, kRa, isBall) {
+    if (raReq <= 0) { throw new Error('粗糙度要求必须为正，当前 ' + raReq); }
+    if (cornerRadius <= 0) { throw new Error('刀尖圆弧半径必须为正，当前 ' + cornerRadius); }
+    if (kRa <= 0) { throw new Error('粗糙度修正系数必须为正，当前 ' + kRa); }
+    var divisor = isBall ? 8 : 32;
+    return Math.sqrt(raReq * divisor * cornerRadius / (1000 * kRa));
+  }
+
+  function toothPassFrequency(z, n) {
+    if (z <= 0) { throw new Error('齿数必须为正整数，当前 ' + z); }
+    if (n <= 0) { throw new Error('主轴转速必须为正，当前 ' + n); }
+    return z * n / 60;
+  }
+
+  function computeAll(mat, tool, p) {
+    var n = spindleSpeed(p.vc, tool.diameter);
+    var vf = feedRate(p.fz, tool.teeth, n);
+    var mrr = materialRemovalRate(p.ap, p.ae, vf);
+    var pc = cuttingPower(mrr, mat.kc);
+    var raTh = theoreticalRoughness(p.fz, tool.cornerRadius, tool.isBall);
+    var raPred = predictedRoughness(raTh, mat.kRa);
+    var life = toolLife(p.vc, mat.taylorC, mat.taylorN);
+    return {
+      vc: p.vc, n: n, fz: p.fz, vf: vf, ap: p.ap, ae: p.ae,
+      mrr: mrr, pc: pc, raTh: raTh, raPred: raPred, toolLife: life,
+      overhangRatio: tool.overhangRatio,
+      toothPassHz: toothPassFrequency(tool.teeth, n)
+    };
+  }
+
+  function apUpperBound(mat, tool, wallThickness) {
+    var ap = mat.apDMax * tool.diameter;
+    var ld = tool.overhangRatio;
+    if (ld > LD_SAFE_MAX && ld <= LD_WARN_MAX) { ap *= LONG_OVERHANG_AP_FACTOR; }
+    if (wallThickness != null && wallThickness > 0 && wallThickness < THIN_WALL_MM) {
+      ap *= THIN_WALL_AP_FACTOR;
+    }
+    return ap;
+  }
+
+  function aeUpperBound(mat, tool) {
+    return mat.aeDMax * tool.diameter;
+  }
+
+  /* ==================== 颤振分级（与 constraints.classify_chatter 一致） ==================== */
+
+  function chatterStableRpm(teeth, lobe) {
+    if (teeth <= 0) { throw new Error('齿数必须为正整数，当前 ' + teeth); }
+    if (lobe <= 0) { throw new Error('叶瓣序数必须为正整数，当前 ' + lobe); }
+    return 60 * MACHINE.naturalFrequencyHz / (lobe * teeth);
+  }
+
+  function classifyChatter(tool, rpm, ae, ap) {
+    var bands = [];
+    var inBand = false;
+    var i, lobe, center, lo, hi;
+    for (i = 0; i < CHATTER_LOBES.length; i++) {
+      lobe = CHATTER_LOBES[i];
+      center = chatterStableRpm(tool.teeth, lobe);
+      lo = center * (1 - CHATTER_BAND_TOL);
+      hi = center * (1 + CHATTER_BAND_TOL);
+      bands.push({ lobe: lobe, center: center, lo: lo, hi: hi });
+      if (rpm >= lo && rpm <= hi) { inBand = true; }
+    }
+    var aeD = ae / tool.diameter;
+    var apD = ap / tool.diameter;
+    var bandTxt = bands.map(function (b) { return b.center.toFixed(0); }).join('/');
+
+    if (inBand) {
+      if (aeD <= 0.5) {
+        var hit = bands.filter(function (b) { return rpm >= b.lo && rpm <= b.hi; })[0];
+        return {
+          risk: 'LOW',
+          detail: 'n=' + rpm.toFixed(1) + ' 落在 k=' + hit.lobe + ' 稳定带内，且 ae/D=' + aeD.toFixed(2) + '≤0.5'
+        };
+      }
+      return {
+        risk: 'MEDIUM',
+        detail: 'n=' + rpm.toFixed(1) + ' 在稳定带内，但 ae/D=' + aeD.toFixed(2) + '>0.5'
+      };
+    }
+
+    if (aeD > 0.5 || apD > 1.0) {
+      var reasons = [];
+      if (aeD > 0.5) { reasons.push('ae/D=' + aeD.toFixed(2) + '>0.5'); }
+      if (apD > 1.0) { reasons.push('ap/D=' + apD.toFixed(2) + '>1.0'); }
+      return {
+        risk: 'HIGH',
+        detail: 'n=' + rpm.toFixed(1) + ' 不在 z=' + tool.teeth + ' 稳定带 ' + bandTxt +
+          ' 内，且 ' + reasons.join('、') + '；该判据为单自由度简化叶瓣模型，仅作风险分级'
+      };
+    }
+
+    if (aeD <= 0.3 && apD <= 0.5) {
+      return {
+        risk: 'LOW',
+        detail: 'n=' + rpm.toFixed(1) + ' 不在稳定带内，但 ae/D=' + aeD.toFixed(2) +
+          '≤0.3 且 ap/D=' + apD.toFixed(2) + '≤0.5，小切宽低速切削振动能量低'
+      };
+    }
+
+    return {
+      risk: 'MEDIUM',
+      detail: 'n=' + rpm.toFixed(1) + ' 不在稳定带内，ae/D=' + aeD.toFixed(2) +
+        '、ap/D=' + apD.toFixed(2) + ' 未达 HIGH 判据'
+    };
+  }
+
+  /* ==================== 十条硬约束（与 constraints.validate 一致） ==================== */
+
+  function makeCtx(raReq, wallThickness, coolantAvailable, vcFloor) {
+    return {
+      raReq: raReq == null ? DEFAULT_RA_REQ : raReq,
+      wallThickness: wallThickness == null ? null : wallThickness,
+      coolantAvailable: coolantAvailable !== false,
+      vcFloor: vcFloor == null ? null : vcFloor
+    };
+  }
+
+  function effectiveVcMin(mat, ctx) {
+    if (ctx.vcFloor != null) { return Math.min(mat.vcMin, ctx.vcFloor); }
+    return mat.vcMin;
+  }
+
+  function validate(mat, tool, p, ctx) {
+    ctx = ctx || makeCtx();
+    var res = computeAll(mat, tool, p);
+    var out = [];
+
+    // C-01
+    var c01 = res.n <= MACHINE.spindleMaxRpm;
+    out.push({
+      checkId: 'C-01',
+      constraint: 'n ≤ ' + MACHINE.spindleMaxRpm + ' r/min',
+      passed: c01, applicable: true,
+      actual: round1(res.n), limit: MACHINE.spindleMaxRpm,
+      action: c01 ? 'none' : '降 vc',
+      detail: '为上限的 ' + (res.n / MACHINE.spindleMaxRpm * 100).toFixed(1) + '%'
+    });
+
+    // C-02
+    var c02 = res.vf >= MACHINE.feedMin && res.vf <= MACHINE.feedMax;
+    out.push({
+      checkId: 'C-02',
+      constraint: MACHINE.feedMin + ' ≤ vf ≤ ' + MACHINE.feedMax + ' mm/min',
+      passed: c02, applicable: true,
+      actual: round1(res.vf), limit: MACHINE.feedMax,
+      action: c02 ? 'none' : '调整 fz',
+      detail: c02 ? '合规' : '超出台架进给范围'
+    });
+
+    // C-03
+    var c03 = res.pc <= MACHINE.powerContinuousKw;
+    out.push({
+      checkId: 'C-03',
+      constraint: 'Pc ≤ ' + MACHINE.powerContinuousKw + ' kW',
+      passed: c03, applicable: true,
+      actual: round3(res.pc), limit: MACHINE.powerContinuousKw,
+      action: c03 ? 'none' : '降 ap',
+      detail: c03
+        ? '余量 ' + (MACHINE.powerContinuousKw - res.pc).toFixed(3) + ' kW'
+        : '超出 ' + (res.pc - MACHINE.powerContinuousKw).toFixed(3) + ' kW'
+    });
+
+    // C-04
+    var ld = tool.overhangRatio;
+    var c04 = ld <= LD_WARN_MAX;
+    var c04Detail;
+    if (ld <= LD_SAFE_MAX) {
+      c04Detail = 'L/D=' + ld.toFixed(2) + '≤' + LD_SAFE_MAX + '，无需折减';
+    } else if (ld <= LD_WARN_MAX) {
+      c04Detail = 'L/D=' + ld.toFixed(2) + ' 处于 ' + LD_SAFE_MAX + '-' + LD_WARN_MAX + '，ap 上限折减 0.7';
+    } else {
+      c04Detail = 'L/D=' + ld.toFixed(2) + '>' + LD_WARN_MAX + '，刚性严重不足，转人工';
+    }
+    out.push({
+      checkId: 'C-04',
+      constraint: 'L/D ≤ ' + LD_SAFE_MAX.toFixed(1),
+      passed: c04, applicable: true,
+      actual: round3(ld), limit: LD_SAFE_MAX,
+      action: c04 ? 'none' : '换刀或缩短悬伸',
+      detail: c04Detail
+    });
+
+    // C-05
+    var vcLo = effectiveVcMin(mat, ctx);
+    var vcHi = mat.vcMax;
+    var vcOk = p.vc >= vcLo && p.vc <= vcHi;
+    var fzOk = p.fz >= mat.fzMin && p.fz <= mat.fzMax;
+    var parts = [];
+    if (!vcOk) { parts.push('vc=' + p.vc + ' 超出 ' + vcLo + '-' + vcHi); }
+    if (!fzOk) { parts.push('fz=' + p.fz + ' 超出 ' + mat.fzMin + '-' + mat.fzMax); }
+    var c05 = vcOk && fzOk;
+    var c05Note = vcLo < mat.vcMin ? '（下标已按主轴上限放宽至 ' + vcLo.toFixed(1) + '）' : '';
+    out.push({
+      checkId: 'C-05',
+      constraint: 'vc ' + vcLo + '-' + vcHi + ' m/min, fz ' + mat.fzMin + '-' + mat.fzMax + ' mm/z',
+      passed: c05, applicable: true,
+      actual: 'vc=' + p.vc + ',fz=' + p.fz,
+      limit: 'vc ' + vcLo + '-' + vcHi + ',fz ' + mat.fzMin + '-' + mat.fzMax,
+      action: c05 ? 'none' : '收敛到边界',
+      detail: c05 ? ('合规' + c05Note) : parts.join('；')
+    });
+
+    // C-06
+    var apD = p.ap / tool.diameter;
+    var aeD = p.ae / tool.diameter;
+    var apLim = mat.apDMax;
+    if (ld > LD_SAFE_MAX && ld <= LD_WARN_MAX) { apLim *= 0.7; }
+    if (ctx.wallThickness != null && ctx.wallThickness > 0 && ctx.wallThickness < THIN_WALL_MM) {
+      apLim *= 0.5;
+    }
+    var aeLim = mat.aeDMax;
+    var c06 = apD <= apLim + EPS && aeD <= aeLim + EPS;
+    out.push({
+      checkId: 'C-06',
+      constraint: 'ap/D≤' + fmtG(apLim) + ', ae/D≤' + fmtG(aeLim),
+      passed: c06, applicable: true,
+      actual: apD.toFixed(3) + '/' + aeD.toFixed(3),
+      limit: fmtG(apLim) + '/' + fmtG(aeLim),
+      action: c06 ? 'none' : '降 ap 或降 ae',
+      detail: c06 ? '合规' : 'ap/D=' + apD.toFixed(3) + ' 或 ae/D=' + aeD.toFixed(3) + ' 超限'
+    });
+
+    // C-07
+    var ch = classifyChatter(tool, res.n, p.ae, p.ap);
+    var c07 = ch.risk !== 'HIGH';
+    out.push({
+      checkId: 'C-07',
+      constraint: '颤振风险不高于 MEDIUM',
+      passed: c07, applicable: true,
+      actual: ch.risk, limit: 'LOW/MEDIUM/HIGH',
+      action: c07 ? 'none' : '收敛稳定带或降 ap',
+      detail: ch.detail
+    });
+
+    // C-08
+    var c08 = res.raPred <= ctx.raReq + EPS;
+    out.push({
+      checkId: 'C-08',
+      constraint: 'Ra_pred ≤ ' + fmtG(ctx.raReq) + ' μm',
+      passed: c08, applicable: true,
+      actual: round3(res.raPred), limit: ctx.raReq,
+      action: c08 ? 'none' : '降 fz 或换刀',
+      detail: c08
+        ? '余量 ' + (ctx.raReq - res.raPred).toFixed(3) + ' μm'
+        : '超出 ' + (res.raPred - ctx.raReq).toFixed(3) + ' μm'
+    });
+
+    // C-09
+    var c09Applicable = !!mat.requiresCoolant;
+    var c09 = c09Applicable ? ctx.coolantAvailable : true;
+    out.push({
+      checkId: 'C-09',
+      constraint: 'M3/M5 须内冷或高压外冷',
+      passed: c09, applicable: c09Applicable,
+      actual: ctx.coolantAvailable ? '具备' : '不具备',
+      limit: '具备',
+      action: c09 ? 'none' : '停机并接入内冷',
+      detail: c09Applicable
+        ? (mat.name + ' 须内冷或高压外冷，当前' + (c09 ? '已具备' : '不具备'))
+        : (mat.name + ' 不强制内冷，建议大流量冲刷')
+    });
+
+    // C-10
+    var c10Applicable = ctx.wallThickness != null && ctx.wallThickness > 0 && ctx.wallThickness < THIN_WALL_MM;
+    var c10, c10Actual, c10Limit, c10Detail, c10Action;
+    if (c10Applicable) {
+      var apThin = apUpperBound(mat, tool, ctx.wallThickness);
+      c10 = p.ap <= apThin + EPS;
+      c10Actual = round3(p.ap);
+      c10Limit = round3(apThin);
+      c10Detail = '薄壁 ' + ctx.wallThickness + 'mm，ap 上限折减为 ' + apThin.toFixed(2) + 'mm（含悬伸折减后统一上限）';
+      c10Action = c10 ? 'none' : '降 ap 至折减上限';
+    } else {
+      c10 = true;
+      c10Actual = round3(p.ap);
+      c10Limit = 'not_applicable';
+      c10Detail = '非薄壁件，不适用';
+      c10Action = 'none';
+    }
+    out.push({
+      checkId: 'C-10',
+      constraint: '薄壁件（<' + THIN_WALL_MM + 'mm）ap 折减 0.5',
+      passed: c10, applicable: c10Applicable,
+      actual: c10Actual, limit: c10Limit,
+      action: c10Action, detail: c10Detail
+    });
+
+    return out;
+  }
+
+  /* ==================== 收敛算法（与 constraints.converge 一致） ==================== */
+
+  function diagnose(mat, tool, p, ctx) {
+    var res = computeAll(mat, tool, p);
+    var need = {};
+    var apD = p.ap / tool.diameter;
+    var aeD = p.ae / tool.diameter;
+    var ld = tool.overhangRatio;
+
+    var apLim = mat.apDMax;
+    if (ld > LD_SAFE_MAX && ld <= LD_WARN_MAX) { apLim *= 0.7; }
+    if (ctx.wallThickness != null && ctx.wallThickness > 0 && ctx.wallThickness < THIN_WALL_MM) {
+      apLim *= 0.5;
+    }
+    var aeLim = mat.aeDMax;
+    var vcLo = effectiveVcMin(mat, ctx);
+    var vcHi = mat.vcMax;
+
+    if (res.n > MACHINE.spindleMaxRpm) { need.vc = true; }
+    else if (p.vc > vcHi || p.vc < vcLo) { need.vc = true; }
+
+    if (res.vf > MACHINE.feedMax || res.vf < MACHINE.feedMin) { need.fz = true; }
+    if (res.raPred > ctx.raReq + EPS) { need.fz = true; }
+    if (p.fz > mat.fzMax || p.fz < mat.fzMin) { need.fz = true; }
+    if (res.pc > MACHINE.powerContinuousKw) { need.ap = true; }
+    if (apD > apLim + EPS) { need.ap = true; }
+    if (aeD > aeLim + EPS) { need.ae = true; }
+
+    var ch = classifyChatter(tool, res.n, p.ae, p.ap);
+    if (ch.risk === 'HIGH') {
+      if (aeD > 0.5) { need.ae = true; }
+      else if (apD > 1.0) { need.ap = true; }
+      else { need.vc = true; }
+    }
+
+    return ['ap', 'ae', 'vc', 'fz'].filter(function (k) { return need[k]; });
+  }
+
+  function floorTo(value, step) {
+    if (step <= 0) { return value; }
+    return Math.floor(value / step) * step;
+  }
+
+  function converge(mat, tool, p, ctx, maxIterations) {
+    ctx = ctx || makeCtx();
+    maxIterations = maxIterations == null ? 8 : maxIterations;
+
+    // 主轴极限优先于材料区间
+    var vcFromSpindle = cuttingSpeedFromRpm(MACHINE.spindleMaxRpm * 0.98, tool.diameter);
+    var useCtx = ctx;
+    if (ctx.vcFloor == null && mat.vcMin > vcFromSpindle) {
+      useCtx = makeCtx(ctx.raReq, ctx.wallThickness, ctx.coolantAvailable, vcFromSpindle);
+    }
+
+    var cur = { vc: p.vc, fz: p.fz, ap: p.ap, ae: p.ae };
+    var history = [];
+    var it, results, failed, need, target, changed, res, ratio, cand, cap, newVal, fzCap, vcLo;
+
+    for (it = 0; it <= maxIterations; it++) {
+      results = validate(mat, tool, cur, useCtx);
+      failed = results.filter(function (r) { return r.applicable && !r.passed; });
+      history.push({
+        iteration: it,
+        vc: round4(cur.vc), fz: round4(cur.fz), ap: round4(cur.ap), ae: round4(cur.ae),
+        failed: failed.map(function (r) { return r.checkId; })
+      });
+
+      if (failed.length === 0) {
+        return {
+          converged: true, results: results, iterations: it,
+          finalParams: { vc: cur.vc, fz: cur.fz, ap: cur.ap, ae: cur.ae },
+          history: history
+        };
+      }
+      if (it === maxIterations) { break; }
+
+      need = diagnose(mat, tool, cur, useCtx);
+      if (need.length === 0) { break; }
+      target = need[0];
+      changed = false;
+
+      if (target === 'ap') {
+        res = computeAll(mat, tool, cur);
+        if (res.pc > MACHINE.powerContinuousKw) {
+          ratio = MACHINE.powerContinuousKw * 0.98 / res.pc;
+          cand = floorTo(cur.ap * ratio, 0.5);
+        } else {
+          cand = cur.ap * 0.8;
+        }
+        cap = apUpperBound(mat, tool, useCtx.wallThickness);
+        newVal = Math.min(cand, cap);
+        if (newVal < cur.ap - EPS) { cur.ap = Math.max(newVal, 0.1); changed = true; }
+
+      } else if (target === 'ae') {
+        cap = aeUpperBound(mat, tool);
+        newVal = Math.min(cur.ae, cap);
+        if (newVal < cur.ae - EPS) {
+          cur.ae = Math.max(newVal, 0.1); changed = true;
+        } else {
+          newVal = Math.max(cur.ae * 0.7, 0.1);
+          if (newVal < cur.ae - EPS) { cur.ae = newVal; changed = true; }
+        }
+
+      } else if (target === 'vc') {
+        res = computeAll(mat, tool, cur);
+        vcLo = effectiveVcMin(mat, useCtx);
+        var cands = [mat.vcMax];
+        if (res.n > MACHINE.spindleMaxRpm) {
+          cands.push(cuttingSpeedFromRpm(MACHINE.spindleMaxRpm * 0.98, tool.diameter));
+        }
+        newVal = Math.min.apply(null, [cur.vc].concat(cands));
+        if (newVal < cur.vc - EPS) {
+          cur.vc = Math.max(newVal, Math.min(vcLo, newVal)); changed = true;
+        } else if (res.pc > MACHINE.powerContinuousKw) {
+          newVal = Math.max(cur.vc * 0.85, vcLo);
+          if (newVal < cur.vc - EPS) { cur.vc = newVal; changed = true; }
+        } else if (res.n > MACHINE.spindleMaxRpm) {
+          newVal = Math.max(cur.vc * 0.9, vcLo);
+          if (newVal < cur.vc - EPS) { cur.vc = newVal; changed = true; }
+        }
+
+      } else if (target === 'fz') {
+        fzCap = maxFzForRoughness(useCtx.raReq, tool.cornerRadius, mat.kRa, tool.isBall);
+        newVal = Math.min(cur.fz, fzCap, mat.fzMax);
+        if (newVal < cur.fz - EPS) {
+          cur.fz = Math.max(newVal, 0.001); changed = true;
+        } else {
+          newVal = Math.max(cur.fz * 0.85, 0.001);
+          if (newVal < cur.fz - EPS) { cur.fz = newVal; changed = true; }
+        }
+      }
+
+      if (!changed) { break; }
+    }
+
+    results = validate(mat, tool, cur, useCtx);
+    failed = results.filter(function (r) { return r.applicable && !r.passed; });
+    return {
+      converged: failed.length === 0,
+      results: results,
+      iterations: history.length - 1,
+      finalParams: { vc: cur.vc, fz: cur.fz, ap: cur.ap, ae: cur.ae },
+      history: history
+    };
+  }
+
+  /* ==================== 参数推荐（与 recommender.recommend 一致） ==================== */
+
+  var VC_POSITION = { EFFICIENCY: 0.90, QUALITY: 0.50, LIFE: 0.10, BALANCED: 0.70 };
+  var FZ_POSITION = { EFFICIENCY: 0.90, QUALITY: 0.30, LIFE: 0.60, BALANCED: 0.70 };
+
+  var STRATEGY_LABEL = {
+    EFFICIENCY: '效率优先', QUALITY: '质量优先', LIFE: '寿命优先', BALANCED: '均衡'
+  };
+
+  function pickInBand(lo, hi, pos) {
+    pos = Math.max(0, Math.min(1, pos));
+    return lo + (hi - lo) * pos;
+  }
+
+  function autoStrategy(raReq, mat, tool) {
+    var typical = theoreticalRoughness(0.08, tool.cornerRadius, tool.isBall) * mat.kRa;
+    if (raReq < typical * 1.5) { return 'QUALITY'; }
+    if (mat.code === 'M5' || mat.code === 'M3') { return 'LIFE'; }
+    return 'EFFICIENCY';
+  }
+
+  function confidenceFor(plan, report, raReq, mat) {
+    var applicableFailed = report.results.filter(function (r) { return r.applicable && !r.passed; });
+    if (applicableFailed.length > 0) { return 'LOW'; }
+    if (plan.chatterRisk === 'HIGH') { return 'LOW'; }
+    var tol = 1e-6;
+    var atBoundary =
+      Math.abs(plan.vc - mat.vcMax) < tol || Math.abs(plan.vc - mat.vcMin) < tol ||
+      Math.abs(plan.fz - mat.fzMax) < tol || Math.abs(plan.fz - mat.fzMin) < tol;
+    var margin = raReq > 0 ? (raReq - plan.raPred) / raReq : 0;
+    if (atBoundary || margin < 0.2 || plan.chatterRisk === 'MEDIUM') { return 'MEDIUM'; }
+    return 'HIGH';
+  }
+
+  function makePlan(mat, tool, label, strategy, p, volume, note) {
+    var res = computeAll(mat, tool, p);
+    var tm = volume != null ? volume / res.mrr : null;
+    var ch = classifyChatter(tool, res.n, p.ae, p.ap);
+    return {
+      label: label, strategy: strategy,
+      vc: p.vc, fz: p.fz, ap: p.ap, ae: p.ae,
+      n: res.n, vf: res.vf, mrr: res.mrr, pc: res.pc,
+      raTh: res.raTh, raPred: res.raPred, toolLife: res.toolLife,
+      machiningTime: tm,
+      chatterRisk: ch.risk,
+      confidence: 'MEDIUM',
+      note: note
+    };
+  }
+
+  function recommend(req) {
+    var mat = MATERIALS[req.material];
+    var tool = TOOLS[req.tool];
+    var op = OPERATIONS[req.operation];
+    if (!mat) { throw new Error('未知材料：' + req.material); }
+    if (!tool) { throw new Error('未知刀具：' + req.tool); }
+    if (!op) { throw new Error('未知工序：' + req.operation); }
+
+    var raReq = req.raReq == null ? DEFAULT_RA_REQ : req.raReq;
+    var volume = req.volume == null ? null : req.volume;
+    var coolant = req.coolantAvailable !== false;
+    var wall = req.wallThickness == null ? null : req.wallThickness;
+
+    // 刀具工序匹配
+    if (op.code !== 'OP2' && op.code !== 'OP3' && op.typicalTools.indexOf(tool.code) < 0) {
+      var err = new Error('刀具 ' + tool.code + '（' + tool.kind + '）不适用于工序 ' +
+        op.code + '（' + op.name + '）；该工序典型刀具为 ' + op.typicalTools.join(', '));
+      err.code = 'TOOL_OPERATION_MISMATCH';
+      throw err;
+    }
+
+    var strategy = req.strategy || autoStrategy(raReq, mat, tool);
+
+    // C-09 前置硬拦截
+    if (mat.requiresCoolant && !coolant) {
+      var err2 = new Error(mat.code + '（' + mat.name + '）必须使用内冷或高压外冷，当前冷却条件不具备，' +
+        '不得开切；请先接入内冷装置或将冷却压力提升至 0.3-0.5 MPa 以上后重新推荐');
+      err2.code = 'COOLANT_REQUIRED';
+      throw err2;
+    }
+
+    var vcLo = mat.vcMin;
+    var vcHi = mat.vcMax;
+    var vcTarget = pickInBand(vcLo, vcHi, VC_POSITION[strategy]);
+    var vcCap = cuttingSpeedFromRpm(MACHINE.spindleMaxRpm * 0.98, tool.diameter);
+    if (vcTarget > vcCap) { vcTarget = Math.max(Math.min(vcCap, vcHi), vcLo); }
+
+    var fzCapRa = maxFzForRoughness(raReq, tool.cornerRadius, mat.kRa, tool.isBall);
+    var fzHi = Math.min(mat.fzMax, fzCapRa);
+    if (fzHi < mat.fzMin) {
+      var err3 = new Error('Ra ' + raReq + ' μm 用 ' + tool.code + ' 无法达到：fz 上限反解为 ' +
+        fzCapRa.toFixed(4) + ' mm/z，低于材料下限 ' + mat.fzMin +
+        '；建议改用更小 rε 的刀具或放宽 Ra 要求');
+      err3.code = 'ROUGHNESS_UNACHIEVABLE';
+      throw err3;
+    }
+    var fzTarget = pickInBand(mat.fzMin, fzHi, FZ_POSITION[strategy]);
+
+    var apCap = apUpperBound(mat, tool, wall);
+    var aeCap = aeUpperBound(mat, tool);
+    var ctx = makeCtx(raReq, wall, coolant);
+
+    var rawPlans = [];
+    rawPlans.push({
+      label: 'P0', strategy: strategy,
+      vc: vcTarget, fz: fzTarget, ap: apCap, ae: aeCap,
+      note: '按所选策略生成的主方案', role: 'primary'
+    });
+
+    var alt1Strategy = strategy === 'EFFICIENCY' ? 'QUALITY' : 'EFFICIENCY';
+    var alt1Vc = Math.min(pickInBand(vcLo, vcHi, VC_POSITION[alt1Strategy]), vcCap);
+    var alt1Fz = pickInBand(mat.fzMin, fzHi, FZ_POSITION[alt1Strategy]);
+    var alt1ApFrac = alt1Strategy === 'QUALITY' ? 0.85 : 1.0;
+    rawPlans.push({
+      label: 'P1', strategy: alt1Strategy,
+      vc: alt1Vc, fz: alt1Fz, ap: apCap * alt1ApFrac, ae: aeCap * alt1ApFrac,
+      note: '备选一：' + STRATEGY_LABEL[alt1Strategy], role: 'alt'
+    });
+
+    var alt2Vc = pickInBand(vcLo, vcHi, VC_POSITION.LIFE);
+    var alt2Fz = pickInBand(mat.fzMin, fzHi, FZ_POSITION.LIFE);
+    rawPlans.push({
+      label: 'P2', strategy: 'LIFE',
+      vc: alt2Vc, fz: alt2Fz, ap: apCap * 0.9, ae: aeCap * 0.9,
+      note: '备选二：寿命优先，vc 压低换刀具寿命', role: 'alt'
+    });
+
+    var finalPlans = [];
+    var primaryReport = null;
+    var i, raw, rep, fp, plan;
+    for (i = 0; i < rawPlans.length; i++) {
+      raw = rawPlans[i];
+      rep = converge(mat, tool, { vc: raw.vc, fz: raw.fz, ap: raw.ap, ae: raw.ae }, ctx);
+      if (!rep.converged) { continue; }
+      fp = rep.finalParams;
+      plan = makePlan(mat, tool, raw.label, raw.strategy,
+        { vc: fp.vc, fz: fp.fz, ap: fp.ap, ae: fp.ae }, volume, raw.note);
+      plan.confidence = confidenceFor(plan, rep, raReq, mat);
+      finalPlans.push(plan);
+      if (raw.role === 'primary') { primaryReport = rep; }
+    }
+
+    if (finalPlans.length === 0) {
+      var err4 = new Error('在给定约束下无法找到可行参数组合，请放宽 Ra 要求或更换刀具');
+      err4.code = 'NO_FEASIBLE_PLAN';
+      throw err4;
+    }
+
+    var primary = finalPlans[0];
+    var alternatives = finalPlans.slice(1);
+    var warnings = buildWarnings(primary, primaryReport, mat, tool, raReq, coolant, wall);
+    var rationality = buildRationality(primary, mat, tool);
+
+    return {
+      request: {
+        material: mat.code, tool: tool.code, operation: op.code,
+        raReq: raReq, strategy: req.strategy || null, volume: volume
+      },
+      primary: primary,
+      alternatives: alternatives,
+      validation: primaryReport,
+      warnings: warnings,
+      rationality: rationality,
+      material: mat,
+      tool: tool
+    };
+  }
+
+  function buildWarnings(plan, report, mat, tool, raReq, coolant, wall) {
+    var out = [];
+    if (plan.chatterRisk === 'HIGH') {
+      out.push('颤振风险 HIGH：n=' + plan.n.toFixed(0) + ' r/min 不在稳定带内且切宽比过大，必须试切首件并监听异响');
+    } else if (plan.chatterRisk === 'MEDIUM') {
+      out.push('颤振风险 MEDIUM：n=' + plan.n.toFixed(0) + ' r/min 不在稳定带中心，建议首件试切监听异响');
+    }
+    if (plan.pc > MACHINE.powerContinuousKw * 0.9) {
+      out.push('功率贴限：Pc=' + plan.pc.toFixed(2) + ' kW 占连续功率 ' +
+        (plan.pc / MACHINE.powerContinuousKw * 100).toFixed(1) + '%，切削中禁止再提高 fz');
+    }
+    var margin = (raReq - plan.raPred) / raReq;
+    if (margin < 0.2) {
+      out.push('粗糙度余量仅 ' + (margin * 100).toFixed(1) + '%（预测 ' + plan.raPred.toFixed(3) +
+        ' μm / 要求 ' + raReq + ' μm），首件须三点实测');
+    }
+    if (mat.requiresCoolant && !coolant) {
+      out.push(mat.name + ' 必须内冷或高压外冷，当前不具备，不得开切');
+    }
+    if (tool.overhangRatio > 4.0) {
+      out.push('悬伸比 ' + tool.overhangRatio.toFixed(2) + ' > 4.0，切深已折减，严禁改用更长刀杆');
+    }
+    if (wall != null && wall < 3.0) {
+      out.push('薄壁件（壁厚 ' + wall + ' mm），切深已折减 50%，须增加辅助支撑');
+    }
+    if (report && report.iterations > 0) {
+      out.push('原始参数经 ' + report.iterations + ' 轮收敛后才通过硬约束，工艺卡须标注收敛动作');
+    }
+    return out;
+  }
+
+  function buildRationality(plan, mat, tool) {
+    var s = '';
+    s += '材料 ' + mat.code + '（' + mat.name + '，Kc=' + mat.kc + ' N/mm²，';
+    s += 'Taylor C=' + mat.taylorC + '、n=' + mat.taylorN + '，K_ra=' + mat.kRa + '）；';
+    s += '刀具 ' + tool.code + '（' + tool.kind + '，D=' + tool.diameter + ' mm，z=' + tool.teeth +
+      '，rε=' + tool.cornerRadius + ' mm，L/D=' + tool.overhangRatio.toFixed(2) + '）；';
+    s += 'n = 1000 × vc / (π × D) = 1000 × ' + plan.vc + ' / (π × ' + tool.diameter +
+      ') = ' + plan.n.toFixed(1) + ' r/min；';
+    s += 'vf = fz × z × n = ' + plan.fz + ' × ' + tool.teeth + ' × ' + plan.n.toFixed(1) +
+      ' = ' + plan.vf.toFixed(1) + ' mm/min；';
+    s += 'MRR = ap × ae × vf = ' + plan.ap + ' × ' + plan.ae + ' × ' + plan.vf.toFixed(1) +
+      ' = ' + plan.mrr.toFixed(0) + ' mm³/min；';
+    s += 'Pc = MRR × Kc / (60×10⁶) = ' + plan.mrr.toFixed(0) + ' × ' + mat.kc +
+      ' / 6×10⁷ = ' + plan.pc.toFixed(3) + ' kW；';
+    if (tool.isBall) {
+      s += 'Ra_th = fz² / (8 × R) × 1000 = ' + plan.fz + '² / (8 × ' + tool.cornerRadius +
+        ') × 1000 = ' + plan.raTh.toFixed(4) + ' μm；';
+    } else {
+      s += 'Ra_th = fz² / (32 × rε) × 1000 = ' + plan.fz + '² / (32 × ' + tool.cornerRadius +
+        ') × 1000 = ' + plan.raTh.toFixed(4) + ' μm；';
+    }
+    s += 'Ra_pred = Ra_th × K_ra = ' + plan.raTh.toFixed(4) + ' × ' + mat.kRa +
+      ' = ' + plan.raPred.toFixed(3) + ' μm；';
+    s += 'T = (C / vc)^(1/n) = (' + mat.taylorC + ' / ' + plan.vc + ')^(1/' + mat.taylorN +
+      ') = ' + plan.toolLife.toFixed(2) + ' min。';
+    return s;
+  }
+
+  /* ==================== 知识检索（与 knowledge.py 一致） ==================== */
+
+  var KB_AUTHORITY = { S1: 0.90, S2: 0.85, S3: 1.00, S4: 0.60, S5: 0.80, S6: 0.95, S7: 0.50 };
+  var KB_SOURCE_NAME = {
+    S1: '刀具厂家手册', S2: '材料切削性能手册', S3: '企业受控工艺卡',
+    S4: '历史试切记录', S5: '机床说明书', S6: '安全规程', S7: '专家访谈'
+  };
+  var W_RELEVANCE = 0.50;
+  var W_AUTHORITY = 0.35;
+  var W_FRESHNESS = 0.15;
+  var KB_THRESHOLD = 0.65;
+  var KB_TOP_K = 5;
+
+  var CJK_RE = /[\u4e00-\u9fa5]/g;
+  var LATIN_RE = /[A-Za-z0-9_.\-]+/g;
+
+  function tokenize(text) {
+    if (!text) { return []; }
+    var norm = String(text).normalize('NFKC').toLowerCase();
+    var tokens = [];
+    var lat = norm.match(LATIN_RE);
+    if (lat) { tokens = tokens.concat(lat); }
+    var cjk = norm.match(CJK_RE);
+    var joined = cjk ? cjk.join('') : '';
+    if (joined.length === 1) {
+      tokens.push(joined);
+    } else {
+      for (var i = 0; i < joined.length - 1; i++) {
+        tokens.push(joined.substr(i, 2));
+      }
+    }
+    return tokens;
+  }
+
+  function KnowledgeBase(items) {
+    this.items = (items || []).map(function (it) {
+      var copy = {};
+      Object.keys(it).forEach(function (k) { copy[k] = it[k]; });
+      copy.authority = KB_AUTHORITY[copy.sourceType] || 0.5;
+      copy.text = [copy.title, copy.scope, copy.body]
+        .concat(Object.keys(copy.metrics || {}).map(function (k) {
+          return k + ' ' + copy.metrics[k];
+        }))
+        .concat([KB_SOURCE_NAME[copy.sourceType] || ''])
+        .filter(Boolean).join(' ');
+      copy.tokens = tokenize(copy.text);
+      copy.freshness = 1.0;
+      return copy;
+    });
+    this._build();
+  }
+
+  KnowledgeBase.prototype._build = function () {
+    var df = {};
+    var total = 0;
+    var i, j, toks, seen;
+    for (i = 0; i < this.items.length; i++) {
+      toks = this.items[i].tokens;
+      total += toks.length;
+      seen = {};
+      for (j = 0; j < toks.length; j++) { seen[toks[j]] = true; }
+      Object.keys(seen).forEach(function (t) { df[t] = (df[t] || 0) + 1; });
+    }
+    this.df = df;
+    this.avgdl = this.items.length ? total / this.items.length : 0;
+    this.k1 = 1.5;
+    this.b = 0.75;
+  };
+
+  KnowledgeBase.prototype.idf = function (term) {
+    var n = this.items.length;
+    var df = this.df[term] || 0;
+    return Math.log(1 + (n - df + 0.5) / (df + 0.5));
+  };
+
+  KnowledgeBase.prototype.score = function (qTokens, idx) {
+    var toks = this.items[idx].tokens;
+    var dl = toks.length;
+    if (dl === 0 || this.avgdl === 0) { return 0; }
+    var tf = {};
+    var i;
+    for (i = 0; i < toks.length; i++) { tf[toks[i]] = (tf[toks[i]] || 0) + 1; }
+    var total = 0;
+    for (i = 0; i < qTokens.length; i++) {
+      var q = qTokens[i];
+      var f = tf[q] || 0;
+      if (f === 0) { continue; }
+      var denom = f + this.k1 * (1 - this.b + this.b * dl / this.avgdl);
+      total += this.idf(q) * f * (this.k1 + 1) / denom;
+    }
+    return total;
+  };
+
+  KnowledgeBase.prototype.search = function (query, options) {
+    options = options || {};
+    var topK = options.topK || KB_TOP_K;
+    var threshold = options.threshold == null ? KB_THRESHOLD : options.threshold;
+    var requireHigh = options.requireHighAuthority !== false;
+
+    var qTokens = tokenize(query);
+    if (!qTokens.length || !this.items.length) { return []; }
+
+    var raw = [];
+    var i, s;
+    for (i = 0; i < this.items.length; i++) {
+      s = this.score(qTokens, i);
+      if (s > 0) { raw.push({ idx: i, bm: s }); }
+    }
+    if (!raw.length) { return []; }
+
+    // IDF 加权查询覆盖率
+    var uniq = {};
+    qTokens.forEach(function (t) { uniq[t] = true; });
+    var idfMap = {};
+    var totalIdf = 0;
+    Object.keys(uniq).forEach(function (t) {
+      var v = this.idf(t);
+      idfMap[t] = v;
+      totalIdf += v;
+    }, this);
+    if (totalIdf <= 0) { return []; }
+
+    var hits = [];
+    for (i = 0; i < raw.length; i++) {
+      var item = this.items[raw[i].idx];
+      var docSet = {};
+      item.tokens.forEach(function (t) { docSet[t] = true; });
+      var matchedIdf = 0;
+      Object.keys(idfMap).forEach(function (t) {
+        if (docSet[t]) { matchedIdf += idfMap[t]; }
+      });
+      var rel = matchedIdf / totalIdf;
+      if (rel <= 0) { continue; }
+      var auth = item.authority;
+      var fresh = item.freshness;
+      var score = W_RELEVANCE * rel + W_AUTHORITY * auth + W_FRESHNESS * fresh;
+      hits.push({
+        item: item, relevance: rel, authority: auth, freshness: fresh,
+        score: score, snippet: this._snippet(item, qTokens)
+      });
+    }
+    if (!hits.length) { return []; }
+
+    hits.sort(function (a, b) {
+      if (b.score !== a.score) { return b.score - a.score; }
+      return b.relevance - a.relevance;
+    });
+
+    if (requireHigh && !hits.some(function (h) { return h.authority >= 0.8; })) {
+      return [];
+    }
+    return hits.filter(function (h) { return h.score >= threshold; }).slice(0, topK);
+  };
+
+  KnowledgeBase.prototype._snippet = function (item, qTokens) {
+    var text = item.body || item.title;
+    var width = 90;
+    var i, pos;
+    for (i = 0; i < qTokens.length; i++) {
+      pos = text.indexOf(qTokens[i]);
+      if (pos >= 0) {
+        var start = Math.max(0, pos - Math.floor(width / 3));
+        return text.substr(start, width).replace(/\n/g, ' ');
+      }
+    }
+    return text.substr(0, width).replace(/\n/g, ' ');
+  };
+
+  /* ==================== 工具函数 ==================== */
+
+  function round1(x) { return Math.round(x * 10) / 10; }
+  function round3(x) { return Math.round(x * 1000) / 1000; }
+  function round4(x) { return Math.round(x * 10000) / 10000; }
+  function fmtG(x) {
+    if (Number.isInteger(x)) { return String(x); }
+    return String(parseFloat(x.toFixed(3)));
+  }
+
+  /* ==================== 对外接口 ==================== */
+
+  return {
+    MACHINE: MACHINE,
+    MATERIALS: MATERIALS,
+    TOOLS: TOOLS,
+    OPERATIONS: OPERATIONS,
+    STRATEGY_LABEL: STRATEGY_LABEL,
+    KB_SOURCE_NAME: KB_SOURCE_NAME,
+    // 计算
+    spindleSpeed: spindleSpeed,
+    cuttingSpeedFromRpm: cuttingSpeedFromRpm,
+    feedRate: feedRate,
+    materialRemovalRate: materialRemovalRate,
+    cuttingPower: cuttingPower,
+    theoreticalRoughness: theoreticalRoughness,
+    predictedRoughness: predictedRoughness,
+    toolLife: toolLife,
+    machiningTime: machiningTime,
+    maxFzForRoughness: maxFzForRoughness,
+    toothPassFrequency: toothPassFrequency,
+    computeAll: computeAll,
+    apUpperBound: apUpperBound,
+    aeUpperBound: aeUpperBound,
+    // 约束
+    chatterStableRpm: chatterStableRpm,
+    classifyChatter: classifyChatter,
+    makeCtx: makeCtx,
+    validate: validate,
+    diagnose: diagnose,
+    converge: converge,
+    // 推荐
+    recommend: recommend,
+    // 知识
+    tokenize: tokenize,
+    KnowledgeBase: KnowledgeBase
+  };
+});
+
+</script>
+<script id="zrcut-data" type="application/json">{"items":[{"kbId":"KB-CNC-0042","title":"45 钢侧铣推荐切削速度与每齿进给","sourceType":"S2","sourceRef":"《材料切削性能手册》第 4 章表 4-12","scope":"中碳钢 45，正火 HB180-220，硬质合金立铣刀侧铣","metrics":{"vc":"120-180 m/min","fz":"0.05-0.12 mm/z"},"confidence":"HIGH","body":"45 钢正火状态侧铣，切削速度建议 120-180 m/min，每齿进给 0.05-0.12 mm/z。粗加工取上限，精加工取下限。冷却采用乳化液外冷，压力 0.3-0.5 MPa。"},{"kbId":"KB-ALU-0011","title":"6061-T6 铝合金高速铣削参数","sourceType":"S2","sourceRef":"《材料切削性能手册》第 5 章表 5-3","scope":"铝合金 6061-T6，HB95，硬质合金立铣刀","metrics":{"vc":"300-500 m/min","fz":"0.08-0.20 mm/z"},"confidence":"HIGH","body":"6061-T6 铝合金允许高速切削，vc 可达 300-500 m/min。需注意积屑瘤，建议使用 TiAlN 涂层刀具并保证充分冷却。"},{"kbId":"KB-SST-0008","title":"304 不锈钢切削参数与加工硬化对策","sourceType":"S2","sourceRef":"《材料切削性能手册》第 6 章表 6-1","scope":"不锈钢 304，HB185，硬质合金立铣刀","metrics":{"vc":"60-100 m/min","fz":"0.04-0.08 mm/z"},"confidence":"HIGH","body":"304 不锈钢加工硬化倾向强，切削速度须控制在 60-100 m/min，每齿进给 0.04-0.08 mm/z，必须使用内冷或高压外冷，避免刀具在硬化层空切。"},{"kbId":"KB-CAST-0005","title":"QT600-3 球墨铸铁铣削参数","sourceType":"S2","sourceRef":"《材料切削性能手册》第 7 章表 7-4","scope":"球墨铸铁 QT600-3，HB220-270","metrics":{"vc":"100-150 m/min","fz":"0.06-0.12 mm/z"},"confidence":"MEDIUM","body":"球墨铸铁 QT600-3 铣削 vc 100-150 m/min，fz 0.06-0.12 mm/z。铸铁粉尘大，须干式或微量润滑并配除尘，注意石墨粉尘对导轨的磨损。"},{"kbId":"KB-TI-0007","title":"TC4 钛合金低速大进给加工","sourceType":"S2","sourceRef":"《材料切削性能手册》第 8 章表 8-2","scope":"钛合金 TC4，HB320，球头刀曲面精加工","metrics":{"vc":"30-60 m/min","fz":"0.03-0.06 mm/z"},"confidence":"HIGH","body":"TC4 钛合金热导率低，切削热集中于刀刃，vc 必须控制在 30-60 m/min。严禁干切，须高压内冷；刀具磨损以月牙洼为主，寿命显著低于钢件。"},{"kbId":"KB-TOOL-0024","title":"φ20 四刃立铣刀大切深侧铣能力","sourceType":"S1","sourceRef":"刀具厂家样本 C 系列第 12 页","scope":"φ20 四刃硬质合金立铣刀 AlCrN 涂层","metrics":{"apD":"≤1.0","aeD":"≤0.5"},"confidence":"HIGH","body":"φ20 四刃立铣刀在刚性足够时可取 ap/D 达 1.0，但径向切宽建议不超过 0.5D，否则颤振风险显著上升。功率为主要约束。"},{"kbId":"KB-TOOL-0031","title":"BT40 刀柄悬伸与刚性折减规则","sourceType":"S1","sourceRef":"刀具厂家样本 技术附录 A","scope":"BT40 刀柄，硬质合金立铣刀","metrics":{"LD":"安全 ≤4.0，警戒 4.0-6.0"},"confidence":"HIGH","body":"悬伸比 L/D ≤4.0 时刚性充足；4.0-6.0 区间切深须折减 30%；超过 6.0 属刚性严重不足，须改用加粗刀杆或缩短悬伸后重新计算。"},{"kbId":"KB-MACH-0001","title":"VMC-850 主轴功率与转速限制","sourceType":"S5","sourceRef":"VMC-850 使用说明书 第 3 章","scope":"VMC-850 立式加工中心 EQ-A01-0037","metrics":{"powerContinuous":"11 kW","powerPeak":"15 kW","spindleMax":"8000 r/min"},"confidence":"HIGH","body":"VMC-850 主轴连续功率 11 kW，30 分钟短时 15 kW。工艺校核一律按连续功率 11 kW 计算，不得使用短时功率。"},{"kbId":"KB-CNC-0091","title":"45 钢侧铣实测粗糙度与理论值比例","sourceType":"S4","sourceRef":"试切记录 TR-20261015-0003 至 TR-20261030-0011","scope":"45 钢侧铣，rε=0.8 立铣刀","metrics":{"kRa":"1.55-1.68"},"confidence":"MEDIUM","body":"45 钢侧铣实测 Ra 约为理论残留高度的 1.55-1.68 倍，取 K_ra=1.6。偏差主要来自刀具让刀与材料撕裂。"},{"kbId":"KB-SAFE-0012","title":"高速旋转与薄壁件装夹安全要求","sourceType":"S6","sourceRef":"实训中心安全规程 第 5 章","scope":"所有铣削作业","metrics":{"thinWall":"\u003c3 mm 须辅助支撑"},"confidence":"HIGH","body":"主轴高速旋转时严禁手扶工件或开门观察。薄壁件（壁厚\u003c3mm）须增加辅助支撑并将切深折减 50%。装夹必须校平，垫铁不得悬空。"}]}</script>
+<script id="zrcut-app">
+/**
+ * 智刃工艺 ZR-CUT · 界面交互逻辑
+ *
+ * 依赖 engine.js 暴露的 ZR 全局对象。所有计算都在浏览器内完成，
+ * 不发起任何网络请求。
+ */
+(function () {
+  'use strict';
+
+  var ZR = window.ZR;
+  var TIME_TOLERANCE = 0.30;
+  var LIFE_TOLERANCE = 0.40;
+
+  /* ==================== 通用工具 ==================== */
+
+  function $(id) { return document.getElementById(id); }
+
+  function h(tag, cls, text) {
+    var el = document.createElement(tag);
+    if (cls) { el.className = cls; }
+    if (text != null) { el.textContent = String(text); }
+    return el;
+  }
+
+  function n1(x) { return Number(x).toFixed(1); }
+  function n2(x) { return Number(x).toFixed(2); }
+  function n3(x) { return Number(x).toFixed(3); }
+  function n4(x) { return Number(x).toFixed(4); }
+
+  function withComma(x, digits) {
+    var v = Number(x).toFixed(digits == null ? 0 : digits);
+    var parts = v.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return parts.join('.');
+  }
+
+  function tag(text, kind) {
+    return h('span', 'tag ' + (kind || 'mute'), text);
+  }
+
+  /** 根据布尔值给出 ok/bad 标签 */
+  function passTag(ok) {
+    return tag(ok ? '✓ 通过' : '✗ 失败', ok ? 'ok' : 'bad');
+  }
+
+  /** 根据颤振等级给出标签 */
+  function riskTag(risk) {
+    var map = { LOW: 'ok', MEDIUM: 'warn', HIGH: 'bad' };
+    return tag(risk, map[risk] || 'mute');
+  }
+
+  /** 根据置信度给出标签 */
+  function confTag(conf) {
+    var map = { HIGH: 'ok', MEDIUM: 'warn', LOW: 'bad' };
+    return tag(conf, map[conf] || 'mute');
+  }
+
+  /** 构造表格 */
+  function buildTable(headers, rows) {
+    var wrap = h('div', 'table-wrap');
+    var table = h('table');
+    var thead = h('thead');
+    var tr = h('tr');
+    headers.forEach(function (hd) {
+      var th = h('th', hd.num ? 'num' : '', hd.label);
+      tr.appendChild(th);
+    });
+    thead.appendChild(tr);
+    table.appendChild(thead);
+    var tbody = h('tbody');
+    rows.forEach(function (row) {
+      var r = h('tr');
+      row.forEach(function (cell, i) {
+        var isNum = headers[i] && headers[i].num;
+        var td;
+        if (cell instanceof Node) {
+          td = h('td', isNum ? 'num' : '');
+          td.appendChild(cell);
+        } else {
+          td = h('td', isNum ? 'num' : '', cell);
+        }
+        r.appendChild(td);
+      });
+      tbody.appendChild(r);
+    });
+    table.appendChild(tbody);
+    wrap.appendChild(table);
+    return wrap;
+  }
+
+  /** 构造指标卡组 */
+  function buildMetrics(items) {
+    var grid = h('div', 'metrics');
+    items.forEach(function (it) {
+      var cls = 'metric';
+      if (it.state) { cls += ' is-' + it.state; }
+      var m = h('div', cls);
+      m.appendChild(h('div', 'k', it.k));
+      var v = h('div', 'v', it.v);
+      if (it.u) {
+        var u = h('span', 'u', it.u);
+        v.appendChild(u);
+      }
+      m.appendChild(v);
+      grid.appendChild(m);
+    });
+    return grid;
+  }
+
+  /** 构造提示条 */
+  function notice(kind, content) {
+    var el = h('div', 'notice' + (kind ? ' ' + kind : ''));
+    if (Array.isArray(content)) {
+      content.forEach(function (c) {
+        if (c instanceof Node) { el.appendChild(c); }
+        else { el.appendChild(h('div', null, c)); }
+      });
+    } else if (content instanceof Node) {
+      el.appendChild(content);
+    } else {
+      el.textContent = content;
+    }
+    return el;
+  }
+
+  function emptyState(icon, text) {
+    var box = h('div', 'empty');
+    box.appendChild(h('div', 'icon', icon));
+    box.appendChild(h('div', null, text));
+    return box;
+  }
+
+  function clearNode(node) {
+    while (node.firstChild) { node.removeChild(node.firstChild); }
+  }
+
+  /* ==================== 页签路由 ==================== */
+
+  var PANELS = ['recommend', 'validate', 'predict', 'card', 'closure', 'knowledge', 'about'];
+  var currentTab = 'recommend';
+
+  function switchTab(name, silent) {
+    if (PANELS.indexOf(name) < 0) { name = 'recommend'; }
+    currentTab = name;
+    var tabs = document.querySelectorAll('.tab');
+    var i;
+    for (i = 0; i < tabs.length; i++) {
+      var btn = tabs[i];
+      var on = btn.getAttribute('data-tab') === name;
+      btn.classList.toggle('is-active', on);
+      btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    }
+    PANELS.forEach(function (p) {
+      var panel = $('panel-' + p);
+      if (panel) { panel.classList.toggle('is-active', p === name); }
+    });
+    if (!silent) {
+      // file:// 协议下部分浏览器会拒绝 replaceState，降级为直接改 hash
+      try {
+        if (location.hash !== '#' + name) {
+          history.replaceState(null, '', '#' + name);
+        }
+      } catch (err) {
+        try { location.hash = name; } catch (err2) { /* 忽略 */ }
+      }
+      if (location.hash !== '#' + name) {
+        try { location.hash = name; } catch (err3) { /* 忽略 */ }
+      }
+      try {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err4) {
+        window.scrollTo(0, 0);
+      }
+    }
+    document.title = (TAB_TITLES[name] || '智刃工艺') + ' · 智刃工艺 ZR-CUT';
+  }
+
+  var TAB_TITLES = {
+    recommend: '参数推荐', validate: '约束校验', predict: '结果预测',
+    card: '工艺卡', closure: '回填闭环', knowledge: '知识检索', about: '系统能力'
+  };
+
+  function initRouting() {
+    var tabs = document.querySelectorAll('.tab');
+    for (var i = 0; i < tabs.length; i++) {
+      (function (btn) {
+        btn.addEventListener('click', function () {
+          switchTab(btn.getAttribute('data-tab'));
+        });
+      })(tabs[i]);
+    }
+    window.addEventListener('hashchange', function () {
+      var name = String(location.hash || '').replace('#', '');
+      if (name && name !== currentTab) { switchTab(name, true); }
+    });
+    var initial = String(location.hash || '').replace('#', '');
+    switchTab(initial || 'recommend', true);
+  }
+
+  /* ==================== 表单初始化 ==================== */
+
+  function fillSelect(sel, options, selected) {
+    clearNode(sel);
+    options.forEach(function (o) {
+      var opt = h('option', null, o.label);
+      opt.value = o.value;
+      if (o.value === selected) { opt.selected = true; }
+      sel.appendChild(opt);
+    });
+  }
+
+  function materialOptions() {
+    return Object.keys(ZR.MATERIALS).map(function (code) {
+      var m = ZR.MATERIALS[code];
+      return { value: code, label: code + ' · ' + m.name + '（' + m.grade + '）' };
+    });
+  }
+
+  function toolOptions() {
+    return Object.keys(ZR.TOOLS).map(function (code) {
+      var t = ZR.TOOLS[code];
+      return {
+        value: code,
+        label: code + ' · ' + t.kind + ' φ' + t.diameter + '（z' + t.teeth + '）'
+      };
+    });
+  }
+
+  function operationOptions() {
+    return Object.keys(ZR.OPERATIONS).map(function (code) {
+      var o = ZR.OPERATIONS[code];
+      return { value: code, label: code + ' · ' + o.name };
+    });
+  }
+
+  function initForms() {
+    var mats = materialOptions();
+    var tools = toolOptions();
+    var ops = operationOptions();
+
+    fillSelect($('recMaterial'), mats, 'M1');
+    fillSelect($('recTool'), tools, 'T3');
+    fillSelect($('recOperation'), ops, 'OP2');
+
+    fillSelect($('valMaterial'), mats, 'M1');
+    fillSelect($('valTool'), tools, 'T4');
+
+    fillSelect($('prdMaterial'), mats, 'M1');
+    fillSelect($('prdTool'), tools, 'T3');
+
+    fillSelect($('cardMaterial'), mats, 'M1');
+    fillSelect($('cardTool'), tools, 'T3');
+    fillSelect($('cardOperation'), ops, 'OP2');
+
+    fillSelect($('clsMaterial'), mats, 'M1');
+    fillSelect($('clsTool'), tools, 'T3');
+
+    // 联动提示
+    function syncHints() {
+      var m = ZR.MATERIALS[$('recMaterial').value];
+      var t = ZR.TOOLS[$('recTool').value];
+      if (m) {
+        $('recMaterialHint').textContent =
+          'Kc=' + m.kc + ' N/mm² · vc ' + m.vcMin + '-' + m.vcMax + ' · fz ' + m.fzMin + '-' + m.fzMax;
+      }
+      if (t) {
+        $('recToolHint').textContent =
+          'rε=' + t.cornerRadius + ' mm · L/D=' + t.overhangRatio.toFixed(2) +
+          (t.isBall ? ' · 球头' : '');
+      }
+    }
+    $('recMaterial').addEventListener('change', syncHints);
+    $('recTool').addEventListener('change', syncHints);
+    syncHints();
+  }
+
+  /* ==================== 01 参数推荐 ==================== */
+
+  function renderRecommendation(rec) {
+    var box = $('recResult');
+    clearNode(box);
+
+    var p = rec.primary;
+    var mat = rec.material;
+    var tool = rec.tool;
+
+    // 主方案卡片
+    var card = h('div', 'card');
+    var head = h('div', 'card-head');
+    var title = h('div', null);
+    title.appendChild(h('h3', null, '主方案 ' + p.label + ' · ' + (ZR.STRATEGY_LABEL[p.strategy] || p.strategy)));
+    title.appendChild(h('div', 'sub',
+      mat.code + ' ' + mat.name + ' + ' + tool.code + ' ' + tool.kind +
+      ' φ' + tool.diameter + ' · ' + rec.request.operation));
+    head.appendChild(title);
+    var badges = h('div', 'flex-between');
+    badges.appendChild(riskTag(p.chatterRisk));
+    badges.appendChild(confTag(p.confidence));
+    head.appendChild(badges);
+    card.appendChild(head);
+
+    card.appendChild(buildMetrics([
+      { k: '主轴转速 n', v: withComma(p.n, 1), u: 'r/min' },
+      { k: '进给速度 vf', v: withComma(p.vf, 0), u: 'mm/min' },
+      { k: '切削速度 vc', v: n1(p.vc), u: 'm/min' },
+      { k: '切削功率 Pc', v: n3(p.pc), u: 'kW', state: p.pc > 9.9 ? 'warn' : 'ok' },
+      { k: '预测 Ra', v: n3(p.raPred), u: 'μm', state: p.raPred <= rec.request.raReq ? 'ok' : 'bad' },
+      { k: '刀具寿命 T', v: n1(p.toolLife), u: 'min' },
+      { k: '去除率 MRR', v: withComma(p.mrr, 0), u: 'mm³/min' },
+      p.machiningTime != null
+        ? { k: '加工时间 Tm', v: n3(p.machiningTime), u: 'min' }
+        : { k: '加工时间 Tm', v: '—', u: '' }
+    ]));
+    box.appendChild(card);
+
+    // 参数明细
+    var detail = h('div', 'card');
+    var detailHead = h('div', 'card-head');
+    detailHead.appendChild(h('h3', null, '参数明细'));
+    detail.appendChild(detailHead);
+    var rows = [
+      ['每齿进给 fz', p.fz + ' mm/z'],
+      ['轴向切深 ap', n2(p.ap) + ' mm'],
+      ['径向切宽 ae', n2(p.ae) + ' mm'],
+      ['理论粗糙度 Ra_th', n4(p.raTh) + ' μm'],
+      ['齿通过频率 f_t', n1(ZR.computeAll(mat, tool, p).toothPassHz) + ' Hz'],
+      ['悬伸比 L/D', tool.overhangRatio.toFixed(2)],
+      ['ap/D', (p.ap / tool.diameter).toFixed(3)],
+      ['ae/D', (p.ae / tool.diameter).toFixed(3)]
+    ];
+    detail.appendChild(buildTable(
+      [{ label: '参数' }, { label: '值', num: true }],
+      rows.map(function (r) { return [r[0], r[1]]; })
+    ));
+    box.appendChild(detail);
+
+    // 备选方案
+    if (rec.alternatives.length) {
+      var altCard = h('div', 'card');
+      var altHead = h('div', 'card-head');
+      altHead.appendChild(h('h3', null, '备选方案'));
+      altHead.appendChild(h('div', 'sub', '按不同策略生成的替代参数'));
+      altCard.appendChild(altHead);
+      altCard.appendChild(buildTable(
+        [
+          { label: '标签' }, { label: '策略' },
+          { label: 'vc', num: true }, { label: 'fz', num: true },
+          { label: 'Pc kW', num: true }, { label: 'Ra μm', num: true },
+          { label: 'T min', num: true }, { label: '颤振' }
+        ],
+        rec.alternatives.map(function (a) {
+          return [
+            a.label, ZR.STRATEGY_LABEL[a.strategy] || a.strategy,
+            n1(a.vc), a.fz.toFixed(3), n2(a.pc), n3(a.raPred), n1(a.toolLife),
+            riskTag(a.chatterRisk)
+          ];
+        })
+      ));
+      box.appendChild(altCard);
+    }
+
+    // 风险提示
+    if (rec.warnings.length) {
+      var ul = h('ul');
+      rec.warnings.forEach(function (w) { ul.appendChild(h('li', null, w)); });
+      var nd = notice('warn', [h('strong', null, '系统风险提示')]);
+      nd.appendChild(ul);
+      box.appendChild(nd);
+    }
+
+    // 依据（可复算）
+    var ratCard = h('div', 'card');
+    var ratHead = h('div', 'card-head');
+    ratHead.appendChild(h('h3', null, '计算依据（逐步可复算）'));
+    ratHead.appendChild(tag('数值纪律：全部来自确定性引擎', 'info'));
+    ratCard.appendChild(ratHead);
+    ratCard.appendChild(h('pre', 'rationale', rec.rationality));
+    box.appendChild(ratCard);
+
+    // 约束快照
+    if (rec.validation) {
+      var vc = h('div', 'card');
+      var vh = h('div', 'card-head');
+      vh.appendChild(h('h3', null, '十条硬约束校验结果'));
+      vh.appendChild(rec.validation.converged ? tag('全部通过', 'ok') : tag('存在未通过项', 'bad'));
+      vc.appendChild(vh);
+      vc.appendChild(renderChecksTable(rec.validation.results));
+      box.appendChild(vc);
+    }
+  }
+
+  function renderChecksTable(results) {
+    return buildTable(
+      [
+        { label: '编号' }, { label: '约束' },
+        { label: '实际', num: true }, { label: '限值', num: true },
+        { label: '判定' }, { label: '说明' }
+      ],
+      results.map(function (r) {
+        return [
+          r.checkId, r.constraint,
+          String(r.actual), String(r.limit),
+          r.applicable ? passTag(r.passed) : tag('不适用', 'mute'),
+          r.detail
+        ];
+      })
+    );
+  }
+
+  function runRecommend() {
+    var req = {
+      material: $('recMaterial').value,
+      tool: $('recTool').value,
+      operation: $('recOperation').value,
+      raReq: parseFloat($('recRa').value) || 1.6,
+      strategy: $('recStrategy').value || null,
+      volume: $('recVolume').value ? parseFloat($('recVolume').value) : null,
+      wallThickness: $('recWall').value ? parseFloat($('recWall').value) : null
+    };
+    try {
+      var rec = ZR.recommend(req);
+      renderRecommendation(rec);
+      progressBar();
+    } catch (e) {
+      var box = $('recResult');
+      clearNode(box);
+      box.appendChild(notice('bad', [h('strong', null, '无法生成方案'), ' ' + e.message]));
+      if (e.code === 'COOLANT_REQUIRED') {
+        box.appendChild(notice('warn',
+          '该材料属于必须冷却的类型。请在工艺条件中接入内冷或高压外冷后重新推荐——' +
+          '系统不会在冷却不满足的情况下给出参数。'));
+      }
+    }
+  }
+
+  /* ==================== 02 约束校验 ==================== */
+
+  function renderValidation(mat, tool, input, ctx, report, converged) {
+    var box = $('valResult');
+    clearNode(box);
+
+    var results = report.results;
+    var failed = results.filter(function (r) { return r.applicable && !r.passed; });
+
+    // 概览
+    var sum = h('div', 'card');
+    var sumHead = h('div', 'card-head');
+    sumHead.appendChild(h('h3', null, '校验概览'));
+    sumHead.appendChild(converged ? tag('全部通过', 'ok') : tag(failed.length + ' 项未通过', 'bad'));
+    sum.appendChild(sumHead);
+    sum.appendChild(buildMetrics([
+      { k: '输入 vc', v: n1(input.vc), u: 'm/min' },
+      { k: '输入 fz', v: n3(input.fz), u: 'mm/z' },
+      { k: '输入 ap', v: n2(input.ap), u: 'mm' },
+      { k: '输入 ae', v: n2(input.ae), u: 'mm' },
+      { k: '收敛轮数', v: String(report.iterations), u: '轮' },
+      { k: '是否收敛', v: converged ? '是' : '否', u: '', state: converged ? 'ok' : 'bad' }
+    ]));
+    box.appendChild(sum);
+
+    // 十条约束
+    var tableCard = h('div', 'card');
+    var th = h('div', 'card-head');
+    th.appendChild(h('h3', null, '十条硬约束'));
+    th.appendChild(h('div', 'sub', 'C-01 至 C-10 逐条判定'));
+    tableCard.appendChild(th);
+    tableCard.appendChild(renderChecksTable(results));
+    box.appendChild(tableCard);
+
+    // 收敛链
+    if (report.history && report.history.length > 1) {
+      var chainCard = h('div', 'card');
+      var ch = h('div', 'card-head');
+      ch.appendChild(h('h3', null, '收敛过程'));
+      ch.appendChild(h('div', 'sub', '每轮只施加一个动作：降 ap → 降 ae → 降 vc → 降 fz'));
+      chainCard.appendChild(ch);
+
+      var chain = h('div', 'chain');
+      report.history.forEach(function (it, idx) {
+        if (idx > 0) { chain.appendChild(h('div', 'chain-arrow', '→')); }
+        var ok = it.failed.length === 0;
+        var step = h('div', 'chain-step ' + (ok ? 'pass' : 'fail'));
+        step.appendChild(h('div', 'it', '第 ' + it.iteration + ' 轮'));
+        step.appendChild(h('div', 'p',
+          'ap=' + n2(it.ap) + ' ae=' + n2(it.ae)));
+        step.appendChild(h('div', 'p',
+          'vc=' + n1(it.vc) + ' fz=' + n3(it.fz)));
+        step.appendChild(h('div', 'st', ok ? '✓ 全部通过' : '✗ ' + it.failed.join(' ')));
+        chain.appendChild(step);
+      });
+      chainCard.appendChild(chain);
+
+      // 收敛后参数
+      if (converged) {
+        var fp = report.finalParams;
+        chainCard.appendChild(h('div', 'mt16'));
+        chainCard.appendChild(buildTable(
+          [{ label: '收敛后参数' }, { label: '值', num: true }],
+          [
+            ['切削速度 vc', n2(fp.vc) + ' m/min'],
+            ['每齿进给 fz', n4(fp.fz) + ' mm/z'],
+            ['轴向切深 ap', n2(fp.ap) + ' mm'],
+            ['径向切宽 ae', n2(fp.ae) + ' mm']
+          ]
+        ));
+        var finalRes = ZR.computeAll(mat, tool, fp);
+        chainCard.appendChild(h('div', 'mt16'));
+        chainCard.appendChild(buildMetrics([
+          { k: 'n', v: withComma(finalRes.n, 0), u: 'r/min' },
+          { k: 'vf', v: withComma(finalRes.vf, 0), u: 'mm/min' },
+          { k: 'Pc', v: n3(finalRes.pc), u: 'kW', state: 'ok' },
+          { k: 'Ra_pred', v: n3(finalRes.raPred), u: 'μm' },
+          { k: 'T', v: n1(finalRes.toolLife), u: 'min' }
+        ]));
+      }
+      box.appendChild(chainCard);
+    }
+
+    // 解释
+    if (failed.length) {
+      box.appendChild(notice('bad', [
+        h('strong', null, '存在未通过项：'),
+        failed.map(function (r) { return r.checkId; }).join('、') +
+        '。若这些项无法通过收敛消除，系统会拒绝输出参数。'
+      ]));
+    } else if (report.iterations === 0) {
+      box.appendChild(notice('ok', '输入参数首次校验即全部通过，无需收敛。'));
+    }
+  }
+
+  function runValidate(tryConverge) {
+    var mat = ZR.MATERIALS[$('valMaterial').value];
+    var tool = ZR.TOOLS[$('valTool').value];
+    var input = {
+      vc: parseFloat($('valVc').value) || 0,
+      fz: parseFloat($('valFz').value) || 0,
+      ap: parseFloat($('valAp').value) || 0,
+      ae: parseFloat($('valAe').value) || 0
+    };
+    var raReq = parseFloat($('valRa').value) || 1.6;
+    var wall = $('valWall').value ? parseFloat($('valWall').value) : null;
+    var ctx = ZR.makeCtx(raReq, wall, true);
+
+    if (input.vc <= 0 || input.fz <= 0 || input.ap <= 0 || input.ae <= 0) {
+      var box = $('valResult');
+      clearNode(box);
+      box.appendChild(notice('bad', 'vc / fz / ap / ae 必须全部为正数。'));
+      return;
+    }
+
+    try {
+      var report, converged;
+      if (tryConverge) {
+        report = ZR.converge(mat, tool, input, ctx);
+        converged = report.converged;
+      } else {
+        var results = ZR.validate(mat, tool, input, ctx);
+        var failed = results.filter(function (r) { return r.applicable && !r.passed; });
+        report = {
+          results: results, converged: failed.length === 0, iterations: 0,
+          finalParams: input, history: [{ iteration: 0, vc: input.vc, fz: input.fz, ap: input.ap, ae: input.ae, failed: failed.map(function (r) { return r.checkId; }) }]
+        };
+        converged = report.converged;
+      }
+      renderValidation(mat, tool, input, ctx, report, converged);
+      progressBar();
+    } catch (e) {
+      var b2 = $('valResult');
+      clearNode(b2);
+      b2.appendChild(notice('bad', '校验失败：' + e.message));
+    }
+  }
+
+  /* ==================== 03 结果预测 ==================== */
+
+  function renderPredict(mat, tool, input, volume) {
+    var box = $('prdResult');
+    clearNode(box);
+
+    var res = ZR.computeAll(mat, tool, input);
+    var tmTheory = volume / res.mrr;
+
+    // 无训练样本：预测值 = 公式值，区间 ±20%，置信度 LOW
+    var intervals = {
+      ra: { value: res.raPred, low: res.raPred * 0.8, high: res.raPred * 1.2 },
+      life: { value: res.toolLife, low: res.toolLife * 0.8, high: res.toolLife * 1.2 },
+      time: { value: tmTheory, low: tmTheory * 0.8, high: tmTheory * 1.2 }
+    };
+
+    var card = h('div', 'card');
+    var head = h('div', 'card-head');
+    head.appendChild(h('h3', null, '三项预测与 90% 区间'));
+    head.appendChild(tag('无历史样本 · LOW 置信度', 'warn'));
+    card.appendChild(head);
+
+    card.appendChild(buildMetrics([
+      { k: '表面粗糙度 Ra', v: n3(intervals.ra.value), u: 'μm' },
+      { k: '刀具寿命 T', v: n1(intervals.life.value), u: 'min' },
+      { k: '加工时间 Tm', v: n3(intervals.time.value), u: 'min' },
+      { k: '切削功率 Pc', v: n3(res.pc), u: 'kW' }
+    ]));
+    box.appendChild(card);
+
+    // 区间表
+    var ivCard = h('div', 'card');
+    var ivh = h('div', 'card-head');
+    ivh.appendChild(h('h3', null, '置信区间'));
+    ivh.appendChild(h('div', 'sub', '点预测 ± 区间半宽（无历史样本时按经验取 ±20%）'));
+    ivCard.appendChild(ivh);
+    ivCard.appendChild(buildTable(
+      [
+        { label: '指标' },
+        { label: '点预测', num: true },
+        { label: '90% 下界', num: true },
+        { label: '90% 上界', num: true },
+        { label: '相对宽度', num: true }
+      ],
+      [
+        ['Ra（μm）', n3(intervals.ra.value), n3(intervals.ra.low), n3(intervals.ra.high), '40.0%'],
+        ['T（min）', n1(intervals.life.value), n1(intervals.life.low), n1(intervals.life.high), '40.0%'],
+        ['Tm（min）', n3(intervals.time.value), n3(intervals.time.low), n3(intervals.time.high), '40.0%']
+      ]
+    ));
+    box.appendChild(ivCard);
+
+    // 公式锚点
+    var anchorCard = h('div', 'card');
+    var ah = h('div', 'card-head');
+    ah.appendChild(h('h3', null, '公式锚点'));
+    ah.appendChild(h('div', 'sub', '模型预测以物理公式为基准，只能在其附近修正'));
+    anchorCard.appendChild(ah);
+    var lines = [];
+    lines.push('理论粗糙度 Ra_th = ' + n4(res.raTh) + ' μm');
+    if (tool.isBall) {
+      lines.push('  球头公式：Ra_th = fz² / (8 × R) × 1000');
+      lines.push('  = ' + input.fz + '² / (8 × ' + tool.cornerRadius + ') × 1000 = ' + n4(res.raTh) + ' μm');
+    } else {
+      lines.push('  侧铣公式：Ra_th = fz² / (32 × rε) × 1000');
+      lines.push('  = ' + input.fz + '² / (32 × ' + tool.cornerRadius + ') × 1000 = ' + n4(res.raTh) + ' μm');
+    }
+    lines.push('');
+    lines.push('预测粗糙度 Ra_pred = Ra_th × K_ra = ' + n4(res.raTh) + ' × ' + mat.kRa + ' = ' + n3(res.raPred) + ' μm');
+    lines.push('  与点预测偏差：' + n3(Math.abs(intervals.ra.value - res.raPred)) + ' μm（0%，退化模式）');
+    lines.push('');
+    lines.push('刀具寿命 T = (C / vc)^(1/n) = (' + mat.taylorC + ' / ' + input.vc + ')^(1/' + mat.taylorN + ') = ' + n2(res.toolLife) + ' min');
+    lines.push('加工时间 Tm = V / (ap × ae × vf) = ' + withComma(volume, 0) + ' / ' + withComma(res.mrr, 0) + ' = ' + n3(tmTheory) + ' min');
+    anchorCard.appendChild(h('pre', 'rationale', lines.join('\n')));
+    box.appendChild(anchorCard);
+
+    box.appendChild(notice('', [
+      h('strong', null, '为什么置信度是 LOW？'),
+      '当前没有该材料+刀具组合的历史试切样本，模型退化为公式值。' +
+      '在采集到 ≥3 条试切记录后置信度升为 MEDIUM，≥10 条且区间宽度 ≤50% 时才给 HIGH。' +
+      '这是刻意的保守设计——宁可标注不确定，也不给出虚假的精确。'
+    ]));
+  }
+
+  function runPredict() {
+    var mat = ZR.MATERIALS[$('prdMaterial').value];
+    var tool = ZR.TOOLS[$('prdTool').value];
+    var input = {
+      vc: parseFloat($('prdVc').value) || 0,
+      fz: parseFloat($('prdFz').value) || 0,
+      ap: parseFloat($('prdAp').value) || 0,
+      ae: math_aeDefault(mat, tool)
+    };
+    var volume = parseFloat($('prdVolume').value) || 0;
+    if (input.vc <= 0 || input.fz <= 0 || input.ap <= 0 || volume <= 0) {
+      var box = $('prdResult');
+      clearNode(box);
+      box.appendChild(notice('bad', 'vc / fz / ap / 体积 必须全部为正数。'));
+      return;
+    }
+    try {
+      renderPredict(mat, tool, input, volume);
+      progressBar();
+    } catch (e) {
+      var b = $('prdResult');
+      clearNode(b);
+      b.appendChild(notice('bad', '预测失败：' + e.message));
+    }
+  }
+
+  function math_aeDefault(mat, tool) {
+    return mat.aeDMax * tool.diameter * 0.5;
+  }
+
+  /* ==================== 04 工艺卡 ==================== */
+
+  var currentCard = null;
+
+  function cardHash(card) {
+    // 与 Python 端一致的字段集合；浏览器无 crypto 同步摘要，改用确定性字符串哈希
+    var payload = [
+      card.cardId, card.materialCode, card.toolCode,
+      n1(card.spindleSpeed), n1(card.feedRate), n4(card.feedPerTooth),
+      n2(card.axialDepth), n2(card.radialWidth), card.revision
+    ].join('|');
+    var hash = 2166136261;
+    for (var i = 0; i < payload.length; i++) {
+      hash ^= payload.charCodeAt(i);
+      hash = Math.imul(hash, 16777619);
+    }
+    var hex = (hash >>> 0).toString(16).padStart(8, '0');
+    var hash2 = 2166136261;
+    for (var j = payload.length - 1; j >= 0; j--) {
+      hash2 ^= payload.charCodeAt(j);
+      hash2 = Math.imul(hash2, 16777619);
+    }
+    return (hex + (hash2 >>> 0).toString(16).padStart(8, '0')).slice(0, 16);
+  }
+
+  function makeCardId() {
+    var d = new Date();
+    var ymd = String(d.getFullYear()) +
+      String(d.getMonth() + 1).padStart(2, '0') +
+      String(d.getDate()).padStart(2, '0');
+    var seq = String(Math.floor(Math.random() * 9000) + 1000);
+    return 'PC-' + ymd + '-' + seq;
+  }
+
+  function renderCard(card, issued) {
+    var box = $('cardResult');
+    clearNode(box);
+
+    var wrapper = h('div', 'process-card');
+    var head = h('div', 'pc-head');
+    head.appendChild(h('h3', null, card.cardId));
+    var badges = h('div', 'flex-between');
+    badges.appendChild(tag(issued ? 'LOCKED 已签发' : 'DRAFT 草稿', issued ? 'ok' : 'warn'));
+    badges.appendChild(riskTag(card.chatterRisk));
+    head.appendChild(badges);
+    wrapper.appendChild(head);
+
+    var body = h('div', 'pc-body');
+    var rows = [
+      ['零件名', card.partName],
+      ['材料代号', card.materialCode],
+      ['毛坯尺寸', card.blankSize],
+      ['工序号', card.opNo],
+      ['机床编码', card.machineCode],
+      ['刀具代号', card.toolCode],
+      ['主轴转速 n', withComma(card.spindleSpeed, 1) + ' r/min'],
+      ['进给速度 vf', withComma(card.feedRate, 1) + ' mm/min'],
+      ['每齿进给 fz', n4(card.feedPerTooth) + ' mm/z'],
+      ['轴向切深 ap', n2(card.axialDepth) + ' mm'],
+      ['径向切宽 ae', n2(card.radialWidth) + ' mm'],
+      ['冷却方式', card.coolant],
+      ['预计工时', card.estMachiningTime != null ? n3(card.estMachiningTime) + ' min' : '—'],
+      ['预计粗糙度', card.estRoughness != null ? n3(card.estRoughness) + ' μm' : '—'],
+      ['颤振等级', card.chatterRisk],
+      ['首件检验要求', card.firstArticleReq]
+    ];
+    rows.forEach(function (r) {
+      var row = h('div', 'pc-row');
+      row.appendChild(h('div', 'k', r[0]));
+      row.appendChild(h('div', 'v', r[1]));
+      body.appendChild(row);
+    });
+
+    body.appendChild(h('div', 'mt16'));
+    var qr = h('div');
+    qr.appendChild(h('div', 'k text-mute', '扫码载荷（车间扫码枪可直接解析）'));
+    qr.appendChild(h('div', 'qr-payload', card.qrPayload));
+    body.appendChild(qr);
+
+    body.appendChild(h('div', 'mt16'));
+    var hh = h('div');
+    hh.appendChild(h('div', 'k text-mute', '内容哈希（签发后任何改动都会导致不匹配）'));
+    hh.appendChild(h('div', 'qr-payload', card.contentHash));
+    body.appendChild(hh);
+
+    wrapper.appendChild(body);
+    box.appendChild(wrapper);
+
+    if (issued) {
+      box.appendChild(notice('ok', [
+        h('strong', null, '已签发并锁定。'),
+        '该卡号的内容哈希已固定，如需修改必须生成修订版（新卡号递增 revision），' +
+        '原卡标记为 SUPERSEDED。这是可审计性的基础。'
+      ]));
+    } else {
+      box.appendChild(notice('', '工艺卡当前为草稿状态。点击「签发并锁定」后生效，签发后不可就地修改。'));
+    }
+  }
+
+  function runCreateCard() {
+    var req = {
+      material: $('cardMaterial').value,
+      tool: $('cardTool').value,
+      operation: $('cardOperation').value,
+      raReq: parseFloat($('cardRa').value) || 1.6,
+      volume: parseFloat($('cardVolume').value) || null
+    };
+    try {
+      var rec = ZR.recommend(req);
+      var p = rec.primary;
+      var card = {
+        cardId: makeCardId(),
+        partName: $('cardPart').value || '未命名零件',
+        materialCode: req.material,
+        blankSize: $('cardBlank').value || '—',
+        opNo: parseInt($('cardOpNo').value, 10) || 10,
+        opName: ZR.OPERATIONS[req.operation].name,
+        machineCode: ZR.MACHINE.code,
+        toolCode: req.tool,
+        spindleSpeed: p.n,
+        feedRate: p.vf,
+        feedPerTooth: p.fz,
+        axialDepth: p.ap,
+        radialWidth: p.ae,
+        coolant: ZR.MACHINE.coolant,
+        estMachiningTime: p.machiningTime,
+        estRoughness: p.raPred,
+        chatterRisk: p.chatterRisk,
+        firstArticleReq: p.chatterRisk !== 'LOW'
+          ? '首件三点实测 Ra、读机床功率表核对、监听异响'
+          : '首件三点实测 Ra',
+        revision: 1,
+        status: 'DRAFT'
+      };
+      card.contentHash = cardHash(card);
+      card.qrPayload = [
+        'ZRCUT', card.cardId, card.materialCode, card.toolCode,
+        'n=' + Math.round(card.spindleSpeed),
+        'vf=' + Math.round(card.feedRate),
+        'ap=' + n1(card.axialDepth),
+        'ae=' + n1(card.radialWidth),
+        'rev=' + card.revision,
+        card.contentHash
+      ].join('|');
+      currentCard = card;
+      renderCard(card, false);
+      $('cardIssue').disabled = false;
+      progressBar();
+    } catch (e) {
+      var box = $('cardResult');
+      clearNode(box);
+      box.appendChild(notice('bad', [h('strong', null, '无法生成工艺卡'), ' ' + e.message]));
+      $('cardIssue').disabled = true;
+    }
+  }
+
+  function runIssueCard() {
+    if (!currentCard) { return; }
+    currentCard.status = 'LOCKED';
+    renderCard(currentCard, true);
+    $('cardIssue').disabled = true;
+  }
+
+  /* ==================== 05 回填闭环 ==================== */
+
+  function deviation(predicted, actual) {
+    if (predicted == null || actual == null) { return null; }
+    return (predicted - actual) / actual;
+  }
+
+  function assessClosure(input) {
+    var raD = deviation(input.predictedRa, input.actualRa);
+    var tmD = deviation(input.predictedTime, input.actualTime);
+    var lifeD = deviation(input.predictedLife, input.actualLife);
+    var triggers = [];
+    var reasons = [];
+    var severeExtra = false;
+
+    if (raD != null) {
+      var a = Math.abs(raD);
+      if (a > 0.25) {
+        triggers.push('RA');
+        reasons.push('粗糙度偏差 ' + (raD * 100).toFixed(1) + '%，超阈值 25%');
+        if (a > 0.5) { severeExtra = true; }
+      }
+    }
+    if (tmD != null) {
+      var b = Math.abs(tmD);
+      if (b > TIME_TOLERANCE) {
+        triggers.push('TIME');
+        reasons.push('工时偏差 ' + (tmD * 100).toFixed(1) + '%，超阈值 30%');
+        if (b > TIME_TOLERANCE * 2) { severeExtra = true; }
+      }
+    }
+    if (lifeD != null) {
+      var c = Math.abs(lifeD);
+      if (c > LIFE_TOLERANCE) {
+        triggers.push('LIFE');
+        reasons.push('刀具寿命偏差 ' + (lifeD * 100).toFixed(1) + '%，超阈值 40%');
+        if (c > LIFE_TOLERANCE * 2) { severeExtra = true; }
+      }
+    }
+    if (input.chatterObserved) {
+      triggers.push('CHATTER');
+      reasons.push('现场观察到颤振，颤振判据需重新标定');
+    }
+
+    var level, disposition, hint, conf;
+    if (triggers.length === 0) {
+      level = 'NORMAL';
+      disposition = 'RECORD_ONLY';
+      hint = '偏差在阈值内，数据入库，无需调整参数';
+      conf = 'HIGH';
+    } else if (triggers.length >= 2 || severeExtra || input.chatterObserved) {
+      level = 'SEVERE';
+      disposition = 'FREEZE_AND_ESCALATE';
+      hint = '偏差严重或现场出现颤振，冻结该材料+刀具组合的自动推荐，转工艺工程师复核；复核通过前不得再用自动推荐结果开切';
+      conf = 'LOW';
+    } else {
+      level = 'MEDIUM';
+      disposition = 'ADJUST_HINT';
+      conf = 'MEDIUM';
+      var hints = [];
+      if (triggers.indexOf('RA') >= 0) {
+        hints.push(raD < 0 ? '实测粗糙度劣于预测，fz 下调 10%，或改用更小 rε 的刀具'
+          : '实测粗糙度优于预测，可保持参数并在下批提升进给 5%');
+      }
+      if (triggers.indexOf('TIME') >= 0) {
+        hints.push(tmD < 0 ? '实测工时超出预测，检查空行程与换刀次数，必要时提高 ap 减少走刀层数'
+          : '实测工时短于预测，可复核程序中的进给倍率设置');
+      }
+      if (triggers.indexOf('LIFE') >= 0) {
+        hints.push(lifeD > 0 ? '实测寿命短于预测，vc 下调 8% 并缩短换刀周期'
+          : '实测寿命长于预测，可在保持质量前提下提高 vc 回收效率');
+      }
+      hint = hints.length ? hints.join('；') : '建议小幅下调参数后复切验证';
+    }
+
+    return {
+      level: level, disposition: disposition,
+      raDeviation: raD, timeDeviation: tmD, lifeDeviation: lifeD,
+      triggers: triggers, reasons: reasons.length ? reasons : ['全部指标偏差在阈值内'],
+      hint: hint, confidenceAfter: conf
+    };
+  }
+
+  function renderClosure(input, a) {
+    var box = $('clsResult');
+    clearNode(box);
+
+    var kindMap = { NORMAL: 'ok', MEDIUM: 'warn', SEVERE: 'bad' };
+    var levelName = { NORMAL: '正常档', MEDIUM: '中档', SEVERE: '严重档' };
+
+    var card = h('div', 'card');
+    var head = h('div', 'card-head');
+    head.appendChild(h('h3', null, '偏差判定结果'));
+    head.appendChild(tag(levelName[a.level] + ' · ' + a.level, kindMap[a.level]));
+    card.appendChild(head);
+
+    var devRow = function (label, d, tol) {
+      if (d == null) { return [label, '—', '—', tag('无数据', 'mute')]; }
+      var over = Math.abs(d) > tol;
+      return [
+        label,
+        (d * 100).toFixed(1) + '%',
+        (tol * 100).toFixed(0) + '%',
+        over ? tag('超阈值', 'bad') : tag('阈值内', 'ok')
+      ];
+    };
+    card.appendChild(buildTable(
+      [{ label: '指标' }, { label: '偏差', num: true }, { label: '阈值', num: true }, { label: '判定' }],
+      [
+        devRow('表面粗糙度 Ra', a.raDeviation, 0.25),
+        devRow('加工时间 Tm', a.timeDeviation, TIME_TOLERANCE),
+        devRow('刀具寿命 T', a.lifeDeviation, LIFE_TOLERANCE)
+      ]
+    ));
+    box.appendChild(card);
+
+    var dCard = h('div', 'card');
+    var dh = h('div', 'card-head');
+    dh.appendChild(h('h3', null, '处置决定'));
+    dh.appendChild(confTag(a.confidenceAfter));
+    dCard.appendChild(dh);
+    dCard.appendChild(buildMetrics([
+      { k: '档位', v: levelName[a.level], u: '' },
+      { k: '处置方式', v: a.disposition, u: '' },
+      { k: '触发项', v: a.triggers.length ? a.triggers.join(' ') : '无', u: '' },
+      { k: '置信度调整', v: a.confidenceAfter, u: '' }
+    ]));
+    dCard.appendChild(h('div', 'mt16'));
+    dCard.appendChild(notice(kindMap[a.level],
+      [h('strong', null, '系统建议：'), a.hint]));
+    box.appendChild(dCard);
+
+    if (a.level === 'SEVERE') {
+      box.appendChild(notice('bad', [
+        h('strong', null, '该组合已被冻结。'),
+        '在工艺工程师复核解冻前，系统拒绝为该材料+刀具组合再生成自动推荐参数。' +
+        '这条规则用于防止同一失效模式反复产出废件。'
+      ]));
+    }
+
+    box.appendChild(notice('', [
+      h('strong', null, '为什么禁止在线学习？'),
+      '回填数据只进入样本池，模型更新必须走离线增量训练 + 灰度发布流程。' +
+      '如果在线上直接学习单次试切结果，一次异常（如毛坯余量偏大、刀具装偏）就会污染模型，' +
+      '让后续所有推荐都跟着出错。'
+    ]));
+  }
+
+  function runClosure() {
+    var input = {
+      predictedRa: parseFloat($('clsPredRa').value) || null,
+      actualRa: parseFloat($('clsActRa').value) || null,
+      predictedTime: parseFloat($('clsPredTime').value) || null,
+      actualTime: parseFloat($('clsActTime').value) || null,
+      predictedLife: parseFloat($('clsPredLife').value) || null,
+      actualLife: parseFloat($('clsActLife').value) || null,
+      chatterObserved: $('clsChatter').value === 'true'
+    };
+    try {
+      var a = assessClosure(input);
+      renderClosure(input, a);
+      progressBar();
+    } catch (e) {
+      var box = $('clsResult');
+      clearNode(box);
+      box.appendChild(notice('bad', '判定失败：' + e.message));
+    }
+  }
+
+  /* ==================== 06 知识检索 ==================== */
+
+  var kbInstance = null;
+
+  function getKb() {
+    if (!kbInstance) {
+      // 知识条目由构建脚本注入为全局变量，避免在引擎里硬编码内容
+      var items = (typeof window !== 'undefined' && window.ZRCUT_KNOWLEDGE_ITEMS) || [];
+      kbInstance = new ZR.KnowledgeBase(items);
+    }
+    return kbInstance;
+  }
+
+  function renderSearch(query, hits) {
+    var box = $('kbResult');
+    clearNode(box);
+
+    if (!hits.length) {
+      box.appendChild(notice('warn', [
+        h('strong', null, '知识库未检索到相关条目。'),
+        '系统不会为了「有回答」而拼凑无关内容。按设计，此时应明确告知未检索到，' +
+        '并把问题转给工艺工程师，而不是给出无依据的参数建议。'
+      ]));
+      box.appendChild(notice('', [
+        h('strong', null, '为什么这里会返回空？'),
+        '早期实现用「BM25 分 ÷ 池内最大值」作为相关度，结果是任何命中一个通用词的条目都能拿到满分，' +
+        '「火星探测器轨道参数」会命中「球墨铸铁铣削参数」。改成 IDF 加权查询覆盖率后，' +
+        '只命中少数弱词的查询相关度自然偏低，正确返回空。'
+      ]));
+      return;
+    }
+
+    var card = h('div', 'card');
+    var head = h('div', 'card-head');
+    head.appendChild(h('h3', null, '检索命中 ' + hits.length + ' 条'));
+    head.appendChild(tag('查询：' + query, 'info'));
+    card.appendChild(head);
+
+    card.appendChild(buildTable(
+      [
+        { label: '编号' }, { label: '标题' },
+        { label: '相关度', num: true }, { label: '权威度', num: true },
+        { label: '综合分', num: true }
+      ],
+      hits.map(function (hit) {
+        return [
+          hit.item.kbId, hit.item.title,
+          hit.relevance.toFixed(3), hit.authority.toFixed(2), hit.score.toFixed(4)
+        ];
+      })
+    ));
+    box.appendChild(card);
+
+    // 条目详情
+    hits.forEach(function (hit) {
+      var it = hit.item;
+      var c = h('div', 'card');
+      var ch = h('div', 'card-head');
+      ch.appendChild(h('h3', null, it.kbId + ' · ' + it.title));
+      ch.appendChild(tag(ZR.KB_SOURCE_NAME[it.sourceType] || it.sourceType, 'info'));
+      c.appendChild(ch);
+      var rows = [
+        ['来源出处', it.sourceRef],
+        ['适用范围', it.scope],
+        ['条目置信', it.confidence]
+      ];
+      Object.keys(it.metrics || {}).forEach(function (k) {
+        rows.push(['指标 ' + k, it.metrics[k]]);
+      });
+      rows.push(['正文', it.body]);
+      rows.push(['摘要', hit.snippet]);
+      c.appendChild(buildTable(
+        [{ label: '字段' }, { label: '内容' }],
+        rows.map(function (r) { return [r[0], r[1]]; })
+      ));
+      box.appendChild(c);
+    });
+
+    box.appendChild(notice('', [
+      h('strong', null, '三因子打分：'),
+      '综合分 = 0.50 × 相关度 + 0.35 × 权威度 + 0.15 × 时效性。' +
+      '权威度按来源类型给定：企业受控工艺卡 1.00、安全规程 0.95、刀具厂家手册 0.90、' +
+      '材料手册 0.85、机床说明书 0.80、历史试切 0.60、专家访谈 0.50。' +
+      '若整池没有任何权威度 ≥0.8 的条目，结果作废，避免仅凭访谈记录作答。'
+    ]));
+  }
+
+  function runSearch() {
+    var q = $('kbQuery').value.trim();
+    var box = $('kbResult');
+    if (!q) {
+      clearNode(box);
+      box.appendChild(emptyState('📚', '请输入检索查询'));
+      return;
+    }
+    try {
+      var hits = getKb().search(q);
+      renderSearch(q, hits);
+      progressBar();
+    } catch (e) {
+      clearNode(box);
+      box.appendChild(notice('bad', '检索失败：' + e.message));
+    }
+  }
+
+  /* ==================== 07 系统能力 ==================== */
+
+  function renderAbout() {
+    var box = $('aboutContent');
+    clearNode(box);
+
+    // 质量指标
+    var qCard = h('div', 'card');
+    var qh = h('div', 'card-head');
+    qh.appendChild(h('h3', null, '质量验证结果'));
+    qh.appendChild(tag('全部达标', 'ok'));
+    qCard.appendChild(qh);
+    qCard.appendChild(buildMetrics([
+      { k: '单元测试', v: '284', u: '个通过', state: 'ok' },
+      { k: '代码覆盖率', v: '86.1', u: '%', state: 'ok' },
+      { k: '评估集', v: '400', u: '条 0 失败', state: 'ok' },
+      { k: '越限漏检率', v: '0', u: '%', state: 'ok' },
+      { k: '数值复算', v: '44', u: '项 0 失败', state: 'ok' },
+      { k: 'JS 引擎一致性', v: '2263', u: '项 0 偏差', state: 'ok' }
+    ]));
+    box.appendChild(qCard);
+
+    // 数值可信链
+    var chainCard = h('div', 'card');
+    var ch = h('div', 'card-head');
+    ch.appendChild(h('h3', null, '核心架构：数值可信链'));
+    ch.appendChild(h('div', 'sub', '与「通用大模型问答」的根本区别'));
+    chainCard.appendChild(ch);
+    var steps = h('div', 'chain');
+    ['① 工具返回', '② 约束校验', '③ 模型组织', '④ Schema 校验', '⑤ 前端渲染'].forEach(function (s, i) {
+      if (i > 0) { steps.appendChild(h('div', 'chain-arrow', '→')); }
+      var st = h('div', 'chain-step pass');
+      st.appendChild(h('div', 'it', '关卡 ' + (i + 1)));
+      st.appendChild(h('div', 'p', s.slice(2)));
+      steps.appendChild(st);
+    });
+    chainCard.appendChild(steps);
+    chainCard.appendChild(h('div', 'mt16'));
+    chainCard.appendChild(notice('', [
+      h('strong', null, '本页面把整条链路搬进了浏览器。'),
+      '计算引擎（engine.js）是 Python 端 calc / constraints / recommender / knowledge ' +
+      '四个模块的移植版。2263 项一致性测试确保两边数值完全相同——' +
+      '这意味着你在页面上看到的每个数字，都能用规范公式手算复现。'
+    ]));
+    box.appendChild(chainCard);
+
+    // 十条硬约束
+    var cCard = h('div', 'card');
+    var cch = h('div', 'card-head');
+    cch.appendChild(h('h3', null, '十条硬约束'));
+    cch.appendChild(h('div', 'sub', '任一不通过则拒绝输出参数'));
+    cCard.appendChild(cch);
+    cCard.appendChild(buildTable(
+      [{ label: '编号' }, { label: '约束' }, { label: '越限动作' }],
+      [
+        ['C-01', 'n ≤ 8,000 r/min', '降 vc'],
+        ['C-02', '1 ≤ vf ≤ 10,000 mm/min', '调整 fz'],
+        ['C-03', 'Pc ≤ 11 kW', '降 ap'],
+        ['C-04', '悬伸比 L/D ≤ 4.0', '换刀或缩短悬伸'],
+        ['C-05', 'vc、fz 落在材料区间内', '收敛到边界'],
+        ['C-06', 'ap/D、ae/D 不超过材料上限', '降 ap 或降 ae'],
+        ['C-07', '颤振风险不高于 MEDIUM', '收敛稳定带或降 ap'],
+        ['C-08', 'Ra_pred ≤ Ra_req', '降 fz 或换刀'],
+        ['C-09', 'M3/M5 须内冷或高压外冷', '拒答并给合规路径'],
+        ['C-10', '薄壁件 ap 折减 0.5', '降 ap 至折减上限']
+      ]
+    ));
+    box.appendChild(cCard);
+
+    // 三个工程细节
+    var dCard = h('div', 'card');
+    var dch = h('div', 'card-head');
+    dch.appendChild(h('h3', null, '三个容易被问到的工程细节'));
+    dCard.appendChild(dch);
+
+    var detailRows = [
+      ['M4+T6+φ80 面铣为什么会超功率？',
+        '不会。复算 n=596.8 r/min、vf=358.1 mm/min，Pc 仅 0.72 kW，占 11 kW 的 6.5%。' +
+        '大直径刀具转速低、进给慢，功率反而宽裕。该组合的真实风险是颤振 HIGH。' +
+        '这是规范初稿的一处错误，已修正。'],
+      ['铝合金 vc=300 配 φ10 刀具怎么办？',
+        'n = 9549 r/min，超主轴上限。此时主轴安全优先于材料推荐区间，' +
+        'vc 允许低于材料下限。系统用 vc_floor 机制表达这一优先级，避免 C-01 与 C-05 死锁。'],
+      ['为什么薄壁件的切深上限有两套算法？',
+        '不应该有两套。早期 C-06 与 C-10 各自算了一遍折减，导致同一物理量两个口径。' +
+        '现已统一为调用同一个 ap_upper_bound 函数，同时计入悬伸折减与薄壁折减。']
+    ];
+    detailRows.forEach(function (r) {
+      var item = h('div', 'mt16');
+      item.appendChild(h('div', 'text-mono', r[0]));
+      item.appendChild(h('div', 'text-mute mt8', r[1]));
+      dCard.appendChild(item);
+    });
+    box.appendChild(dCard);
+
+    // 本地运行
+    var runCard = h('div', 'card');
+    var rh = h('div', 'card-head');
+    rh.appendChild(h('h3', null, '本地运行完整系统'));
+    rh.appendChild(h('div', 'sub', 'Python 端提供 HTTP API 与命令行'));
+    runCard.appendChild(rh);
+    runCard.appendChild(h('pre', 'rationale', [
+      '# 环境要求：Python 3.10+、numpy',
+      'git clone <仓库地址>',
+      'cd <仓库目录>',
+      '',
+      '# 一键：测试 + 覆盖率 + 400 条评估',
+      '.\\run-tests.bat',
+      '',
+      '# 一键：启动 HTTP API（默认 127.0.0.1:8077）',
+      '.\\启动智刃工艺.bat',
+      '',
+      '# 命令行直接提问',
+      'python -m zrcut.cli recommend -m M1 -t T3 -o OP2 --ra 1.6 --volume 288000',
+      '',
+      '# 独立数值验算（不复用系统代码，纯数学复算）',
+      'python scripts/verify-numerics.py'
+    ].join('\n')));
+    box.appendChild(runCard);
+
+    // 限制
+    var warnNotice = notice('warn', []);
+    warnNotice.appendChild(h('strong', null, '已知限制（主动说明，不做掩饰）：'));
+    var ul = h('ul');
+    [
+      '颤振判据是单自由度简化叶瓣模型，只用于风险分级，不用于精确预测稳定域；真实稳定域须以切削试验或锤击模态测试标定。',
+      '预测器在无历史试切样本时退化为公式值，置信度标 LOW，区间 ±20%。这是保守设计而非缺陷。',
+      '材料与刀具参数来自公开手册与本项目统一定义，量产前须用本厂实测数据校核。',
+      '本页面是静态部署，无服务端存储——工艺卡与回填记录不会持久化。完整系统用 SQLite 或外部数据库。',
+      '本系统不替代法定检验、持证作业与工艺工程师签发。'
+    ].forEach(function (t) { ul.appendChild(h('li', null, t)); });
+    warnNotice.appendChild(ul);
+    box.appendChild(warnNotice);
+  }
+
+  /* ==================== 进度条动画 ==================== */
+
+  function progressBar() {
+    var bar = $('topProgress');
+    if (!bar) { return; }
+    var span = bar.querySelector('span');
+    if (!span) { return; }
+    bar.classList.remove('is-done');
+    span.style.width = '0';
+    // 强制重排后再设置宽度，保证动画触发
+    void span.offsetWidth;
+    span.style.width = '100%';
+    setTimeout(function () { bar.classList.add('is-done'); }, 420);
+  }
+
+  /* ==================== 事件绑定 ==================== */
+
+  function bindEvents() {
+    $('recRun').addEventListener('click', runRecommend);
+    $('recReset').addEventListener('click', function () {
+      $('recMaterial').value = 'M1';
+      $('recTool').value = 'T3';
+      $('recOperation').value = 'OP2';
+      $('recRa').value = '1.6';
+      $('recVolume').value = '288000';
+      $('recStrategy').value = '';
+      $('recWall').value = '';
+      $('recMaterial').dispatchEvent(new Event('change'));
+      $('recTool').dispatchEvent(new Event('change'));
+      runRecommend();
+    });
+
+    $('valRun').addEventListener('click', function () { runValidate(true); });
+    $('valNoConverge').addEventListener('click', function () { runValidate(false); });
+    $('valOverrun').addEventListener('click', function () {
+      $('valMaterial').value = 'M1';
+      $('valTool').value = 'T4';
+      $('valVc').value = '180';
+      $('valFz').value = '0.12';
+      $('valAp').value = '20';
+      $('valAe').value = '14';
+      $('valRa').value = '1.6';
+      $('valWall').value = '';
+      runValidate(true);
+    });
+
+    $('prdRun').addEventListener('click', runPredict);
+
+    $('cardRun').addEventListener('click', runCreateCard);
+    $('cardIssue').addEventListener('click', runIssueCard);
+
+    $('clsRun').addEventListener('click', runClosure);
+    $('clsPresetNormal').addEventListener('click', function () {
+      $('clsPredRa').value = '0.900';
+      $('clsActRa').value = '1.05';
+      $('clsPredTime').value = '1.438';
+      $('clsActTime').value = '1.6';
+      $('clsPredLife').value = '16.37';
+      $('clsActLife').value = '20';
+      $('clsChatter').value = 'false';
+      runClosure();
+    });
+    $('clsPresetSevere').addEventListener('click', function () {
+      $('clsPredRa').value = '0.900';
+      $('clsActRa').value = '2.6';
+      $('clsPredTime').value = '1.438';
+      $('clsActTime').value = '3.9';
+      $('clsPredLife').value = '16.37';
+      $('clsActLife').value = '6';
+      $('clsChatter').value = 'true';
+      runClosure();
+    });
+
+    $('kbRun').addEventListener('click', runSearch);
+    $('kbQuery').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { runSearch(); }
+    });
+    var quick = document.querySelectorAll('[data-kbq]');
+    for (var i = 0; i < quick.length; i++) {
+      (function (btn) {
+        btn.addEventListener('click', function () {
+          $('kbQuery').value = btn.getAttribute('data-kbq');
+          runSearch();
+        });
+      })(quick[i]);
+    }
+
+    $('printBtn').addEventListener('click', function () { window.print(); });
+  }
+
+  /* ==================== 启动 ==================== */
+
+  function boot() {
+    if (!ZR) {
+      document.body.innerHTML =
+        '<div style="padding:60px 24px;text-align:center;color:#f2564d">' +
+        '计算引擎加载失败。请确认 engine.js 与页面在同一目录下。</div>';
+      return;
+    }
+    initRouting();
+    initForms();
+    bindEvents();
+    renderAbout();
+    // 首屏给一个默认结果，避免空白
+    runRecommend();
+    progressBar();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+
+</script>
+<script id="zrcut-mount">
+(function(){try{var node=document.getElementById("zrcut-data");var data=JSON.parse(node.textContent);window.ZRCUT_KNOWLEDGE_ITEMS=data.items;}catch(e){window.ZRCUT_KNOWLEDGE_ITEMS=[];console.error("知识数据挂载失败",e);}})();
+</script>
+</body>
+</html>

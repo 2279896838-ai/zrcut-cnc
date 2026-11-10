@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="智刃工艺 ZR-CUT：面向机加车间与实训中心的 CNC 切削工艺参数智能推荐系统。确定性计算引擎 + 十条硬约束 + 浏览器内真算。">
+<meta name="keywords" content="CNC,切削参数,工艺参数,智能制造,切削速度,进给,颤振,刀具寿命">
+<title>智刃工艺 ZR-CUT · CNC 切削工艺参数智能推荐系统</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="top-progress" id="topProgress" aria-hidden="true"><span></span></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">刃</div>
+      <div class="brand-copy">
+        <h1>智刃工艺 <span class="en">ZR-CUT</span></h1>
+        <p>CNC 切削工艺参数智能推荐系统 · 智能制造</p>
+      </div>
+    </div>
+    <div class="header-tools">
+      <div class="mode-badge" id="modeBadge" title="全部计算在本页面内完成，无需服务端">
+        <span class="mode-dot" aria-hidden="true"></span>
+        <span id="modeText">浏览器内真算</span>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="printBtn" type="button" title="打印或导出 PDF">打印</button>
+    </div>
+  </div>
+</header>
+
+<nav class="tabbar" aria-label="主导航">
+  <div class="tabbar-inner" role="tablist">
+    <button class="tab is-active" type="button" role="tab" data-tab="recommend" aria-selected="true">
+      <span class="tab-num">01</span><span>参数推荐</span>
+    </button>
+    <button class="tab" type="button" role="tab" data-tab="validate" aria-selected="false">
+      <span class="tab-num">02</span><span>约束校验</span>
+    </button>
+    <button class="tab" type="button" role="tab" data-tab="predict" aria-selected="false">
+      <span class="tab-num">03</span><span>结果预测</span>
+    </button>
+    <button class="tab" type="button" role="tab" data-tab="card" aria-selected="false">
+      <span class="tab-num">04</span><span>工艺卡</span>
+    </button>
+    <button class="tab" type="button" role="tab" data-tab="closure" aria-selected="false">
+      <span class="tab-num">05</span><span>回填闭环</span>
+    </button>
+    <button class="tab" type="button" role="tab" data-tab="knowledge" aria-selected="false">
+      <span class="tab-num">06</span><span>知识检索</span>
+    </button>
+    <button class="tab" type="button" role="tab" data-tab="about" aria-selected="false">
+      <span class="tab-num">07</span><span>系统能力</span>
+    </button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ==================== 01 参数推荐 ==================== -->
+  <section class="panel is-active" id="panel-recommend" role="tabpanel" aria-labelledby="tab-recommend">
+    <div class="panel-head">
+      <h2><span class="idx">01</span>参数推荐</h2>
+      <p>输入材料、刀具、工序与质量要求，输出可执行的切削参数主方案与两套备选。
+        所有数值由确定性计算引擎给出，可逐项复算。</p>
+    </div>
+
+    <div class="card">
+      <div class="form-grid">
+        <div class="field">
+          <label for="recMaterial">材料</label>
+          <select id="recMaterial"></select>
+          <span class="hint" id="recMaterialHint"></span>
+        </div>
+        <div class="field">
+          <label for="recTool">刀具</label>
+          <select id="recTool"></select>
+          <span class="hint" id="recToolHint"></span>
+        </div>
+        <div class="field">
+          <label for="recOperation">工序</label>
+          <select id="recOperation"></select>
+        </div>
+        <div class="field">
+          <label for="recRa">Ra 要求 <span class="hint">μm</span></label>
+          <input type="number" id="recRa" value="1.6" min="0.05" max="12.5" step="0.1">
+        </div>
+        <div class="field">
+          <label for="recVolume">去除体积 <span class="hint">mm³，可空</span></label>
+          <input type="number" id="recVolume" value="288000" min="0" step="1000">
+        </div>
+        <div class="field">
+          <label for="recStrategy">策略</label>
+          <select id="recStrategy">
+            <option value="">自动选择</option>
+            <option value="EFFICIENCY">效率优先</option>
+            <option value="QUALITY">质量优先</option>
+            <option value="LIFE">寿命优先</option>
+            <option value="BALANCED">均衡</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="recWall">壁厚 <span class="hint">mm，薄壁填 &lt;3</span></label>
+          <input type="number" id="recWall" value="" min="0" step="0.5" placeholder="非薄壁件">
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="recRun" type="button">生成方案</button>
+        <button class="btn btn-ghost" id="recReset" type="button">恢复默认</button>
+      </div>
+    </div>
+
+    <div id="recResult">
+      <div class="empty">
+        <div class="icon">⚙</div>
+        <div>点击「生成方案」开始计算</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 02 约束校验 ==================== -->
+  <section class="panel" id="panel-validate" role="tabpanel">
+    <div class="panel-head">
+      <h2><span class="idx">02</span>十条硬约束校验与自动收敛</h2>
+      <p>对给定参数逐条判定 C-01 至 C-10。越限时按
+        <b>先降 ap → 再降 ae → 再降 vc → 最后降 fz</b> 的顺序迭代收敛。</p>
+    </div>
+
+    <div class="card">
+      <div class="form-grid">
+        <div class="field">
+          <label for="valMaterial">材料</label>
+          <select id="valMaterial"></select>
+        </div>
+        <div class="field">
+          <label for="valTool">刀具</label>
+          <select id="valTool"></select>
+        </div>
+        <div class="field">
+          <label for="valVc">vc <span class="hint">m/min</span></label>
+          <input type="number" id="valVc" value="180" min="0.1" step="1">
+        </div>
+        <div class="field">
+          <label for="valFz">fz <span class="hint">mm/z</span></label>
+          <input type="number" id="valFz" value="0.12" min="0.001" step="0.005">
+        </div>
+        <div class="field">
+          <label for="valAp">ap <span class="hint">mm</span></label>
+          <input type="number" id="valAp" value="20" min="0.01" step="0.5">
+        </div>
+        <div class="field">
+          <label for="valAe">ae <span class="hint">mm</span></label>
+          <input type="number" id="valAe" value="14" min="0.01" step="0.5">
+        </div>
+        <div class="field">
+          <label for="valRa">Ra 要求 <span class="hint">μm</span></label>
+          <input type="number" id="valRa" value="1.6" min="0.05" step="0.1">
+        </div>
+        <div class="field">
+          <label for="valWall">壁厚 <span class="hint">mm，可空</span></label>
+          <input type="number" id="valWall" value="" min="0" step="0.5" placeholder="非薄壁件">
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="valRun" type="button">校验并收敛</button>
+        <button class="btn btn-ghost" id="valNoConverge" type="button">仅校验（不收敛）</button>
+        <button class="btn btn-ghost" id="valOverrun" type="button">填入越限算例</button>
+      </div>
+    </div>
+
+    <div id="valResult">
+      <div class="empty">
+        <div class="icon">⚖</div>
+        <div>填入参数后点击「校验并收敛」</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 03 结果预测 ==================== -->
+  <section class="panel" id="panel-predict" role="tabpanel">
+    <div class="panel-head">
+      <h2><span class="idx">03</span>结果预测</h2>
+      <p>给出表面粗糙度、刀具寿命、加工时间三项预测及 90% 置信区间。
+        无历史试切样本时退化为公式值并标注 LOW 置信度——这是刻意的保守设计。</p>
+    </div>
+
+    <div class="card">
+      <div class="form-grid">
+        <div class="field">
+          <label for="prdMaterial">材料</label>
+          <select id="prdMaterial"></select>
+        </div>
+        <div class="field">
+          <label for="prdTool">刀具</label>
+          <select id="prdTool"></select>
+        </div>
+        <div class="field">
+          <label for="prdVc">vc <span class="hint">m/min</span></label>
+          <input type="number" id="prdVc" value="168" min="0.1" step="1">
+        </div>
+        <div class="field">
+          <label for="prdFz">fz <span class="hint">mm/z</span></label>
+          <input type="number" id="prdFz" value="0.12" min="0.001" step="0.005">
+        </div>
+        <div class="field">
+          <label for="prdAp">ap <span class="hint">mm</span></label>
+          <input type="number" id="prdAp" value="8" min="0.01" step="0.5">
+        </div>
+        <div class="field">
+          <label for="prdVolume">去除体积 <span class="hint">mm³</span></label>
+          <input type="number" id="prdVolume" value="288000" min="1" step="1000">
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="prdRun" type="button">计算预测</button>
+      </div>
+    </div>
+
+    <div id="prdResult">
+      <div class="empty">
+        <div class="icon">📈</div>
+        <div>填入参数后点击「计算预测」</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 04 工艺卡 ==================== -->
+  <section class="panel" id="panel-card" role="tabpanel">
+    <div class="panel-head">
+      <h2><span class="idx">04</span>工艺卡生成与签发</h2>
+      <p>把推荐结果落成车间可执行的工艺卡。签发后锁定，内容哈希用于防篡改校验，
+        修改必须走变更单流程。</p>
+    </div>
+
+    <div class="card">
+      <div class="form-grid">
+        <div class="field">
+          <label for="cardPart">零件名</label>
+          <input type="text" id="cardPart" value="底板">
+        </div>
+        <div class="field">
+          <label for="cardBlank">毛坯尺寸</label>
+          <input type="text" id="cardBlank" value="100x60x20">
+        </div>
+        <div class="field">
+          <label for="cardOpNo">工序号</label>
+          <input type="number" id="cardOpNo" value="20" min="1" step="5">
+        </div>
+        <div class="field">
+          <label for="cardMaterial">材料</label>
+          <select id="cardMaterial"></select>
+        </div>
+        <div class="field">
+          <label for="cardTool">刀具</label>
+          <select id="cardTool"></select>
+        </div>
+        <div class="field">
+          <label for="cardOperation">工序</label>
+          <select id="cardOperation"></select>
+        </div>
+        <div class="field">
+          <label for="cardRa">Ra 要求 <span class="hint">μm</span></label>
+          <input type="number" id="cardRa" value="1.6" min="0.05" step="0.1">
+        </div>
+        <div class="field">
+          <label for="cardVolume">去除体积 <span class="hint">mm³</span></label>
+          <input type="number" id="cardVolume" value="61200" min="1" step="1000">
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="cardRun" type="button">生成工艺卡</button>
+        <button class="btn btn-ghost" id="cardIssue" type="button" disabled>签发并锁定</button>
+      </div>
+    </div>
+
+    <div id="cardResult">
+      <div class="empty">
+        <div class="icon">📋</div>
+        <div>填入信息后点击「生成工艺卡」</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 05 回填闭环 ==================== -->
+  <section class="panel" id="panel-closure" role="tabpanel">
+    <div class="panel-head">
+      <h2><span class="idx">05</span>回填闭环</h2>
+      <p>试切后回填实测数据，按三档阈值判定偏差：
+        Ra &gt; 25%、工时 &gt; 30%、寿命 &gt; 40%。
+        偏差严重时冻结该材料+刀具组合并转工艺工程师。</p>
+    </div>
+
+    <div class="card">
+      <div class="form-grid">
+        <div class="field">
+          <label for="clsMaterial">材料</label>
+          <select id="clsMaterial"></select>
+        </div>
+        <div class="field">
+          <label for="clsTool">刀具</label>
+          <select id="clsTool"></select>
+        </div>
+        <div class="field">
+          <label for="clsPredRa">预测 Ra <span class="hint">μm</span></label>
+          <input type="number" id="clsPredRa" value="0.900" min="0.001" step="0.01">
+        </div>
+        <div class="field">
+          <label for="clsActRa">实测 Ra <span class="hint">μm</span></label>
+          <input type="number" id="clsActRa" value="1.05" min="0.001" step="0.01">
+        </div>
+        <div class="field">
+          <label for="clsPredTime">预测工时 <span class="hint">min</span></label>
+          <input type="number" id="clsPredTime" value="1.438" min="0.001" step="0.01">
+        </div>
+        <div class="field">
+          <label for="clsActTime">实测工时 <span class="hint">min</span></label>
+          <input type="number" id="clsActTime" value="1.6" min="0.001" step="0.01">
+        </div>
+        <div class="field">
+          <label for="clsPredLife">预测寿命 <span class="hint">min</span></label>
+          <input type="number" id="clsPredLife" value="16.37" min="0.001" step="0.1">
+        </div>
+        <div class="field">
+          <label for="clsActLife">实测寿命 <span class="hint">min</span></label>
+          <input type="number" id="clsActLife" value="20" min="0.001" step="0.1">
+        </div>
+        <div class="field">
+          <label for="clsChatter">现场颤振</label>
+          <select id="clsChatter">
+            <option value="false">未观察到</option>
+            <option value="true">观察到</option>
+          </select>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="clsRun" type="button">判定偏差</button>
+        <button class="btn btn-ghost" id="clsPresetNormal" type="button">正常档算例</button>
+        <button class="btn btn-ghost" id="clsPresetSevere" type="button">严重档算例</button>
+      </div>
+    </div>
+
+    <div id="clsResult">
+      <div class="empty">
+        <div class="icon">🔄</div>
+        <div>填入实测数据后点击「判定偏差」</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 06 知识检索 ==================== -->
+  <section class="panel" id="panel-knowledge" role="tabpanel">
+    <div class="panel-head">
+      <h2><span class="idx">06</span>知识检索</h2>
+      <p>BM25 + IDF 加权查询覆盖率 + 三因子打分（相关度 0.50 / 权威度 0.35 / 时效性 0.15）。
+        无可靠依据时返回空结果而非硬凑——这是防止编造的关键设计。</p>
+    </div>
+
+    <div class="card">
+      <div class="form-grid">
+        <div class="field" style="grid-column: span 2;">
+          <label for="kbQuery">检索查询</label>
+          <input type="text" id="kbQuery" value="304 不锈钢 内冷">
+        </div>
+        <div class="field">
+          <label>&nbsp;</label>
+          <button class="btn" id="kbRun" type="button">检索</button>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-ghost btn-sm" type="button" data-kbq="45钢 侧铣 切削速度">45 钢侧铣</button>
+        <button class="btn btn-ghost btn-sm" type="button" data-kbq="钛合金 TC4 精加工">钛合金</button>
+        <button class="btn btn-ghost btn-sm" type="button" data-kbq="铝合金 6061 高速铣削">铝合金</button>
+        <button class="btn btn-ghost btn-sm" type="button" data-kbq="主轴功率 限制">主轴功率</button>
+        <button class="btn btn-ghost btn-sm" type="button" data-kbq="火星探测器轨道参数">无关查询（应返回空）</button>
+      </div>
+    </div>
+
+    <div id="kbResult">
+      <div class="empty">
+        <div class="icon">📚</div>
+        <div>输入查询后点击「检索」</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 07 系统能力 ==================== -->
+  <section class="panel" id="panel-about" role="tabpanel">
+    <div class="panel-head">
+      <h2><span class="idx">07</span>系统能力与质量</h2>
+      <p>本页是同一个系统的浏览器内实现。Python 端服务提供 HTTP API，
+        本页面把计算引擎移植到 JavaScript，在纯静态环境也能真实计算。</p>
+    </div>
+
+    <div id="aboutContent"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="#recommend">参数推荐</a>
+      <a href="#validate">约束校验</a>
+      <a href="#knowledge">知识检索</a>
+      <a href="#about">系统能力</a>
+    </div>
+    <div>智刃工艺 ZR-CUT · MIT License · 零外部依赖（Python 标准库 + numpy）</div>
+    <div class="disclaimer">
+      免责声明：本系统用于工艺参数推荐辅助，不替代法定检验、持证作业与工艺工程师签发。
+      颤振判定采用单自由度简化叶瓣模型，仅用于风险分级，不用于精确预测稳定域；
+      真实稳定域须以切削试验或锤击模态测试标定。材料与刀具参数来自公开手册，
+      量产前须用本厂实测数据校核。
+    </div>
+  </div>
+</footer>
+
+<script src="/static/engine.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,5158 @@
+{
+ "meta": {
+  "generatedFrom": "zrcut (Python)",
+  "tolerance": 0.0001,
+  "note": "JS 引擎须与 Python 端数值一致，相对误差 ≤ 1e-4"
+ },
+ "domain": {
+  "machine": {
+   "code": "EQ-A01-0037",
+   "name": "VMC-850 立式加工中心",
+   "spindleMaxRpm": 8000.0,
+   "powerContinuousKw": 11.0,
+   "powerPeakKw": 15.0,
+   "taper": "BT40",
+   "feedMin": 1.0,
+   "feedMax": 10000.0,
+   "naturalFrequencyHz": 320.0,
+   "coolant": "乳化液外冷",
+   "coolantPressure": [
+    0.3,
+    0.5
+   ]
+  },
+  "materials": {
+   "M1": {
+    "code": "M1",
+    "name": "中碳钢",
+    "grade": "45，正火",
+    "hardness": "HB 180-220",
+    "kc": 2000.0,
+    "taylorC": 350.0,
+    "taylorN": 0.25,
+    "kRa": 1.6,
+    "vcMin": 120.0,
+    "vcMax": 180.0,
+    "fzMin": 0.05,
+    "fzMax": 0.12,
+    "aeDMax": 0.5,
+    "apDMax": 1.0,
+    "requiresCoolant": false
+   },
+   "M2": {
+    "code": "M2",
+    "name": "铝合金",
+    "grade": "6061-T6",
+    "hardness": "HB 95",
+    "kc": 700.0,
+    "taylorC": 1800.0,
+    "taylorN": 0.4,
+    "kRa": 1.2,
+    "vcMin": 300.0,
+    "vcMax": 500.0,
+    "fzMin": 0.08,
+    "fzMax": 0.2,
+    "aeDMax": 0.7,
+    "apDMax": 2.0,
+    "requiresCoolant": false
+   },
+   "M3": {
+    "code": "M3",
+    "name": "不锈钢",
+    "grade": "304",
+    "hardness": "HB 185",
+    "kc": 2600.0,
+    "taylorC": 160.0,
+    "taylorN": 0.2,
+    "kRa": 2.2,
+    "vcMin": 60.0,
+    "vcMax": 100.0,
+    "fzMin": 0.04,
+    "fzMax": 0.08,
+    "aeDMax": 0.4,
+    "apDMax": 0.5,
+    "requiresCoolant": true
+   },
+   "M4": {
+    "code": "M4",
+    "name": "球墨铸铁",
+    "grade": "QT600-3",
+    "hardness": "HB 220-270",
+    "kc": 1500.0,
+    "taylorC": 280.0,
+    "taylorN": 0.25,
+    "kRa": 2.0,
+    "vcMin": 100.0,
+    "vcMax": 150.0,
+    "fzMin": 0.06,
+    "fzMax": 0.12,
+    "aeDMax": 0.5,
+    "apDMax": 0.8,
+    "requiresCoolant": false
+   },
+   "M5": {
+    "code": "M5",
+    "name": "钛合金",
+    "grade": "TC4",
+    "hardness": "HB 320",
+    "kc": 2100.0,
+    "taylorC": 80.0,
+    "taylorN": 0.18,
+    "kRa": 2.5,
+    "vcMin": 30.0,
+    "vcMax": 60.0,
+    "fzMin": 0.03,
+    "fzMax": 0.06,
+    "aeDMax": 0.3,
+    "apDMax": 0.3,
+    "requiresCoolant": true
+   }
+  },
+  "tools": {
+   "T1": {
+    "code": "T1",
+    "kind": "立铣刀",
+    "diameter": 10.0,
+    "teeth": 4,
+    "coating": "硬质合金 TiAlN",
+    "overhang": 40.0,
+    "fluteLength": 22.0,
+    "cornerRadius": 0.8,
+    "isBall": false,
+    "overhangRatio": 4.0
+   },
+   "T2": {
+    "code": "T2",
+    "kind": "立铣刀",
+    "diameter": 12.0,
+    "teeth": 4,
+    "coating": "硬质合金 TiAlN",
+    "overhang": 45.0,
+    "fluteLength": 26.0,
+    "cornerRadius": 0.8,
+    "isBall": false,
+    "overhangRatio": 3.75
+   },
+   "T3": {
+    "code": "T3",
+    "kind": "立铣刀",
+    "diameter": 16.0,
+    "teeth": 4,
+    "coating": "硬质合金 TiAlN",
+    "overhang": 55.0,
+    "fluteLength": 32.0,
+    "cornerRadius": 0.8,
+    "isBall": false,
+    "overhangRatio": 3.4375
+   },
+   "T4": {
+    "code": "T4",
+    "kind": "立铣刀",
+    "diameter": 20.0,
+    "teeth": 4,
+    "coating": "硬质合金 AlCrN",
+    "overhang": 65.0,
+    "fluteLength": 40.0,
+    "cornerRadius": 0.8,
+    "isBall": false,
+    "overhangRatio": 3.25
+   },
+   "T5": {
+    "code": "T5",
+    "kind": "球头刀",
+    "diameter": 10.0,
+    "teeth": 2,
+    "coating": "硬质合金 TiAlN",
+    "overhang": 50.0,
+    "fluteLength": 25.0,
+    "cornerRadius": 5.0,
+    "isBall": true,
+    "overhangRatio": 5.0
+   },
+   "T6": {
+    "code": "T6",
+    "kind": "面铣刀",
+    "diameter": 80.0,
+    "teeth": 5,
+    "coating": "硬质合金 可转位",
+    "overhang": 80.0,
+    "fluteLength": 0.0,
+    "cornerRadius": 1.2,
+    "isBall": false,
+    "overhangRatio": 1.0
+   }
+  },
+  "operations": {
+   "OP1": {
+    "code": "OP1",
+    "name": "端面铣",
+    "typicalTools": [
+     "T6"
+    ]
+   },
+   "OP2": {
+    "code": "OP2",
+    "name": "侧铣（轮廓）",
+    "typicalTools": [
+     "T1",
+     "T2",
+     "T3",
+     "T4"
+    ]
+   },
+   "OP3": {
+    "code": "OP3",
+    "name": "型腔粗加工",
+    "typicalTools": [
+     "T1",
+     "T2",
+     "T3",
+     "T4"
+    ]
+   },
+   "OP4": {
+    "code": "OP4",
+    "name": "曲面精加工",
+    "typicalTools": [
+     "T5"
+    ]
+   }
+  }
+ },
+ "calc": [
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T3",
+    "vc": 168.0,
+    "fz": 0.12,
+    "ap": 8.0,
+    "ae": 4.0,
+    "volume": 288000.0
+   },
+   "output": {
+    "n": 3342.253805,
+    "vf": 1604.281826,
+    "mrr": 51337.018444,
+    "pc": 1.711234,
+    "raTh": 0.5625,
+    "raPred": 0.9,
+    "toolLife": 18.838011,
+    "overhangRatio": 3.4375,
+    "toothPassHz": 222.81692,
+    "machiningTime": 5.609987
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T4",
+    "vc": 180.0,
+    "fz": 0.12,
+    "ap": 17.0,
+    "ae": 10.0,
+    "volume": 61200.0
+   },
+   "output": {
+    "n": 2864.788976,
+    "vf": 1375.098708,
+    "mrr": 233766.780413,
+    "pc": 7.792226,
+    "raTh": 0.5625,
+    "raPred": 0.9,
+    "toolLife": 14.294934,
+    "overhangRatio": 3.25,
+    "toothPassHz": 190.985932,
+    "machiningTime": 0.261799
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T2",
+    "vc": 400.0,
+    "fz": 0.15,
+    "ap": 12.0,
+    "ae": 6.0,
+    "volume": 100000.0
+   },
+   "output": {
+    "n": 10610.329539,
+    "vf": 6366.197724,
+    "mrr": 458366.236105,
+    "pc": 5.347606,
+    "raTh": 0.878906,
+    "raPred": 1.054687,
+    "toolLife": 42.956737,
+    "overhangRatio": 3.75,
+    "toothPassHz": 707.355303,
+    "machiningTime": 0.218166
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T1",
+    "vc": 246.3,
+    "fz": 0.19,
+    "ap": 8.8,
+    "ae": 4.9,
+    "volume": 50000.0
+   },
+   "output": {
+    "n": 7839.972497,
+    "vf": 5958.379097,
+    "mrr": 256925.306684,
+    "pc": 2.997462,
+    "raTh": 1.410156,
+    "raPred": 1.692187,
+    "toolLife": 144.384387,
+    "overhangRatio": 4.0,
+    "toothPassHz": 522.664833,
+    "machiningTime": 0.194609
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T1",
+    "vc": 80.0,
+    "fz": 0.06,
+    "ap": 2.0,
+    "ae": 2.0,
+    "volume": 30000.0
+   },
+   "output": {
+    "n": 2546.479089,
+    "vf": 611.154981,
+    "mrr": 2444.619926,
+    "pc": 0.105934,
+    "raTh": 0.140625,
+    "raPred": 0.309375,
+    "toolLife": 32.0,
+    "overhangRatio": 4.0,
+    "toothPassHz": 169.765273,
+    "machiningTime": 12.271846
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T6",
+    "vc": 150.0,
+    "fz": 0.12,
+    "ap": 2.0,
+    "ae": 40.0,
+    "volume": 400000.0
+   },
+   "output": {
+    "n": 596.831037,
+    "vf": 358.098622,
+    "mrr": 28647.889757,
+    "pc": 0.716197,
+    "raTh": 0.375,
+    "raPred": 0.75,
+    "toolLife": 12.141353,
+    "overhangRatio": 1.0,
+    "toothPassHz": 49.73592,
+    "machiningTime": 13.962634
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T5",
+    "vc": 45.0,
+    "fz": 0.05,
+    "ap": 2.1,
+    "ae": 3.0,
+    "volume": 20000.0
+   },
+   "output": {
+    "n": 1432.394488,
+    "vf": 143.239449,
+    "mrr": 902.408527,
+    "pc": 0.031584,
+    "raTh": 0.0625,
+    "raPred": 0.15625,
+    "toolLife": 24.446021,
+    "overhangRatio": 5.0,
+    "toothPassHz": 47.746483,
+    "machiningTime": 22.162911
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T5",
+    "vc": 30.0,
+    "fz": 0.03,
+    "ap": 1.5,
+    "ae": 1.5,
+    "volume": 12000.0
+   },
+   "output": {
+    "n": 954.929659,
+    "vf": 57.29578,
+    "mrr": 128.915504,
+    "pc": 0.004512,
+    "raTh": 0.0225,
+    "raPred": 0.05625,
+    "toolLife": 232.537478,
+    "overhangRatio": 5.0,
+    "toothPassHz": 31.830989,
+    "machiningTime": 93.084227
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T6",
+    "vc": 100.0,
+    "fz": 0.1,
+    "ap": 1.5,
+    "ae": 30.0,
+    "volume": 200000.0
+   },
+   "output": {
+    "n": 397.887358,
+    "vf": 198.943679,
+    "mrr": 8952.465549,
+    "pc": 0.298416,
+    "raTh": 0.260417,
+    "raPred": 0.416667,
+    "toolLife": 150.0625,
+    "overhangRatio": 1.0,
+    "toothPassHz": 33.15728,
+    "machiningTime": 22.340214
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T2",
+    "vc": 95.0,
+    "fz": 0.07,
+    "ap": 2.5,
+    "ae": 2.5,
+    "volume": 25000.0
+   },
+   "output": {
+    "n": 2519.953266,
+    "vf": 705.586914,
+    "mrr": 4409.918215,
+    "pc": 0.191096,
+    "raTh": 0.191406,
+    "raPred": 0.421094,
+    "toolLife": 13.551329,
+    "overhangRatio": 3.75,
+    "toothPassHz": 167.996884,
+    "machiningTime": 5.669039
+   }
+  }
+ ],
+ "validation": [
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T3",
+    "vc": 168.0,
+    "fz": 0.12,
+    "ap": 8.0,
+    "ae": 4.0,
+    "raReq": 1.6,
+    "wallThickness": null,
+    "coolantAvailable": true
+   },
+   "output": [
+    {
+     "checkId": "C-01",
+     "passed": true,
+     "applicable": true,
+     "actual": 3342.3,
+     "limit": 8000.0
+    },
+    {
+     "checkId": "C-02",
+     "passed": true,
+     "applicable": true,
+     "actual": 1604.3,
+     "limit": 10000.0
+    },
+    {
+     "checkId": "C-03",
+     "passed": true,
+     "applicable": true,
+     "actual": 1.711,
+     "limit": 11.0
+    },
+    {
+     "checkId": "C-04",
+     "passed": true,
+     "applicable": true,
+     "actual": 3.438,
+     "limit": 4.0
+    },
+    {
+     "checkId": "C-05",
+     "passed": true,
+     "applicable": true,
+     "actual": "vc=168,fz=0.12",
+     "limit": "vc 120-180,fz 0.05-0.12"
+    },
+    {
+     "checkId": "C-06",
+     "passed": true,
+     "applicable": true,
+     "actual": "0.500/0.250",
+     "limit": "1/0.5"
+    },
+    {
+     "checkId": "C-07",
+     "passed": true,
+     "applicable": true,
+     "actual": "LOW",
+     "limit": "LOW/MEDIUM/HIGH"
+    },
+    {
+     "checkId": "C-08",
+     "passed": true,
+     "applicable": true,
+     "actual": 0.9,
+     "limit": 1.6
+    },
+    {
+     "checkId": "C-09",
+     "passed": true,
+     "applicable": false,
+     "actual": "具备",
+     "limit": "具备"
+    },
+    {
+     "checkId": "C-10",
+     "passed": true,
+     "applicable": false,
+     "actual": 8.0,
+     "limit": "not_applicable"
+    }
+   ]
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T4",
+    "vc": 180.0,
+    "fz": 0.12,
+    "ap": 20.0,
+    "ae": 14.0,
+    "raReq": 1.6,
+    "wallThickness": null,
+    "coolantAvailable": true
+   },
+   "output": [
+    {
+     "checkId": "C-01",
+     "passed": true,
+     "applicable": true,
+     "actual": 2864.8,
+     "limit": 8000.0
+    },
+    {
+     "checkId": "C-02",
+     "passed": true,
+     "applicable": true,
+     "actual": 1375.1,
+     "limit": 10000.0
+    },
+    {
+     "checkId": "C-03",
+     "passed": false,
+     "applicable": true,
+     "actual": 12.834,
+     "limit": 11.0
+    },
+    {
+     "checkId": "C-04",
+     "passed": true,
+     "applicable": true,
+     "actual": 3.25,
+     "limit": 4.0
+    },
+    {
+     "checkId": "C-05",
+     "passed": true,
+     "applicable": true,
+     "actual": "vc=180,fz=0.12",
+     "limit": "vc 120-180,fz 0.05-0.12"
+    },
+    {
+     "checkId": "C-06",
+     "passed": false,
+     "applicable": true,
+     "actual": "1.000/0.700",
+     "limit": "1/0.5"
+    },
+    {
+     "checkId": "C-07",
+     "passed": false,
+     "applicable": true,
+     "actual": "HIGH",
+     "limit": "LOW/MEDIUM/HIGH"
+    },
+    {
+     "checkId": "C-08",
+     "passed": true,
+     "applicable": true,
+     "actual": 0.9,
+     "limit": 1.6
+    },
+    {
+     "checkId": "C-09",
+     "passed": true,
+     "applicable": false,
+     "actual": "具备",
+     "limit": "具备"
+    },
+    {
+     "checkId": "C-10",
+     "passed": true,
+     "applicable": false,
+     "actual": 20.0,
+     "limit": "not_applicable"
+    }
+   ]
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T1",
+    "vc": 800.0,
+    "fz": 0.1,
+    "ap": 5.0,
+    "ae": 3.0,
+    "raReq": 3.2,
+    "wallThickness": null,
+    "coolantAvailable": true
+   },
+   "output": [
+    {
+     "checkId": "C-01",
+     "passed": false,
+     "applicable": true,
+     "actual": 25464.8,
+     "limit": 8000.0
+    },
+    {
+     "checkId": "C-02",
+     "passed": false,
+     "applicable": true,
+     "actual": 10185.9,
+     "limit": 10000.0
+    },
+    {
+     "checkId": "C-03",
+     "passed": true,
+     "applicable": true,
+     "actual": 1.783,
+     "limit": 11.0
+    },
+    {
+     "checkId": "C-04",
+     "passed": true,
+     "applicable": true,
+     "actual": 4.0,
+     "limit": 4.0
+    },
+    {
+     "checkId": "C-05",
+     "passed": false,
+     "applicable": true,
+     "actual": "vc=800,fz=0.1",
+     "limit": "vc 300-500,fz 0.08-0.2"
+    },
+    {
+     "checkId": "C-06",
+     "passed": true,
+     "applicable": true,
+     "actual": "0.500/0.300",
+     "limit": "2/0.7"
+    },
+    {
+     "checkId": "C-07",
+     "passed": true,
+     "applicable": true,
+     "actual": "LOW",
+     "limit": "LOW/MEDIUM/HIGH"
+    },
+    {
+     "checkId": "C-08",
+     "passed": true,
+     "applicable": true,
+     "actual": 0.469,
+     "limit": 3.2
+    },
+    {
+     "checkId": "C-09",
+     "passed": true,
+     "applicable": false,
+     "actual": "具备",
+     "limit": "具备"
+    },
+    {
+     "checkId": "C-10",
+     "passed": true,
+     "applicable": false,
+     "actual": 5.0,
+     "limit": "not_applicable"
+    }
+   ]
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T1",
+    "vc": 80.0,
+    "fz": 0.06,
+    "ap": 2.0,
+    "ae": 2.0,
+    "raReq": 0.8,
+    "wallThickness": null,
+    "coolantAvailable": false
+   },
+   "output": [
+    {
+     "checkId": "C-01",
+     "passed": true,
+     "applicable": true,
+     "actual": 2546.5,
+     "limit": 8000.0
+    },
+    {
+     "checkId": "C-02",
+     "passed": true,
+     "applicable": true,
+     "actual": 611.2,
+     "limit": 10000.0
+    },
+    {
+     "checkId": "C-03",
+     "passed": true,
+     "applicable": true,
+     "actual": 0.106,
+     "limit": 11.0
+    },
+    {
+     "checkId": "C-04",
+     "passed": true,
+     "applicable": true,
+     "actual": 4.0,
+     "limit": 4.0
+    },
+    {
+     "checkId": "C-05",
+     "passed": true,
+     "applicable": true,
+     "actual": "vc=80,fz=0.06",
+     "limit": "vc 60-100,fz 0.04-0.08"
+    },
+    {
+     "checkId": "C-06",
+     "passed": true,
+     "applicable": true,
+     "actual": "0.200/0.200",
+     "limit": "0.5/0.4"
+    },
+    {
+     "checkId": "C-07",
+     "passed": true,
+     "applicable": true,
+     "actual": "LOW",
+     "limit": "LOW/MEDIUM/HIGH"
+    },
+    {
+     "checkId": "C-08",
+     "passed": true,
+     "applicable": true,
+     "actual": 0.309,
+     "limit": 0.8
+    },
+    {
+     "checkId": "C-09",
+     "passed": false,
+     "applicable": true,
+     "actual": "不具备",
+     "limit": "具备"
+    },
+    {
+     "checkId": "C-10",
+     "passed": true,
+     "applicable": false,
+     "actual": 2.0,
+     "limit": "not_applicable"
+    }
+   ]
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T3",
+    "vc": 168.0,
+    "fz": 0.12,
+    "ap": 8.0,
+    "ae": 4.0,
+    "raReq": 1.6,
+    "wallThickness": 2.0,
+    "coolantAvailable": true
+   },
+   "output": [
+    {
+     "checkId": "C-01",
+     "passed": true,
+     "applicable": true,
+     "actual": 3342.3,
+     "limit": 8000.0
+    },
+    {
+     "checkId": "C-02",
+     "passed": true,
+     "applicable": true,
+     "actual": 1604.3,
+     "limit": 10000.0
+    },
+    {
+     "checkId": "C-03",
+     "passed": true,
+     "applicable": true,
+     "actual": 1.711,
+     "limit": 11.0
+    },
+    {
+     "checkId": "C-04",
+     "passed": true,
+     "applicable": true,
+     "actual": 3.438,
+     "limit": 4.0
+    },
+    {
+     "checkId": "C-05",
+     "passed": true,
+     "applicable": true,
+     "actual": "vc=168,fz=0.12",
+     "limit": "vc 120-180,fz 0.05-0.12"
+    },
+    {
+     "checkId": "C-06",
+     "passed": true,
+     "applicable": true,
+     "actual": "0.500/0.250",
+     "limit": "0.5/0.5"
+    },
+    {
+     "checkId": "C-07",
+     "passed": true,
+     "applicable": true,
+     "actual": "LOW",
+     "limit": "LOW/MEDIUM/HIGH"
+    },
+    {
+     "checkId": "C-08",
+     "passed": true,
+     "applicable": true,
+     "actual": 0.9,
+     "limit": 1.6
+    },
+    {
+     "checkId": "C-09",
+     "passed": true,
+     "applicable": false,
+     "actual": "具备",
+     "limit": "具备"
+    },
+    {
+     "checkId": "C-10",
+     "passed": true,
+     "applicable": true,
+     "actual": 8.0,
+     "limit": 8.0
+    }
+   ]
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T5",
+    "vc": 120.0,
+    "fz": 0.08,
+    "ap": 3.0,
+    "ae": 2.0,
+    "raReq": 1.6,
+    "wallThickness": null,
+    "coolantAvailable": true
+   },
+   "output": [
+    {
+     "checkId": "C-01",
+     "passed": true,
+     "applicable": true,
+     "actual": 3819.7,
+     "limit": 8000.0
+    },
+    {
+     "checkId": "C-02",
+     "passed": true,
+     "applicable": true,
+     "actual": 611.2,
+     "limit": 10000.0
+    },
+    {
+     "checkId": "C-03",
+     "passed": true,
+     "applicable": true,
+     "actual": 0.122,
+     "limit": 11.0
+    },
+    {
+     "checkId": "C-04",
+     "passed": true,
+     "applicable": true,
+     "actual": 5.0,
+     "limit": 4.0
+    },
+    {
+     "checkId": "C-05",
+     "passed": true,
+     "applicable": true,
+     "actual": "vc=120,fz=0.08",
+     "limit": "vc 120-180,fz 0.05-0.12"
+    },
+    {
+     "checkId": "C-06",
+     "passed": true,
+     "applicable": true,
+     "actual": "0.300/0.200",
+     "limit": "0.7/0.5"
+    },
+    {
+     "checkId": "C-07",
+     "passed": true,
+     "applicable": true,
+     "actual": "LOW",
+     "limit": "LOW/MEDIUM/HIGH"
+    },
+    {
+     "checkId": "C-08",
+     "passed": true,
+     "applicable": true,
+     "actual": 0.256,
+     "limit": 1.6
+    },
+    {
+     "checkId": "C-09",
+     "passed": true,
+     "applicable": false,
+     "actual": "具备",
+     "limit": "具备"
+    },
+    {
+     "checkId": "C-10",
+     "passed": true,
+     "applicable": false,
+     "actual": 3.0,
+     "limit": "not_applicable"
+    }
+   ]
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T6",
+    "vc": 150.0,
+    "fz": 0.12,
+    "ap": 2.0,
+    "ae": 40.0,
+    "raReq": 3.2,
+    "wallThickness": null,
+    "coolantAvailable": true
+   },
+   "output": [
+    {
+     "checkId": "C-01",
+     "passed": true,
+     "applicable": true,
+     "actual": 596.8,
+     "limit": 8000.0
+    },
+    {
+     "checkId": "C-02",
+     "passed": true,
+     "applicable": true,
+     "actual": 358.1,
+     "limit": 10000.0
+    },
+    {
+     "checkId": "C-03",
+     "passed": true,
+     "applicable": true,
+     "actual": 0.716,
+     "limit": 11.0
+    },
+    {
+     "checkId": "C-04",
+     "passed": true,
+     "applicable": true,
+     "actual": 1.0,
+     "limit": 4.0
+    },
+    {
+     "checkId": "C-05",
+     "passed": true,
+     "applicable": true,
+     "actual": "vc=150,fz=0.12",
+     "limit": "vc 100-150,fz 0.06-0.12"
+    },
+    {
+     "checkId": "C-06",
+     "passed": true,
+     "applicable": true,
+     "actual": "0.025/0.500",
+     "limit": "0.8/0.5"
+    },
+    {
+     "checkId": "C-07",
+     "passed": true,
+     "applicable": true,
+     "actual": "MEDIUM",
+     "limit": "LOW/MEDIUM/HIGH"
+    },
+    {
+     "checkId": "C-08",
+     "passed": true,
+     "applicable": true,
+     "actual": 0.75,
+     "limit": 3.2
+    },
+    {
+     "checkId": "C-09",
+     "passed": true,
+     "applicable": false,
+     "actual": "具备",
+     "limit": "具备"
+    },
+    {
+     "checkId": "C-10",
+     "passed": true,
+     "applicable": false,
+     "actual": 2.0,
+     "limit": "not_applicable"
+    }
+   ]
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T3",
+    "vc": 300.0,
+    "fz": 0.1,
+    "ap": 8.0,
+    "ae": 4.0,
+    "raReq": 1.6,
+    "wallThickness": null,
+    "coolantAvailable": true
+   },
+   "output": [
+    {
+     "checkId": "C-01",
+     "passed": true,
+     "applicable": true,
+     "actual": 5968.3,
+     "limit": 8000.0
+    },
+    {
+     "checkId": "C-02",
+     "passed": true,
+     "applicable": true,
+     "actual": 2387.3,
+     "limit": 10000.0
+    },
+    {
+     "checkId": "C-03",
+     "passed": true,
+     "applicable": true,
+     "actual": 2.546,
+     "limit": 11.0
+    },
+    {
+     "checkId": "C-04",
+     "passed": true,
+     "applicable": true,
+     "actual": 3.438,
+     "limit": 4.0
+    },
+    {
+     "checkId": "C-05",
+     "passed": false,
+     "applicable": true,
+     "actual": "vc=300,fz=0.1",
+     "limit": "vc 120-180,fz 0.05-0.12"
+    },
+    {
+     "checkId": "C-06",
+     "passed": true,
+     "applicable": true,
+     "actual": "0.500/0.250",
+     "limit": "1/0.5"
+    },
+    {
+     "checkId": "C-07",
+     "passed": true,
+     "applicable": true,
+     "actual": "LOW",
+     "limit": "LOW/MEDIUM/HIGH"
+    },
+    {
+     "checkId": "C-08",
+     "passed": true,
+     "applicable": true,
+     "actual": 0.625,
+     "limit": 1.6
+    },
+    {
+     "checkId": "C-09",
+     "passed": true,
+     "applicable": false,
+     "actual": "具备",
+     "limit": "具备"
+    },
+    {
+     "checkId": "C-10",
+     "passed": true,
+     "applicable": false,
+     "actual": 8.0,
+     "limit": "not_applicable"
+    }
+   ]
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T3",
+    "vc": 168.0,
+    "fz": 0.5,
+    "ap": 8.0,
+    "ae": 4.0,
+    "raReq": 1.6,
+    "wallThickness": null,
+    "coolantAvailable": true
+   },
+   "output": [
+    {
+     "checkId": "C-01",
+     "passed": true,
+     "applicable": true,
+     "actual": 3342.3,
+     "limit": 8000.0
+    },
+    {
+     "checkId": "C-02",
+     "passed": true,
+     "applicable": true,
+     "actual": 6684.5,
+     "limit": 10000.0
+    },
+    {
+     "checkId": "C-03",
+     "passed": true,
+     "applicable": true,
+     "actual": 7.13,
+     "limit": 11.0
+    },
+    {
+     "checkId": "C-04",
+     "passed": true,
+     "applicable": true,
+     "actual": 3.438,
+     "limit": 4.0
+    },
+    {
+     "checkId": "C-05",
+     "passed": false,
+     "applicable": true,
+     "actual": "vc=168,fz=0.5",
+     "limit": "vc 120-180,fz 0.05-0.12"
+    },
+    {
+     "checkId": "C-06",
+     "passed": true,
+     "applicable": true,
+     "actual": "0.500/0.250",
+     "limit": "1/0.5"
+    },
+    {
+     "checkId": "C-07",
+     "passed": true,
+     "applicable": true,
+     "actual": "LOW",
+     "limit": "LOW/MEDIUM/HIGH"
+    },
+    {
+     "checkId": "C-08",
+     "passed": false,
+     "applicable": true,
+     "actual": 15.625,
+     "limit": 1.6
+    },
+    {
+     "checkId": "C-09",
+     "passed": true,
+     "applicable": false,
+     "actual": "具备",
+     "limit": "具备"
+    },
+    {
+     "checkId": "C-10",
+     "passed": true,
+     "applicable": false,
+     "actual": 8.0,
+     "limit": "not_applicable"
+    }
+   ]
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T5",
+    "vc": 60.0,
+    "fz": 0.06,
+    "ap": 3.0,
+    "ae": 3.0,
+    "raReq": 0.4,
+    "wallThickness": null,
+    "coolantAvailable": true
+   },
+   "output": [
+    {
+     "checkId": "C-01",
+     "passed": true,
+     "applicable": true,
+     "actual": 1909.9,
+     "limit": 8000.0
+    },
+    {
+     "checkId": "C-02",
+     "passed": true,
+     "applicable": true,
+     "actual": 229.2,
+     "limit": 10000.0
+    },
+    {
+     "checkId": "C-03",
+     "passed": true,
+     "applicable": true,
+     "actual": 0.072,
+     "limit": 11.0
+    },
+    {
+     "checkId": "C-04",
+     "passed": true,
+     "applicable": true,
+     "actual": 5.0,
+     "limit": 4.0
+    },
+    {
+     "checkId": "C-05",
+     "passed": true,
+     "applicable": true,
+     "actual": "vc=60,fz=0.06",
+     "limit": "vc 30-60,fz 0.03-0.06"
+    },
+    {
+     "checkId": "C-06",
+     "passed": false,
+     "applicable": true,
+     "actual": "0.300/0.300",
+     "limit": "0.21/0.3"
+    },
+    {
+     "checkId": "C-07",
+     "passed": true,
+     "applicable": true,
+     "actual": "LOW",
+     "limit": "LOW/MEDIUM/HIGH"
+    },
+    {
+     "checkId": "C-08",
+     "passed": true,
+     "applicable": true,
+     "actual": 0.225,
+     "limit": 0.4
+    },
+    {
+     "checkId": "C-09",
+     "passed": true,
+     "applicable": true,
+     "actual": "具备",
+     "limit": "具备"
+    },
+    {
+     "checkId": "C-10",
+     "passed": true,
+     "applicable": false,
+     "actual": 3.0,
+     "limit": "not_applicable"
+    }
+   ]
+  }
+ ],
+ "converge": [
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T4",
+    "vc": 180.0,
+    "fz": 0.12,
+    "ap": 20.0,
+    "ae": 14.0,
+    "raReq": 1.6
+   },
+   "output": {
+    "converged": true,
+    "finalParams": {
+     "vc": 180.0,
+     "fz": 0.12,
+     "ap": 16.5,
+     "ae": 10.0
+    },
+    "iterations": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T1",
+    "vc": 480.0,
+    "fz": 0.19,
+    "ap": 20.0,
+    "ae": 7.0,
+    "raReq": 1.6
+   },
+   "output": {
+    "converged": true,
+    "finalParams": {
+     "vc": 246.300864,
+     "fz": 0.184752,
+     "ap": 8.8,
+     "ae": 4.9
+    },
+    "iterations": 5
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T2",
+    "vc": 500.0,
+    "fz": 0.2,
+    "ap": 10.0,
+    "ae": 6.0,
+    "raReq": 3.2
+   },
+   "output": {
+    "converged": true,
+    "finalParams": {
+     "vc": 295.561037,
+     "fz": 0.2,
+     "ap": 10.0,
+     "ae": 6.0
+    },
+    "iterations": 1
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T3",
+    "vc": 168.0,
+    "fz": 0.12,
+    "ap": 8.0,
+    "ae": 4.0,
+    "raReq": 1.6
+   },
+   "output": {
+    "converged": true,
+    "finalParams": {
+     "vc": 168.0,
+     "fz": 0.12,
+     "ap": 8.0,
+     "ae": 4.0
+    },
+    "iterations": 0
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T5",
+    "vc": 60.0,
+    "fz": 0.06,
+    "ap": 3.0,
+    "ae": 3.0,
+    "raReq": 0.4
+   },
+   "output": {
+    "converged": true,
+    "finalParams": {
+     "vc": 60.0,
+     "fz": 0.06,
+     "ap": 2.1,
+     "ae": 3.0
+    },
+    "iterations": 1
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T1",
+    "vc": 100.0,
+    "fz": 0.08,
+    "ap": 1.5,
+    "ae": 1.0,
+    "raReq": 0.8
+   },
+   "output": {
+    "converged": true,
+    "finalParams": {
+     "vc": 100.0,
+     "fz": 0.08,
+     "ap": 1.5,
+     "ae": 1.0
+    },
+    "iterations": 0
+   }
+  }
+ ],
+ "chatter": [
+  {
+   "input": {
+    "tool": "T3",
+    "rpm": 2400.0,
+    "ae": 6.0,
+    "ap": 8.0
+   },
+   "output": {
+    "risk": "LOW"
+   }
+  },
+  {
+   "input": {
+    "tool": "T3",
+    "rpm": 3400.0,
+    "ae": 6.0,
+    "ap": 7.0
+   },
+   "output": {
+    "risk": "MEDIUM"
+   }
+  },
+  {
+   "input": {
+    "tool": "T4",
+    "rpm": 2864.8,
+    "ae": 14.0,
+    "ap": 17.0
+   },
+   "output": {
+    "risk": "HIGH"
+   }
+  },
+  {
+   "input": {
+    "tool": "T1",
+    "rpm": 1432.4,
+    "ae": 0.3,
+    "ap": 1.0
+   },
+   "output": {
+    "risk": "LOW"
+   }
+  },
+  {
+   "input": {
+    "tool": "T6",
+    "rpm": 596.8,
+    "ae": 40.0,
+    "ap": 2.0
+   },
+   "output": {
+    "risk": "MEDIUM"
+   }
+  },
+  {
+   "input": {
+    "tool": "T5",
+    "rpm": 1432.4,
+    "ae": 3.0,
+    "ap": 2.1
+   },
+   "output": {
+    "risk": "LOW"
+   }
+  },
+  {
+   "input": {
+    "tool": "T3",
+    "rpm": 4800.0,
+    "ae": 7.0,
+    "ap": 8.0
+   },
+   "output": {
+    "risk": "LOW"
+   }
+  }
+ ],
+ "recommend": [
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T6",
+    "operation": "OP1",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 150.0,
+    "fz": 0.064394,
+    "ap": 42.0,
+    "ae": 40.0,
+    "n": 596.831037,
+    "pc": 10.761034,
+    "raPred": 0.172774,
+    "toolLife": 29.641975,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T6",
+    "operation": "OP1",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 20.5,
+    "ae": 40.0,
+    "n": 692.324002,
+    "pc": 10.69179,
+    "raPred": 0.532042,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T6",
+    "operation": "OP1",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 20.5,
+    "ae": 40.0,
+    "n": 692.324002,
+    "pc": 10.69179,
+    "raPred": 0.532042,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T1",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 150.0,
+    "fz": 0.059,
+    "ap": 10.0,
+    "ae": 5.0,
+    "n": 4774.648293,
+    "pc": 1.878028,
+    "raPred": 0.217563,
+    "toolLife": 29.641975,
+    "strategy": "QUALITY",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T1",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 10.0,
+    "ae": 5.0,
+    "n": 5538.59202,
+    "pc": 4.172406,
+    "raPred": 0.798063,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T1",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 10.0,
+    "ae": 5.0,
+    "n": 5538.59202,
+    "pc": 4.172406,
+    "raPred": 0.798063,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T2",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 150.0,
+    "fz": 0.059,
+    "ap": 12.0,
+    "ae": 6.0,
+    "n": 3978.873577,
+    "pc": 2.253634,
+    "raPred": 0.217563,
+    "toolLife": 29.641975,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T2",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 12.0,
+    "ae": 6.0,
+    "n": 4615.49335,
+    "pc": 5.006887,
+    "raPred": 0.798063,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T2",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 12.0,
+    "ae": 6.0,
+    "n": 4615.49335,
+    "pc": 5.006887,
+    "raPred": 0.798063,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T3",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 150.0,
+    "fz": 0.059,
+    "ap": 16.0,
+    "ae": 8.0,
+    "n": 2984.155183,
+    "pc": 3.004845,
+    "raPred": 0.217563,
+    "toolLife": 29.641975,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T3",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 16.0,
+    "ae": 8.0,
+    "n": 3461.620012,
+    "pc": 6.67585,
+    "raPred": 0.798063,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T3",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 16.0,
+    "ae": 8.0,
+    "n": 3461.620012,
+    "pc": 6.67585,
+    "raPred": 0.798063,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T4",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 150.0,
+    "fz": 0.059,
+    "ap": 20.0,
+    "ae": 10.0,
+    "n": 2387.324146,
+    "pc": 3.756057,
+    "raPred": 0.217563,
+    "toolLife": 29.641975,
+    "strategy": "QUALITY",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T4",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 20.0,
+    "ae": 10.0,
+    "n": 2769.29601,
+    "pc": 8.344812,
+    "raPred": 0.798063,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T4",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 20.0,
+    "ae": 10.0,
+    "n": 2769.29601,
+    "pc": 8.344812,
+    "raPred": 0.798063,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T1",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 150.0,
+    "fz": 0.059,
+    "ap": 10.0,
+    "ae": 5.0,
+    "n": 4774.648293,
+    "pc": 1.878028,
+    "raPred": 0.217563,
+    "toolLife": 29.641975,
+    "strategy": "QUALITY",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T1",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 10.0,
+    "ae": 5.0,
+    "n": 5538.59202,
+    "pc": 4.172406,
+    "raPred": 0.798063,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T1",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 10.0,
+    "ae": 5.0,
+    "n": 5538.59202,
+    "pc": 4.172406,
+    "raPred": 0.798063,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T2",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 150.0,
+    "fz": 0.059,
+    "ap": 12.0,
+    "ae": 6.0,
+    "n": 3978.873577,
+    "pc": 2.253634,
+    "raPred": 0.217563,
+    "toolLife": 29.641975,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T2",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 12.0,
+    "ae": 6.0,
+    "n": 4615.49335,
+    "pc": 5.006887,
+    "raPred": 0.798063,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T2",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 12.0,
+    "ae": 6.0,
+    "n": 4615.49335,
+    "pc": 5.006887,
+    "raPred": 0.798063,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T3",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 150.0,
+    "fz": 0.059,
+    "ap": 16.0,
+    "ae": 8.0,
+    "n": 2984.155183,
+    "pc": 3.004845,
+    "raPred": 0.217563,
+    "toolLife": 29.641975,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T3",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 16.0,
+    "ae": 8.0,
+    "n": 3461.620012,
+    "pc": 6.67585,
+    "raPred": 0.798063,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T3",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 16.0,
+    "ae": 8.0,
+    "n": 3461.620012,
+    "pc": 6.67585,
+    "raPred": 0.798063,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T4",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 150.0,
+    "fz": 0.059,
+    "ap": 20.0,
+    "ae": 10.0,
+    "n": 2387.324146,
+    "pc": 3.756057,
+    "raPred": 0.217563,
+    "toolLife": 29.641975,
+    "strategy": "QUALITY",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T4",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 20.0,
+    "ae": 10.0,
+    "n": 2769.29601,
+    "pc": 8.344812,
+    "raPred": 0.798063,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T4",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 20.0,
+    "ae": 10.0,
+    "n": 2769.29601,
+    "pc": 8.344812,
+    "raPred": 0.798063,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T5",
+    "operation": "OP4",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.095,
+    "ap": 7.0,
+    "ae": 5.0,
+    "n": 5538.59202,
+    "pc": 1.227721,
+    "raPred": 0.361,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T5",
+    "operation": "OP4",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 7.0,
+    "ae": 5.0,
+    "n": 5538.59202,
+    "pc": 1.460342,
+    "raPred": 0.51076,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M1",
+    "tool": "T5",
+    "operation": "OP4",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 174.0,
+    "fz": 0.113,
+    "ap": 7.0,
+    "ae": 5.0,
+    "n": 5538.59202,
+    "pc": 1.460342,
+    "raPred": 0.51076,
+    "toolLife": 16.370999,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T6",
+    "operation": "OP1",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 480.0,
+    "fz": 0.109823,
+    "ap": 15.5,
+    "ae": 56.0,
+    "n": 1909.859317,
+    "pc": 10.6202,
+    "raPred": 0.376912,
+    "toolLife": 27.231914,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T6",
+    "operation": "OP1",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 480.0,
+    "fz": 0.188,
+    "ap": 9.0,
+    "ae": 56.0,
+    "n": 1909.859317,
+    "pc": 10.556174,
+    "raPred": 1.1045,
+    "toolLife": 27.231914,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T6",
+    "operation": "OP1",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 480.0,
+    "fz": 0.188,
+    "ap": 9.0,
+    "ae": 56.0,
+    "n": 1909.859317,
+    "pc": 10.556174,
+    "raPred": 1.1045,
+    "toolLife": 27.231914,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T1",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 246.300864,
+    "fz": 0.083713,
+    "ap": 8.192,
+    "ae": 4.9,
+    "n": 7840.0,
+    "pc": 1.229421,
+    "raPred": 0.328492,
+    "toolLife": 144.383121,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T1",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 246.300864,
+    "fz": 0.174277,
+    "ap": 8.192,
+    "ae": 4.9,
+    "n": 7840.0,
+    "pc": 2.559462,
+    "raPred": 1.423708,
+    "toolLife": 144.383121,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T1",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 246.300864,
+    "fz": 0.188,
+    "ap": 9.216,
+    "ae": 4.9,
+    "n": 7840.0,
+    "pc": 3.106127,
+    "raPred": 1.65675,
+    "toolLife": 144.383121,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T2",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 300.0,
+    "fz": 0.083713,
+    "ap": 9.8304,
+    "ae": 5.88,
+    "n": 7957.747155,
+    "pc": 1.796956,
+    "raPred": 0.328492,
+    "toolLife": 88.181631,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T2",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 300.0,
+    "fz": 0.174277,
+    "ap": 9.984,
+    "ae": 5.88,
+    "n": 7957.747155,
+    "pc": 3.799431,
+    "raPred": 1.423708,
+    "toolLife": 88.181631,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T2",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 300.0,
+    "fz": 0.188,
+    "ap": 11.52,
+    "ae": 5.88,
+    "n": 7957.747155,
+    "pc": 4.729166,
+    "raPred": 1.65675,
+    "toolLife": 88.181631,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T3",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 394.081382,
+    "fz": 0.083713,
+    "ap": 13.1072,
+    "ae": 7.84,
+    "n": 7840.0,
+    "pc": 3.147319,
+    "raPred": 0.328492,
+    "toolLife": 44.587843,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T3",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 394.081382,
+    "fz": 0.174277,
+    "ap": 15.0,
+    "ae": 7.84,
+    "n": 7840.0,
+    "pc": 7.498423,
+    "raPred": 1.423708,
+    "toolLife": 44.587843,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T3",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 394.081382,
+    "fz": 0.188,
+    "ap": 13.5,
+    "ae": 7.84,
+    "n": 7840.0,
+    "pc": 7.279986,
+    "raPred": 1.65675,
+    "toolLife": 44.587843,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T4",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 400.0,
+    "fz": 0.083713,
+    "ap": 19.52,
+    "ae": 9.8,
+    "n": 6366.197724,
+    "pc": 4.757565,
+    "raPred": 0.328492,
+    "toolLife": 42.956737,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T4",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 480.0,
+    "fz": 0.174277,
+    "ap": 12.0,
+    "ae": 9.8,
+    "n": 7639.437268,
+    "pc": 7.306598,
+    "raPred": 1.423708,
+    "toolLife": 27.231914,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T4",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 480.0,
+    "fz": 0.188,
+    "ap": 11.0,
+    "ae": 9.8,
+    "n": 7639.437268,
+    "pc": 7.225115,
+    "raPred": 1.65675,
+    "toolLife": 27.231914,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T1",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 246.300864,
+    "fz": 0.083713,
+    "ap": 8.192,
+    "ae": 4.9,
+    "n": 7840.0,
+    "pc": 1.229421,
+    "raPred": 0.328492,
+    "toolLife": 144.383121,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T1",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 246.300864,
+    "fz": 0.174277,
+    "ap": 8.192,
+    "ae": 4.9,
+    "n": 7840.0,
+    "pc": 2.559462,
+    "raPred": 1.423708,
+    "toolLife": 144.383121,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T1",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 246.300864,
+    "fz": 0.188,
+    "ap": 9.216,
+    "ae": 4.9,
+    "n": 7840.0,
+    "pc": 3.106127,
+    "raPred": 1.65675,
+    "toolLife": 144.383121,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T2",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 300.0,
+    "fz": 0.083713,
+    "ap": 9.8304,
+    "ae": 5.88,
+    "n": 7957.747155,
+    "pc": 1.796956,
+    "raPred": 0.328492,
+    "toolLife": 88.181631,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T2",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 300.0,
+    "fz": 0.174277,
+    "ap": 9.984,
+    "ae": 5.88,
+    "n": 7957.747155,
+    "pc": 3.799431,
+    "raPred": 1.423708,
+    "toolLife": 88.181631,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T2",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 300.0,
+    "fz": 0.188,
+    "ap": 11.52,
+    "ae": 5.88,
+    "n": 7957.747155,
+    "pc": 4.729166,
+    "raPred": 1.65675,
+    "toolLife": 88.181631,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T3",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 394.081382,
+    "fz": 0.083713,
+    "ap": 13.1072,
+    "ae": 7.84,
+    "n": 7840.0,
+    "pc": 3.147319,
+    "raPred": 0.328492,
+    "toolLife": 44.587843,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T3",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 394.081382,
+    "fz": 0.174277,
+    "ap": 15.0,
+    "ae": 7.84,
+    "n": 7840.0,
+    "pc": 7.498423,
+    "raPred": 1.423708,
+    "toolLife": 44.587843,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T3",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 394.081382,
+    "fz": 0.188,
+    "ap": 13.5,
+    "ae": 7.84,
+    "n": 7840.0,
+    "pc": 7.279986,
+    "raPred": 1.65675,
+    "toolLife": 44.587843,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T4",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 400.0,
+    "fz": 0.083713,
+    "ap": 19.52,
+    "ae": 9.8,
+    "n": 6366.197724,
+    "pc": 4.757565,
+    "raPred": 0.328492,
+    "toolLife": 42.956737,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T4",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 480.0,
+    "fz": 0.174277,
+    "ap": 12.0,
+    "ae": 9.8,
+    "n": 7639.437268,
+    "pc": 7.306598,
+    "raPred": 1.423708,
+    "toolLife": 27.231914,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T4",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 480.0,
+    "fz": 0.188,
+    "ap": 11.0,
+    "ae": 9.8,
+    "n": 7639.437268,
+    "pc": 7.225115,
+    "raPred": 1.65675,
+    "toolLife": 27.231914,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T5",
+    "operation": "OP4",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 246.300864,
+    "fz": 0.111923,
+    "ap": 8.96,
+    "ae": 4.9,
+    "n": 7840.0,
+    "pc": 0.898911,
+    "raPred": 0.375803,
+    "toolLife": 144.383121,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T5",
+    "operation": "OP4",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 246.300864,
+    "fz": 0.188,
+    "ap": 8.96,
+    "ae": 4.9,
+    "n": 7840.0,
+    "pc": 1.509923,
+    "raPred": 1.06032,
+    "toolLife": 144.383121,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M2",
+    "tool": "T5",
+    "operation": "OP4",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 246.300864,
+    "fz": 0.188,
+    "ap": 8.96,
+    "ae": 4.9,
+    "n": 7840.0,
+    "pc": 1.509923,
+    "raPred": 1.06032,
+    "toolLife": 144.383121,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T6",
+    "operation": "OP1",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 80.0,
+    "fz": 0.052,
+    "ap": 40.0,
+    "ae": 32.0,
+    "n": 318.309886,
+    "pc": 4.590453,
+    "raPred": 0.154917,
+    "toolLife": 32.0,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T6",
+    "operation": "OP1",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 40.0,
+    "ae": 32.0,
+    "n": 254.647909,
+    "pc": 4.519831,
+    "raPred": 0.234667,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T6",
+    "operation": "OP1",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 40.0,
+    "ae": 32.0,
+    "n": 254.647909,
+    "pc": 4.519831,
+    "raPred": 0.234667,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T1",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 80.0,
+    "fz": 0.048467,
+    "ap": 5.0,
+    "ae": 4.0,
+    "n": 2546.479089,
+    "pc": 0.427859,
+    "raPred": 0.201874,
+    "toolLife": 32.0,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T1",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 5.0,
+    "ae": 4.0,
+    "n": 2037.183272,
+    "pc": 0.451983,
+    "raPred": 0.352,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T1",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 5.0,
+    "ae": 4.0,
+    "n": 2037.183272,
+    "pc": 0.451983,
+    "raPred": 0.352,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T2",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 80.0,
+    "fz": 0.048467,
+    "ap": 6.0,
+    "ae": 4.8,
+    "n": 2122.065908,
+    "pc": 0.513431,
+    "raPred": 0.201874,
+    "toolLife": 32.0,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T2",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 6.0,
+    "ae": 4.8,
+    "n": 1697.652726,
+    "pc": 0.54238,
+    "raPred": 0.352,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T2",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 6.0,
+    "ae": 4.8,
+    "n": 1697.652726,
+    "pc": 0.54238,
+    "raPred": 0.352,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T3",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 80.0,
+    "fz": 0.048467,
+    "ap": 8.0,
+    "ae": 6.4,
+    "n": 1591.549431,
+    "pc": 0.684575,
+    "raPred": 0.201874,
+    "toolLife": 32.0,
+    "strategy": "QUALITY",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T3",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 8.0,
+    "ae": 6.4,
+    "n": 1273.239545,
+    "pc": 0.723173,
+    "raPred": 0.352,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T3",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 8.0,
+    "ae": 6.4,
+    "n": 1273.239545,
+    "pc": 0.723173,
+    "raPred": 0.352,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T4",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 80.0,
+    "fz": 0.048467,
+    "ap": 10.0,
+    "ae": 8.0,
+    "n": 1273.239545,
+    "pc": 0.855718,
+    "raPred": 0.201874,
+    "toolLife": 32.0,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T4",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 10.0,
+    "ae": 8.0,
+    "n": 1018.591636,
+    "pc": 0.903966,
+    "raPred": 0.352,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T4",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 10.0,
+    "ae": 8.0,
+    "n": 1018.591636,
+    "pc": 0.903966,
+    "raPred": 0.352,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T1",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 80.0,
+    "fz": 0.048467,
+    "ap": 5.0,
+    "ae": 4.0,
+    "n": 2546.479089,
+    "pc": 0.427859,
+    "raPred": 0.201874,
+    "toolLife": 32.0,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T1",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 5.0,
+    "ae": 4.0,
+    "n": 2037.183272,
+    "pc": 0.451983,
+    "raPred": 0.352,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T1",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 5.0,
+    "ae": 4.0,
+    "n": 2037.183272,
+    "pc": 0.451983,
+    "raPred": 0.352,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T2",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 80.0,
+    "fz": 0.048467,
+    "ap": 6.0,
+    "ae": 4.8,
+    "n": 2122.065908,
+    "pc": 0.513431,
+    "raPred": 0.201874,
+    "toolLife": 32.0,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T2",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 6.0,
+    "ae": 4.8,
+    "n": 1697.652726,
+    "pc": 0.54238,
+    "raPred": 0.352,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T2",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 6.0,
+    "ae": 4.8,
+    "n": 1697.652726,
+    "pc": 0.54238,
+    "raPred": 0.352,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T3",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 80.0,
+    "fz": 0.048467,
+    "ap": 8.0,
+    "ae": 6.4,
+    "n": 1591.549431,
+    "pc": 0.684575,
+    "raPred": 0.201874,
+    "toolLife": 32.0,
+    "strategy": "QUALITY",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T3",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 8.0,
+    "ae": 6.4,
+    "n": 1273.239545,
+    "pc": 0.723173,
+    "raPred": 0.352,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T3",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 8.0,
+    "ae": 6.4,
+    "n": 1273.239545,
+    "pc": 0.723173,
+    "raPred": 0.352,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T4",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 80.0,
+    "fz": 0.048467,
+    "ap": 10.0,
+    "ae": 8.0,
+    "n": 1273.239545,
+    "pc": 0.855718,
+    "raPred": 0.201874,
+    "toolLife": 32.0,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T4",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 10.0,
+    "ae": 8.0,
+    "n": 1018.591636,
+    "pc": 0.903966,
+    "raPred": 0.352,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T4",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 10.0,
+    "ae": 8.0,
+    "n": 1018.591636,
+    "pc": 0.903966,
+    "raPred": 0.352,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T5",
+    "operation": "OP4",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 80.0,
+    "fz": 0.052,
+    "ap": 3.5,
+    "ae": 4.0,
+    "n": 2546.479089,
+    "pc": 0.160666,
+    "raPred": 0.14872,
+    "toolLife": 32.0,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T5",
+    "operation": "OP4",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 3.5,
+    "ae": 4.0,
+    "n": 2037.183272,
+    "pc": 0.158194,
+    "raPred": 0.22528,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M3",
+    "tool": "T5",
+    "operation": "OP4",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 64.0,
+    "fz": 0.064,
+    "ap": 3.5,
+    "ae": 4.0,
+    "n": 2037.183272,
+    "pc": 0.158194,
+    "raPred": 0.22528,
+    "toolLife": 97.65625,
+    "strategy": "LIFE",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T6",
+    "operation": "OP1",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 125.0,
+    "fz": 0.068291,
+    "ap": 64.0,
+    "ae": 40.0,
+    "n": 497.359197,
+    "pc": 10.8688,
+    "raPred": 0.242897,
+    "toolLife": 25.17631,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T6",
+    "operation": "OP1",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 32.5,
+    "ae": 40.0,
+    "n": 576.936669,
+    "pc": 10.687752,
+    "raPred": 0.676875,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T6",
+    "operation": "OP1",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 32.5,
+    "ae": 40.0,
+    "n": 576.936669,
+    "pc": 10.687752,
+    "raPred": 0.676875,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T1",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 125.0,
+    "fz": 0.063466,
+    "ap": 8.0,
+    "ae": 5.0,
+    "n": 3978.873577,
+    "pc": 1.010097,
+    "raPred": 0.314685,
+    "toolLife": 25.17631,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T1",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 8.0,
+    "ae": 5.0,
+    "n": 4615.49335,
+    "pc": 2.104665,
+    "raPred": 1.015312,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T1",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 8.0,
+    "ae": 5.0,
+    "n": 4615.49335,
+    "pc": 2.104665,
+    "raPred": 1.015312,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T2",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 125.0,
+    "fz": 0.063466,
+    "ap": 9.6,
+    "ae": 6.0,
+    "n": 3315.727981,
+    "pc": 1.212116,
+    "raPred": 0.314685,
+    "toolLife": 25.17631,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T2",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 9.6,
+    "ae": 6.0,
+    "n": 3846.244458,
+    "pc": 2.525598,
+    "raPred": 1.015312,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T2",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 9.6,
+    "ae": 6.0,
+    "n": 3846.244458,
+    "pc": 2.525598,
+    "raPred": 1.015312,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T3",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 125.0,
+    "fz": 0.063466,
+    "ap": 12.8,
+    "ae": 8.0,
+    "n": 2486.795986,
+    "pc": 1.616155,
+    "raPred": 0.314685,
+    "toolLife": 25.17631,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T3",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 12.8,
+    "ae": 8.0,
+    "n": 2884.683344,
+    "pc": 3.367464,
+    "raPred": 1.015312,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T3",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 12.8,
+    "ae": 8.0,
+    "n": 2884.683344,
+    "pc": 3.367464,
+    "raPred": 1.015312,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T4",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 125.0,
+    "fz": 0.063466,
+    "ap": 16.0,
+    "ae": 10.0,
+    "n": 1989.436789,
+    "pc": 2.020194,
+    "raPred": 0.314685,
+    "toolLife": 25.17631,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T4",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 16.0,
+    "ae": 10.0,
+    "n": 2307.746675,
+    "pc": 4.20933,
+    "raPred": 1.015312,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T4",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 16.0,
+    "ae": 10.0,
+    "n": 2307.746675,
+    "pc": 4.20933,
+    "raPred": 1.015312,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T1",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 125.0,
+    "fz": 0.063466,
+    "ap": 8.0,
+    "ae": 5.0,
+    "n": 3978.873577,
+    "pc": 1.010097,
+    "raPred": 0.314685,
+    "toolLife": 25.17631,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T1",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 8.0,
+    "ae": 5.0,
+    "n": 4615.49335,
+    "pc": 2.104665,
+    "raPred": 1.015312,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T1",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 8.0,
+    "ae": 5.0,
+    "n": 4615.49335,
+    "pc": 2.104665,
+    "raPred": 1.015312,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T2",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 125.0,
+    "fz": 0.063466,
+    "ap": 9.6,
+    "ae": 6.0,
+    "n": 3315.727981,
+    "pc": 1.212116,
+    "raPred": 0.314685,
+    "toolLife": 25.17631,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T2",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 9.6,
+    "ae": 6.0,
+    "n": 3846.244458,
+    "pc": 2.525598,
+    "raPred": 1.015312,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T2",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 9.6,
+    "ae": 6.0,
+    "n": 3846.244458,
+    "pc": 2.525598,
+    "raPred": 1.015312,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T3",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 125.0,
+    "fz": 0.063466,
+    "ap": 12.8,
+    "ae": 8.0,
+    "n": 2486.795986,
+    "pc": 1.616155,
+    "raPred": 0.314685,
+    "toolLife": 25.17631,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T3",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 12.8,
+    "ae": 8.0,
+    "n": 2884.683344,
+    "pc": 3.367464,
+    "raPred": 1.015312,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T3",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 12.8,
+    "ae": 8.0,
+    "n": 2884.683344,
+    "pc": 3.367464,
+    "raPred": 1.015312,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T4",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 125.0,
+    "fz": 0.063466,
+    "ap": 16.0,
+    "ae": 10.0,
+    "n": 1989.436789,
+    "pc": 2.020194,
+    "raPred": 0.314685,
+    "toolLife": 25.17631,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T4",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 16.0,
+    "ae": 10.0,
+    "n": 2307.746675,
+    "pc": 4.20933,
+    "raPred": 1.015312,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T4",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 16.0,
+    "ae": 10.0,
+    "n": 2307.746675,
+    "pc": 4.20933,
+    "raPred": 1.015312,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T5",
+    "operation": "OP4",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 125.0,
+    "fz": 0.068833,
+    "ap": 5.6,
+    "ae": 5.0,
+    "n": 3978.873577,
+    "pc": 0.383428,
+    "raPred": 0.236898,
+    "toolLife": 25.17631,
+    "strategy": "QUALITY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T5",
+    "operation": "OP4",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 5.6,
+    "ae": 5.0,
+    "n": 4615.49335,
+    "pc": 0.736633,
+    "raPred": 0.6498,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M4",
+    "tool": "T5",
+    "operation": "OP4",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 145.0,
+    "fz": 0.114,
+    "ap": 5.6,
+    "ae": 5.0,
+    "n": 4615.49335,
+    "pc": 0.736633,
+    "raPred": 0.6498,
+    "toolLife": 13.904652,
+    "strategy": "EFFICIENCY",
+    "chatterRisk": "MEDIUM",
+    "confidence": "MEDIUM",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T6",
+    "operation": "OP1",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 45.0,
+    "fz": 0.039,
+    "ap": 24.0,
+    "ae": 24.0,
+    "n": 179.049311,
+    "pc": 0.703879,
+    "raPred": 0.099023,
+    "toolLife": 24.446021,
+    "strategy": "QUALITY",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T6",
+    "operation": "OP1",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 24.0,
+    "ae": 24.0,
+    "n": 131.302828,
+    "pc": 0.635296,
+    "raPred": 0.15,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T6",
+    "operation": "OP1",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 24.0,
+    "ae": 24.0,
+    "n": 131.302828,
+    "pc": 0.635296,
+    "raPred": 0.15,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T1",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 45.0,
+    "fz": 0.039,
+    "ap": 3.0,
+    "ae": 3.0,
+    "n": 1432.394488,
+    "pc": 0.070388,
+    "raPred": 0.148535,
+    "toolLife": 24.446021,
+    "strategy": "QUALITY",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T1",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 3.0,
+    "ae": 3.0,
+    "n": 1050.422624,
+    "pc": 0.06353,
+    "raPred": 0.225,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T1",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 3.0,
+    "ae": 3.0,
+    "n": 1050.422624,
+    "pc": 0.06353,
+    "raPred": 0.225,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T2",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 45.0,
+    "fz": 0.039,
+    "ap": 3.6,
+    "ae": 3.6,
+    "n": 1193.662073,
+    "pc": 0.084465,
+    "raPred": 0.148535,
+    "toolLife": 24.446021,
+    "strategy": "QUALITY",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T2",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 3.6,
+    "ae": 3.6,
+    "n": 875.352187,
+    "pc": 0.076235,
+    "raPred": 0.225,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T2",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 3.6,
+    "ae": 3.6,
+    "n": 875.352187,
+    "pc": 0.076235,
+    "raPred": 0.225,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T3",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 45.0,
+    "fz": 0.039,
+    "ap": 4.8,
+    "ae": 4.8,
+    "n": 895.246555,
+    "pc": 0.112621,
+    "raPred": 0.148535,
+    "toolLife": 24.446021,
+    "strategy": "QUALITY",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T3",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 4.8,
+    "ae": 4.8,
+    "n": 656.51414,
+    "pc": 0.101647,
+    "raPred": 0.225,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T3",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 4.8,
+    "ae": 4.8,
+    "n": 656.51414,
+    "pc": 0.101647,
+    "raPred": 0.225,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T4",
+    "operation": "OP2",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 45.0,
+    "fz": 0.039,
+    "ap": 6.0,
+    "ae": 6.0,
+    "n": 716.197244,
+    "pc": 0.140776,
+    "raPred": 0.148535,
+    "toolLife": 24.446021,
+    "strategy": "QUALITY",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T4",
+    "operation": "OP2",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 6.0,
+    "ae": 6.0,
+    "n": 525.211312,
+    "pc": 0.127059,
+    "raPred": 0.225,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T4",
+    "operation": "OP2",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 6.0,
+    "ae": 6.0,
+    "n": 525.211312,
+    "pc": 0.127059,
+    "raPred": 0.225,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T1",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 45.0,
+    "fz": 0.039,
+    "ap": 3.0,
+    "ae": 3.0,
+    "n": 1432.394488,
+    "pc": 0.070388,
+    "raPred": 0.148535,
+    "toolLife": 24.446021,
+    "strategy": "QUALITY",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T1",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 3.0,
+    "ae": 3.0,
+    "n": 1050.422624,
+    "pc": 0.06353,
+    "raPred": 0.225,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T1",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 3.0,
+    "ae": 3.0,
+    "n": 1050.422624,
+    "pc": 0.06353,
+    "raPred": 0.225,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T2",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 45.0,
+    "fz": 0.039,
+    "ap": 3.6,
+    "ae": 3.6,
+    "n": 1193.662073,
+    "pc": 0.084465,
+    "raPred": 0.148535,
+    "toolLife": 24.446021,
+    "strategy": "QUALITY",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T2",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 3.6,
+    "ae": 3.6,
+    "n": 875.352187,
+    "pc": 0.076235,
+    "raPred": 0.225,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T2",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 3.6,
+    "ae": 3.6,
+    "n": 875.352187,
+    "pc": 0.076235,
+    "raPred": 0.225,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T3",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 45.0,
+    "fz": 0.039,
+    "ap": 4.8,
+    "ae": 4.8,
+    "n": 895.246555,
+    "pc": 0.112621,
+    "raPred": 0.148535,
+    "toolLife": 24.446021,
+    "strategy": "QUALITY",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T3",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 4.8,
+    "ae": 4.8,
+    "n": 656.51414,
+    "pc": 0.101647,
+    "raPred": 0.225,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T3",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 4.8,
+    "ae": 4.8,
+    "n": 656.51414,
+    "pc": 0.101647,
+    "raPred": 0.225,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T4",
+    "operation": "OP3",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 45.0,
+    "fz": 0.039,
+    "ap": 6.0,
+    "ae": 6.0,
+    "n": 716.197244,
+    "pc": 0.140776,
+    "raPred": 0.148535,
+    "toolLife": 24.446021,
+    "strategy": "QUALITY",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T4",
+    "operation": "OP3",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 6.0,
+    "ae": 6.0,
+    "n": 525.211312,
+    "pc": 0.127059,
+    "raPred": 0.225,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T4",
+    "operation": "OP3",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 6.0,
+    "ae": 6.0,
+    "n": 525.211312,
+    "pc": 0.127059,
+    "raPred": 0.225,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T5",
+    "operation": "OP4",
+    "raReq": 0.4,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 45.0,
+    "fz": 0.039,
+    "ap": 2.1,
+    "ae": 3.0,
+    "n": 1432.394488,
+    "pc": 0.024636,
+    "raPred": 0.095063,
+    "toolLife": 24.446021,
+    "strategy": "QUALITY",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T5",
+    "operation": "OP4",
+    "raReq": 1.6,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 2.1,
+    "ae": 3.0,
+    "n": 1050.422624,
+    "pc": 0.022235,
+    "raPred": 0.144,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  },
+  {
+   "input": {
+    "material": "M5",
+    "tool": "T5",
+    "operation": "OP4",
+    "raReq": 3.2,
+    "volume": 100000.0
+   },
+   "output": {
+    "vc": 33.0,
+    "fz": 0.048,
+    "ap": 2.1,
+    "ae": 3.0,
+    "n": 1050.422624,
+    "pc": 0.022235,
+    "raPred": 0.144,
+    "toolLife": 136.941032,
+    "strategy": "LIFE",
+    "chatterRisk": "LOW",
+    "confidence": "HIGH",
+    "altCount": 2
+   }
+  }
+ ],
+ "stableBands": {
+  "2": {
+   "1": 9600.0,
+   "2": 4800.0,
+   "3": 3200.0
+  },
+  "4": {
+   "1": 4800.0,
+   "2": 2400.0,
+   "3": 1600.0
+  },
+  "5": {
+   "1": 3840.0,
+   "2": 1920.0,
+   "3": 1280.0
+  }
+ },
+ "knowledge": {
+  "items": [
+   {
+    "kbId": "KB-CNC-0042",
+    "title": "45 钢侧铣推荐切削速度与每齿进给",
+    "sourceType": "S2",
+    "sourceRef": "《材料切削性能手册》第 4 章表 4-12",
+    "scope": "中碳钢 45，正火 HB180-220，硬质合金立铣刀侧铣",
+    "metrics": {
+     "vc": "120-180 m/min",
+     "fz": "0.05-0.12 mm/z"
+    },
+    "confidence": "HIGH",
+    "body": "45 钢正火状态侧铣，切削速度建议 120-180 m/min，每齿进给 0.05-0.12 mm/z。粗加工取上限，精加工取下限。冷却采用乳化液外冷，压力 0.3-0.5 MPa。"
+   },
+   {
+    "kbId": "KB-ALU-0011",
+    "title": "6061-T6 铝合金高速铣削参数",
+    "sourceType": "S2",
+    "sourceRef": "《材料切削性能手册》第 5 章表 5-3",
+    "scope": "铝合金 6061-T6，HB95，硬质合金立铣刀",
+    "metrics": {
+     "vc": "300-500 m/min",
+     "fz": "0.08-0.20 mm/z"
+    },
+    "confidence": "HIGH",
+    "body": "6061-T6 铝合金允许高速切削，vc 可达 300-500 m/min。需注意积屑瘤，建议使用 TiAlN 涂层刀具并保证充分冷却。"
+   },
+   {
+    "kbId": "KB-SST-0008",
+    "title": "304 不锈钢切削参数与加工硬化对策",
+    "sourceType": "S2",
+    "sourceRef": "《材料切削性能手册》第 6 章表 6-1",
+    "scope": "不锈钢 304，HB185，硬质合金立铣刀",
+    "metrics": {
+     "vc": "60-100 m/min",
+     "fz": "0.04-0.08 mm/z"
+    },
+    "confidence": "HIGH",
+    "body": "304 不锈钢加工硬化倾向强，切削速度须控制在 60-100 m/min，每齿进给 0.04-0.08 mm/z，必须使用内冷或高压外冷，避免刀具在硬化层空切。"
+   },
+   {
+    "kbId": "KB-CAST-0005",
+    "title": "QT600-3 球墨铸铁铣削参数",
+    "sourceType": "S2",
+    "sourceRef": "《材料切削性能手册》第 7 章表 7-4",
+    "scope": "球墨铸铁 QT600-3，HB220-270",
+    "metrics": {
+     "vc": "100-150 m/min",
+     "fz": "0.06-0.12 mm/z"
+    },
+    "confidence": "MEDIUM",
+    "body": "球墨铸铁 QT600-3 铣削 vc 100-150 m/min，fz 0.06-0.12 mm/z。铸铁粉尘大，须干式或微量润滑并配除尘，注意石墨粉尘对导轨的磨损。"
+   },
+   {
+    "kbId": "KB-TI-0007",
+    "title": "TC4 钛合金低速大进给加工",
+    "sourceType": "S2",
+    "sourceRef": "《材料切削性能手册》第 8 章表 8-2",
+    "scope": "钛合金 TC4，HB320，球头刀曲面精加工",
+    "metrics": {
+     "vc": "30-60 m/min",
+     "fz": "0.03-0.06 mm/z"
+    },
+    "confidence": "HIGH",
+    "body": "TC4 钛合金热导率低，切削热集中于刀刃，vc 必须控制在 30-60 m/min。严禁干切，须高压内冷；刀具磨损以月牙洼为主，寿命显著低于钢件。"
+   },
+   {
+    "kbId": "KB-TOOL-0024",
+    "title": "φ20 四刃立铣刀大切深侧铣能力",
+    "sourceType": "S1",
+    "sourceRef": "刀具厂家样本 C 系列第 12 页",
+    "scope": "φ20 四刃硬质合金立铣刀 AlCrN 涂层",
+    "metrics": {
+     "apD": "≤1.0",
+     "aeD": "≤0.5"
+    },
+    "confidence": "HIGH",
+    "body": "φ20 四刃立铣刀在刚性足够时可取 ap/D 达 1.0，但径向切宽建议不超过 0.5D，否则颤振风险显著上升。功率为主要约束。"
+   },
+   {
+    "kbId": "KB-TOOL-0031",
+    "title": "BT40 刀柄悬伸与刚性折减规则",
+    "sourceType": "S1",
+    "sourceRef": "刀具厂家样本 技术附录 A",
+    "scope": "BT40 刀柄，硬质合金立铣刀",
+    "metrics": {
+     "LD": "安全 ≤4.0，警戒 4.0-6.0"
+    },
+    "confidence": "HIGH",
+    "body": "悬伸比 L/D ≤4.0 时刚性充足；4.0-6.0 区间切深须折减 30%；超过 6.0 属刚性严重不足，须改用加粗刀杆或缩短悬伸后重新计算。"
+   },
+   {
+    "kbId": "KB-MACH-0001",
+    "title": "VMC-850 主轴功率与转速限制",
+    "sourceType": "S5",
+    "sourceRef": "VMC-850 使用说明书 第 3 章",
+    "scope": "VMC-850 立式加工中心 EQ-A01-0037",
+    "metrics": {
+     "powerContinuous": "11 kW",
+     "powerPeak": "15 kW",
+     "spindleMax": "8000 r/min"
+    },
+    "confidence": "HIGH",
+    "body": "VMC-850 主轴连续功率 11 kW，30 分钟短时 15 kW。工艺校核一律按连续功率 11 kW 计算，不得使用短时功率。"
+   },
+   {
+    "kbId": "KB-CNC-0091",
+    "title": "45 钢侧铣实测粗糙度与理论值比例",
+    "sourceType": "S4",
+    "sourceRef": "试切记录 TR-20261015-0003 至 TR-20261030-0011",
+    "scope": "45 钢侧铣，rε=0.8 立铣刀",
+    "metrics": {
+     "kRa": "1.55-1.68"
+    },
+    "confidence": "MEDIUM",
+    "body": "45 钢侧铣实测 Ra 约为理论残留高度的 1.55-1.68 倍，取 K_ra=1.6。偏差主要来自刀具让刀与材料撕裂。"
+   },
+   {
+    "kbId": "KB-SAFE-0012",
+    "title": "高速旋转与薄壁件装夹安全要求",
+    "sourceType": "S6",
+    "sourceRef": "实训中心安全规程 第 5 章",
+    "scope": "所有铣削作业",
+    "metrics": {
+     "thinWall": "<3 mm 须辅助支撑"
+    },
+    "confidence": "HIGH",
+    "body": "主轴高速旋转时严禁手扶工件或开门观察。薄壁件（壁厚<3mm）须增加辅助支撑并将切深折减 50%。装夹必须校平，垫铁不得悬空。"
+   }
+  ],
+  "queries": [
+   {
+    "q": "45钢 侧铣 切削速度",
+    "hits": [
+     "KB-CNC-0042"
+    ]
+   },
+   {
+    "q": "钛合金 TC4 精加工",
+    "hits": [
+     "KB-TI-0007"
+    ]
+   },
+   {
+    "q": "304 不锈钢 内冷",
+    "hits": [
+     "KB-SST-0008"
+    ]
+   },
+   {
+    "q": "铝合金 6061 高速铣削",
+    "hits": [
+     "KB-ALU-0011"
+    ]
+   },
+   {
+    "q": "主轴功率 限制",
+    "hits": [
+     "KB-MACH-0001"
+    ]
+   },
+   {
+    "q": "火星探测器轨道参数",
+    "hits": []
+   }
+  ],
+  "tokens": {
+   "45钢 vc=180": [
+    "45",
+    "vc",
+    "180",
+    "钢"
+   ]
+  }
+ }
+}
