@@ -75,3 +75,6 @@ dsh-spill-*/
 # ---------- 运行时数据 ----------
 data/runtime/*.jsonl
 demo/runtime/*.jsonl
+
+# 本机专用凭据探测脚本（不入库）
+scripts/probe-credential.ps1
